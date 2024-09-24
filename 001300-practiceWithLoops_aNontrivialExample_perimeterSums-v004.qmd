@@ -1,0 +1,737 @@
+###################################
+###################################
+##
+## Loops: a non-trivial example
+##
+###################################
+###################################
+
+####################################################################################
+# Write a function, perimeterSums, that takes the following arguments:
+#
+# ARGUMENTS
+#   - mat: a square (same # of rows and cols) numeric matrix
+#
+# RETURN VALUE: 
+#   The function should return a vector that contains the sums of the numbers
+#   on the outermost perimeter, 2nd outermost perimeter, etc. of the matrix.
+#   In other words:
+#
+#   - The 1st value in the returned vector should be the sum of all the numbers
+#     that are on the outermost perimiter of the matrix, i.e. the numbers
+#     on the leftmost column, bottom row, rightmost column and top row of the matrix.
+#
+#   - The 2nd value in the returned vector should be the sum of the numbers that
+#     would be on the perimeter of the matrix if the outermost perimeter were removed.
+# 
+#   - etc.
+####################################################################################
+
+#-------------------------------------------------------------------------
+# The first step in understanding how to write the function is to fully 
+# understand what the question is asking. In that regard it helps to 
+# go through several examples.
+#-------------------------------------------------------------------------
+
+
+# EXAMPLE 1: With a 3x3 matrix after you remove the outer perimeter
+# there is only one number left.
+#
+#   > someMatrix <- matrix(seq(10,90,10), nrow=3, ncol=3)
+#   > someMatrix
+#        [,1] [,2] [,3]
+#   [1,]   10   40   70
+#   [2,]   20   50   80
+#   [3,]   30   60   90
+#
+#   > # sum of numbers on the outer perimeter is
+#   > # 320 i.e. 10+20+30+60+90+80+70+40 and
+#   > # 50 is the middle number
+#
+#   > perimeterSums(someMatrix)
+#   [1] 320 50
+
+
+
+# EXAMPLE 2: In a 2x2 matrix there is only ONE perimeter
+#
+#   > someMatrix <- matrix(c(1,2,3,4), nrow=2, ncol=2)
+#   > someMatrix
+#        [,1] [,2]
+#   [1,]    1    3
+#   [2,]    2    4
+#   > perimeterSums(someMatrix)  # only one number, ie. 1+2+3+4
+#   [1] 10
+
+
+
+# EXAMPLE 3: In a 3x3 matrix there are two "perimeters"
+#
+#   > someMatrix <- matrix(rep(1,9), nrow=3, ncol=3)
+#   > someMatrix
+#        [,1] [,2] [,3]
+#   [1,]    1    1    1
+#   [2,]    1    1    1
+#   [3,]    1    1    1
+#   > perimeterSums(someMatrix)
+#   [1] 8 1
+
+
+
+# EXAMPLE 4: In a 4x4 matrix there are two "perimeters"
+#
+#   > someMatrix <- matrix(rep(1,16), nrow=4, ncol=4)
+#   > someMatrix
+#        [,1] [,2] [,3] [,4]
+#   [1,]    1    1    1    1
+#   [2,]    1    1    1    1
+#   [3,]    1    1    1    1
+#   [4,]    1    1    1    1
+#   > perimeterSums(someMatrix)
+#   [1] 12 4
+
+
+ 
+# EXAMPLE 5: In a 5x5 matrix there are three "perimeters".
+# The 1's, 2's and 3's in following picture show the positions
+# in a 5x5 matrix that are
+#   - on the 1st perimeter  (outermost positions)
+#   - on the 2nd perimeter  
+#   - on the 3rd perimeter (i.e. just the middle number)
+#
+#      1 1 1 1 1 
+#      1 2 2 2 1
+#      1 2 3 2 1
+#      1 2 2 2 1
+#      1 1 1 1 1 
+#
+# For example, given the following 5x5 matrix:
+#
+#       1    6   11   16   21
+#       2    7   12   17   22
+#       3    8   13   18   23
+#       4    9   14   19   24
+#       5   10   15   20   25
+#
+# the following numbers are on the outermost perimeter:
+#      1 2 3 4 5 10 15 20 25 24 23 22 21 16 11 6
+#
+# These numbers are listed starting with the top-left corner (i.e. the 1)
+# and moving around the perimeter in a counter-clockwise order
+# (ie. down then right then up then left).
+#
+# To see the 2nd perimeter the following picture replaces the numbers
+# on the outermost perimeter with x's
+#
+#       x    x    x    x   x
+#       x    7   12   17   x
+#       x    8   13   18   x
+#       x    9   14   19   x
+#       x    x    x    x   x
+#
+# It's easy to see now that the following numbers are on the 2nd perimeter:
+#      7 8 9 14 19 18 17 12
+#
+#
+# Finally, if you ignore both the 1st and 2nd perimeters, the only number
+# left is the center number, i.e. 13. It's easy to see that from the 
+# following picture which replaces the numbers on the 2nd perimeter
+# with periods.
+#
+#       x    x    x    x   x
+#       x    .    .    .   x
+#       x    .   13    .   x
+#       x    .    .    .   x
+#       x    x    x    x   x
+#
+# Therefore given this matrix, the function should return:
+#  c( sum(1,2,3,4,5,10,15,20,25,24,23,22,21,16,11,6),
+#     sum(7,8,9,14,19,18,17,12),
+#     13 )
+# Which comes out to 
+#
+#   c( 208, 104, 13)
+
+
+
+##########################################################################
+# The following is a working version of the function.
+# When we coded this in class, there were 3 minor bugs (i.e. errors)
+# in the code. I fixed those bugs after class. 
+#
+# Keep reading below for some comments on how to think through these
+# types of problems and how to find and fix the bugs that might arise.
+##########################################################################
+
+perimeterSums <- function(mat) {
+  if(!is.matrix(mat)){
+    stop("mat must be a square matrix")
+  }
+  
+  if(nrow(mat) != ncol(mat)){
+    stop("mat must be a square matrix")
+  }
+  
+  numPerimeters <- ceiling(nrow(mat) / 2)  # figure out the number of perimeters
+  answer <- numeric(0)
+  
+  nr <- nrow(mat)
+
+  while( length(answer) < numPerimeters){
+    perimNum <- length(answer) + 1   # 1 for 1st perimeter, 2 for 2nd etc
+
+    leftPart <- sum(mat[perimNum:(nr-perimNum+1) , perimNum])       # originally had - 1 instead of + 1
+
+    if ( perimNum == numPerimeters & nr%%2==1){                     # originally did not have "& nr%%2==1"
+      bottomPart = 0
+    } else {
+      bottomPart <- sum(mat[nr-perimNum+1 , (perimNum+1):(nr-perimNum+1)])
+    }
+
+    if (perimNum == numPerimeters & nr%%2==1){                      # originally did not have "& nr%%2==1"
+      rightPart <- 0
+    } else {
+      rightPart <- sum(mat[(nr-perimNum):perimNum , nr-perimNum+1]) # originally had -1 instead of +1
+    }
+
+    if ( perimNum == numPerimeters){
+      topPart <- 0
+    } else {
+      topPart <- sum(mat[perimNum , (perimNum+1):(nr-perimNum)])
+    }
+
+    total <- sum( leftPart,bottomPart,rightPart,topPart)  
+    answer <- c(answer, total)
+  }
+  return(answer)
+}
+
+#############################################################
+# Test the code to make sure it works!!!
+#############################################################
+
+#.................................................
+# Test with a 5x5 matrix that has different values
+# in every cell. 
+#.................................................
+m <- matrix(1:25, nrow=5, ncol=5)
+m
+perimeterSums(m)   # 208 104 13
+
+# Let's check this by figuring it out "by hand", ie.
+# by manually checking what the answer should be
+answer <- c(sum(1,2,3,4,5,10,15,20,25,24,23,22,21,16,11,6),
+            sum(7,8,9,14,17,18,19,12),
+            13)
+answer # 208 104 13
+
+#................................................................
+# Test the function with various square matrices that are filled
+# with all 1's.  These are easy to check by hand.
+#................................................................
+
+# You should make sure to run various types of tests. 
+# If we would only check with matrices that consist purely of 1's 
+# we might miss some subtle errors. Therefore we also checked above
+# with a matrix that has different numbers in each cell.
+
+m <- matrix(1, nrow=1, ncol=1)         # 1x1 matrix
+perimeterSums(m)                       # [1] 1
+
+m <- matrix(rep(1,4), nrow=2, ncol=2)  # 2x2 matrix of 1's
+perimeterSums(m)                       # [1] 4
+
+m <- matrix(rep(1,9), nrow=3, ncol=3)  # 3x3 matrix of 1's
+perimeterSums(m)                       # [1] 8 1
+
+m <- matrix(rep(1,16), nrow=4, ncol=4) # 4x4 matrix of 1's
+perimeterSums(m)                       # [1] 12 4
+
+m <- matrix(rep(1,25), nrow=5, ncol=5) # 5x5 matrix of 1's
+perimeterSums(m)                       # [1] 16 8 1
+
+m <- matrix(rep(1,36), nrow=6, ncol=6) # 6x6 matrix of 1's
+perimeterSums(m)                       # [1] 20 12 4
+
+m <- matrix(rep(1,49), nrow=7, ncol=7) # 7x7 matrix of 1's
+perimeterSums(m)                       # [1] 24 16 8 1
+
+# we can test with a very large matrix ...
+m <- matrix(rep(1,900), nrow=30, ncol=30) # 30x30 matrix of 1's
+perimeterSums(m)  # [1] 116 108 100  92  84  76  68  60  52  44  36  28  20  12   4
+
+
+################################################
+# Thought process in how to code this function.
+################################################
+
+#------------------------------------------------------------------
+# First think about what is being asked of you and if there
+# is anything that is going to be repeated over and over and over.
+#
+# For this problem it should become clear after some thinking
+# that whatever you need to do to figure out the sum of the 
+# 1st perimeter will be similar to what you need to do to 
+# figure out the sum of the 2nd perimeter, etc. 
+#
+# The only way to attack this type of problem so that it works
+# for matrices of any size is with a loop.
+#------------------------------------------------------------------
+
+#-------------------------------------------------
+# OK ... so you now know that you will need a loop.
+# It would help a LOT to start with some examples and make sure
+# you totally understand what is required to figure
+# out the solution "by hand".
+#-------------------------------------------------
+
+# Let's work out the answer by hand for the following 5x5 matrix.
+#
+# > m <- matrix(1:25, nrow=5, ncol=5)
+#
+#    1    6   11   16   21
+#    2    7   12   17   22
+#    3    8   13   18   23
+#    4    9   14   19   24
+#    5   10   15   20   25
+#
+
+#..........................................................................
+# First let's figure out what it takes to compute the outermost sum.
+# This is a good place to start just to get a feel for what is necessary.
+#..........................................................................
+
+# To get the outermost sum, we must add the following values.
+# We are listing the values by starting at the upper left hand corner and going
+# around the outer perimeter in a counter-clockwise order (down, right, up, left).
+# We could have done this in a different order, but that was the first
+# thought that came to my mind. 
+#
+#   left column : 1 2 3 4 5
+#   bottom row  : 10 15 20 25  (not including 5 since that was already listed)
+#   right column: 24 22 21  (not including 25 since that was already listed)
+#   top row: 16 11 6  (not including 21 or 1 since both were already listed)
+#
+# So the first sum in the returned vector will be
+#   sum(1,2,3,4,5,10,15,20,25,24,23,22,21,16,11,6)
+# Which is 208
+#
+# Let's figure out how to do that part in code for this particular matrix.
+# Note that we will eventually need a "general solution" but looking at
+# some specific examples helps to figure out a general solution.
+# After a little thinking it comes out that the following will work:
+
+m <- matrix(1:25, nrow=5, ncol=5)
+# outermost perimeter
+leftPart   <- m[ 1:5 , 1   ]    # 1  2  3  4  5
+bottomPart <- m[ 5   , 2:5 ]    # 10 15 20 25
+rightPart  <- m[ 1:4 , 5   ]    # 21 22 23 24
+topPart    <- m[ 1   , 2:4 ]    # 6  11 16
+sum(leftPart,bottomPart, rightPart,topPart)  # 208
+
+#............................................
+# Now let's focus on the 2nd perimeter
+#............................................
+
+# Using the following picture, we can work out the code
+# below that sums the positions in the matrix that are
+# on the 2nd perimeter (i.e. the 2'sin the picture)
+#
+#      x x x x x
+#      x 2 2 2 x
+#      x 2 3 2 x
+#      x 2 2 2 x
+#      x x x x x
+
+leftPart   <- m[ 2:4 , 2   ]
+bottomPart <- m[ 4   , 3:4 ]
+rightPart  <- m[ 2:3 , 4   ]
+topPart    <- m[ 2   , 3:3 ]
+
+# Display the matrix and the individual parts to make
+# sure that we are correct:
+m <- matrix(1:25, nrow=5, ncol=5)
+m
+leftPart    #  7  8  9
+bottomPart  # 14 19
+rightPart   # 17 18
+topPart     # 12
+
+# so the 2nd sum in the answer is:
+sum(leftPart,bottomPart, rightPart,topPart) # 104
+
+#...............................................
+# The 3rd perimeter for this case is easy ...
+#...............................................
+
+# Refer to the following picture to see that after
+# eliminating the numbers on the 1st and 2nd
+# perimeters (these are the x's) we are left with 
+# only a single number. 
+#
+#       x x x x x
+#       x x x x x
+#       x x 3 x x
+#       x x x x x
+#       x x x x x
+#
+# The code to get that number is:
+
+m <- matrix(1:25, nrow=5, ncol=5)
+m
+leftPart   <- m[3 , 3]
+bottomPart <- 0  # since there is "bottom" to this "perimeter"
+rightPart  <- 0  # since there is "right" to this "perimeter"
+topPart    <- 0  # since there is "top" to this "perimeter"
+
+sum(leftPart,bottomPart, rightPart,topPart) # 13
+
+# OK, so now we have a feel for how to come up with 
+# the answer "by hand" for a particular 5x5 matrix.
+# Let's see if we can figure out how to put that into code.
+
+
+#---------------------------------------------------
+# Figure out the number of times the loop will 
+# need to "go around"
+#---------------------------------------------------
+
+# We already know that we'll need a loop. It helps a lot
+# to figure out how many times that loop will go around
+# for a matrix of an arbitrary size. 
+#
+# Let's work out some examples by hand:
+# 
+# - for a 1x1 matrix (e.g. a single number) the number of perimeters is obviously 1
+#   matrix size:          1x1
+#   number of perimeters: 1   (i.e. just the single number)
+# 
+# - matrix size:          2x2
+#   number of perimeters: 1   (i.e. just the 4 numbers )
+#
+# - matrix size:          3x3
+#   number of perimeters: 2   (i.e. the outer numbers and the center number)
+#
+# - etc.   
+#
+# After some thinking and looking at some pictures (you can draw them yourself),
+# we can make the following chart
+#
+#  matrix size        # of perimeters
+#  -----------        ---------------
+#    1x1               1
+#    2x2               1
+#    3x3               2
+#    4x4               2
+#    5x5               3
+#    6x6               3
+#    7x7               4
+#    8x8               4
+#
+# It should be easy to see a pattern and to realize that the number of perimeters
+# for matrices that have an even number of rows (or cols) is just 1/2 the number of rows.
+#
+# With a little more thought you can see that for matrices with an odd number of rows
+# the answer is similar, but you have to round up the answer to the nearest whole number.
+#
+# You should now be able to come up with the following code that determines
+# the number of perimeters based on the number of rows (or cols) of a square matrix.
+# Assuming that our matrix is named mat:
+
+numPerimeters <- ceiling(nrow(mat) / 2)  # figure out the number of perimeters
+
+
+#-------------------------------------------------
+# Start putting together the outline of your
+# code.
+# 
+# The following outline sets up the general structure for
+# our code. We will have to fill in some very important
+# details later (see the comments in the code below)
+#-------------------------------------------------
+
+perimeterSums <- function(mat) {
+  
+  numPerimeters <- ceiling(nrow(mat) / 2)  # figure out the number of perimeters
+  
+  # Start with an empty vector. We will a new number to this vector
+  # every time through the loop.
+  answer <- numeric(0)  
+  
+  # instead of writing nrow(mat), we can abbreviate that with the 
+  # following variable.
+  nr <- nrow(mat)  # note that for square matrices, nrow and ncol are the same
+  
+  # Keep looping until we have all the sums
+  while( length(answer) < numPerimeters){
+    
+    # DO SOMETHING HERE TO FIGURE OUT THE SUM FOR THE
+    # CURRENT PERIMETER.
+    #
+    # PLACE THAT SUM IN A VARIABLE, SUCH AS total.
+    #
+    # FINALLY, ADD THE total FOR THE CURRENT PERIMETER 
+    # TO THE ANSWER
+    #
+    # WE WILL FILL IN THIS PART LATER ...
+    
+    # add the current total to the answer
+    answer <- c(answer, total)
+  }
+  
+  return(answer)
+}
+
+
+#----------------------------------------------------------------
+# At this point we can start to figure out some details
+# of how the code inside the body of the loop works. 
+# 
+# It helps to figure out "by hand" what would need to happen
+# each time through the loop for a particular example. 
+#
+# The comments in the code below, continues to work with the 
+# 5x5 matrix example that we started with above.
+#
+# In the process of working through the example, it becomes
+# clear that we will need to know which perimeter we are calculating
+# the sum for. We create a variable, perimNum, for this purpose.
+#----------------------------------------------------------------
+
+perimeterSums <- function(mat) {
+  
+  numPerimeters <- ceiling(nrow(mat) / 2)  # figure out the number of perimeters
+  answer <- numeric(0)  
+  nr <- nrow(mat)
+  
+  while( length(answer) < numPerimeters){
+    perimNum <- length(answer) + 1   # 1 for 1st perimeter, 2 for 2nd etc
+
+    # To figure out the next line of code think about the
+    # code that would be necessary for a 5x5 matrix for each perimeter.
+    # This code is based on the work we did above.
+    #
+    #   leftPart  <- mat[ 1:(5-0) , 1  ] # 1st perimeter
+    #   leftPart  <- mat[ 2:(5-1) , 2  ] # 2nd perimeter
+    #   leftPart  <- mat[ 3:(5-2) , 3  ] # 3nd perimeter
+    #
+    # By looking at the 3 lines of code above, that should be 
+    # done for the 1st perimeter, 2nd perimeter and 3rd perimeter, 
+    # we can work out the following generic line of code that
+    # would work correctly for each time through the loop
+    leftPart <- sum( mat[  perimNum:(nr-perimNum+1)   ,   perimNum ] )
+    
+
+    # We can follow a similar approach for the rest of the "parts" 
+    # of the perimeter. Again, refer back to the work that we did
+    # above when we figure it out "by hand" for a 5x5 matrix.
+    #
+    #   bottomPart <- mat[ 5 , 2:5 ]   # 1st perimeter
+    #   bottomPart <- mat[ 4 , 3:4 ]   # 2nd perimeter
+    #   bottomPart <- mat[   ,     ]   # 3rd perimeter THERE IS NO BOTTOM PART
+    
+    if ( perimNum == numPerimeters){
+      bottomPart = 0
+    } else {
+      bottomPart <- sum ( mat[ nr - perimNum + 1 ,      (perimNum+1):(nr-perimNum+1) ] )
+    }
+    
+    
+    #   rightPart <- mat[ 4:1 , 5 ]  # 1st permeter
+    #   rightPart <- mat[ 3:2 , 4 ]  # 2nd permeter
+    #   rightPart <- mat[     ,   ]  # 3rd perimeter THERE IS NO RIGHT PART
+    
+    if ( perimNum == numPerimeters){
+      rightPart <- 0
+    } else {
+      rightPart <- sum (    mat [ (nr-perimNum):perimNum , nr-perimNum+1 ] )
+    }
+    
+    
+    #   topPart <- mat[1 , 2:4 ]  # 1st perimeter
+    #   topPart <- mat[2 , 3:3 ]  # 2nd perimeter
+    #   topPart <- mat[  ,     ]  # 3rd perimeter THERE IS NO TOP PART
+    
+    if ( perimNum == numPerimeters){
+      topPart <- 0
+    } else {
+      topPart <- sum (    mat [ perimNum , (perimNum+1):(nr-perimNum) ] )
+    }
+
+    total <- sum( leftPart,bottomPart,rightPart,topPart)  
+    answer <- c(answer, total)
+  }
+  
+  return(answer)
+}
+
+
+#.................................................
+# Test the code.
+#
+# After running the following test, it seems like 
+# this code does work for a 5x5 matrix.
+#.................................................
+m <- matrix(1:25, nrow=5, ncol=5)
+m
+perimeterSums(m)   # 208 104 13
+
+# Let's check this by figuring it out "by hand", ie.
+# by manually checking what the answer should be
+answer <- c(sum(1,2,3,4,5,10,15,20,25,24,23,22,21,16,11,6),
+            sum(7,8,9,14,17,18,19,12),
+            13)
+answer # 208 104 13
+
+
+
+######################################################
+# Try some more examples ...
+#
+# If you think about it some more you should evenutally
+# figure out that the code will need to be modified slightly
+# for matrices with an even number of rows (and columns).
+#
+# The inner-most perimeter for a square matrix that has 
+# an odd number of rows consists of a single number as 
+# can be seen in the diagram of a 3x3 matrix.
+# Our code in the function above took care of this issue
+# with the if's that appear in side the loop.
+# 
+#      1 1 1
+#      1 2 1
+#      1 1 1 
+#
+# However, square matrices that have an even number of rows and 
+# columns have four numbers in their innermost perimeter.
+# This can clearly be seen in the following diagram of a 
+# 4x4 matrix:
+#
+#      1 1 1 1
+#      1 2 2 1 
+#      1 2 2 1
+#      1 1 1 1 
+#
+# The code that we wrote above will not work for matrices
+# with an even number of rows (and columns). With some thought
+# we can revise the code as shown below to only ignore the
+# bottomPart and rightPart of the innermost perimeter
+# if the number of rows in the matrix is odd (see the comments
+# in the code below)
+######################################################
+
+perimeterSums <- function(mat) {
+  numPerimeters <- ceiling(nrow(mat) / 2) 
+  answer <- numeric(0)
+  nr <- nrow(mat)
+  
+  while( length(answer) < numPerimeters){
+    perimNum <- length(answer) + 1
+    leftPart <- sum(mat[perimNum:(nr-perimNum+1) , perimNum]) 
+    
+    if ( perimNum == numPerimeters & nr%%2==1){   # originally did not have "& nr%%2==1"
+      bottomPart = 0
+    } else {
+      bottomPart <- sum(mat[nr-perimNum+1 , (perimNum+1):(nr-perimNum+1)])
+    }
+    
+    if (perimNum == numPerimeters & nr%%2==1){    # originally did not have "& nr%%2==1"
+      rightPart <- 0
+    } else {
+      rightPart <- sum(mat[(nr-perimNum):perimNum , nr-perimNum+1]) 
+    }
+    
+    if ( perimNum == numPerimeters){
+      topPart <- 0
+    } else {
+      topPart <- sum(mat[perimNum , (perimNum+1):(nr-perimNum)])
+    }
+    
+    total <- sum( leftPart,bottomPart,rightPart,topPart)  
+    answer <- c(answer, total)
+  }
+  return(answer)
+}
+
+# Test the code on a 4x4 matrix
+m <- matrix(rep(1,16), nrow=4, ncol=4)
+perimeterSums(m)  # 12 2    
+
+
+########################################################
+# Finding errors ... (i.e. debugging)
+#
+# The R debugger is very useful for finding errors.
+# However, it is sometimes faster or easier to put
+# lines of code that display the values of your variables
+# directly into the code.
+#
+# For example, the following code adds "cat" commands
+# to display values of variables as the code is running.
+# This makes it easy to see exactly what the code is doing.
+# Adding commands to cat or print the values directly 
+# into the code is often a faster approach to finding
+# where the problems are than by using the debugger. 
+#
+# Both techniques (i.e. using the debugger and using
+# cat or print commands) are valuable and can be used
+# as necessary.
+#
+# Once any problems are found, the cat and print commands
+# that were used to find the bugs should be removed from the
+# final version of the code.
+########################################################
+
+
+
+perimeterSums <- function(mat) {
+  
+  numPerimeters <- ceiling(nrow(mat) / 2)  # figure out the number of perimeters
+  answer <- numeric(0)  
+  nr <- nrow(mat)  # note that for square matrices, nrow and ncol are the same
+  
+  while( length(answer) < numPerimeters){
+    perimNum <- length(answer) + 1   # 1 for 1st perimeter, 2 for 2nd etc
+    cat("*** PERIMNUM: ", perimNum, "\n")
+    
+    leftPart <- sum( mat[  perimNum:(nr-perimNum+1)   ,   perimNum ] )
+    cat("leftPart:", mat[  perimNum:(nr-perimNum+1)   ,   perimNum ],"\n")
+    
+    if ( perimNum == numPerimeters){
+      bottomPart = 0
+    } else {
+      bottomPart <- sum ( mat[ nr - perimNum + 1 ,      (perimNum+1):(nr-perimNum+1) ] )
+    }
+    cat("bottomPart:", mat[ nr - perimNum + 1 ,      (perimNum+1):(nr-perimNum+1) ],"\n")
+    
+    if ( perimNum == numPerimeters){
+      rightPart <- 0
+    } else {
+      rightPart <- sum (    mat [ (nr-perimNum):perimNum , nr-perimNum+1 ] )
+    }
+    cat("rightPart:",  mat [ (nr-perimNum):perimNum , nr-perimNum-1 ],"\n" )
+    
+    if ( perimNum == numPerimeters){
+      topPart <- 0
+    } else {
+      topPart <- sum (    mat [ perimNum , (perimNum+1):(nr-perimNum) ] )
+    }
+    cat("topPart:",  mat [ perimNum , (perimNum+1):(nr-perimNum) ],"\n" )
+    
+    total <- sum( leftPart,bottomPart,rightPart,topPart)  
+    cat("TOATAL IS: ", total, "\n\n")
+    
+    answer <- c(answer, total)
+  }
+  
+  return(answer)
+}
+
+# Test the code ...
+
+m <- matrix(1:25, nrow=5, ncol=5)
+m
+perimeterSums(m)
+
+
+

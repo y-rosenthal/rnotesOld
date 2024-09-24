@@ -1,0 +1,26 @@
+# R Studio Hotkeys
+
++-------------------+----------------------+------------------------------------------------------------------------------------------------------------------------------------------------+
+| Hotkey            | Press in this window | What it does                                                                                                                                   |
++===================+======================+================================================================================================================================================+
+| ctrl-L            | any window           | Clear the "console" window.                                                                                                                    |
++-------------------+----------------------+------------------------------------------------------------------------------------------------------------------------------------------------+
+| ctrl-ENTER (win)\ | script window        | Run all code that is highlighted in the Script window.  The output will appear in the console window. (also see ***shift-arrow-keys*** below)\ |
+| cmd-ENTER (mac)   |                      |                                                                                                                                                |
+|                   |                      | If no code is highlighted then this runs just the line of code where the cursor is in the script window.                                       |
++-------------------+----------------------+------------------------------------------------------------------------------------------------------------------------------------------------+
+| ESC               | console window       | Clears just the current                                                                                                                        |
+|                   |                      | line of code. Use this if you typed a long command and you want to erase it                                                                    |
+|                   |                      | before pressing ENTER.                                                                                                                         |
++-------------------+----------------------+------------------------------------------------------------------------------------------------------------------------------------------------+
+| arrow-keys        | console window       | left/right arrows move in the current line of code.                                                                                            |
+|                   |                      |                                                                                                                                                |
+|                   |                      | up/down arrows move to commands that were typed earlier/later.                                                                                 |
++-------------------+----------------------+------------------------------------------------------------------------------------------------------------------------------------------------+
+| shift-arrow-keys  | script window        | Extend the highlight in                                                                                                                        |
+|                   |                      | the direction of the arrow key. This is a very quick way to highlight a few                                                                    |
+|                   |                      | lines of code. Press shift while holding the down arrow (or up arrow) to                                                                       |
+|                   |                      | highlight just a few lines of code.                                                                                                            |
++-------------------+----------------------+------------------------------------------------------------------------------------------------------------------------------------------------+
+
+: RStudio - some useful hotkeys

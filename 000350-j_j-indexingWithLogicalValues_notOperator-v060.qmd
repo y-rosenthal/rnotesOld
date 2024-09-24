@@ -1,0 +1,570 @@
+# Indexing a vector using LOGICAL values
+
+```{r}
+#############################################################################.
+#############################################################################.
+##
+## Indexing a vector using LOGICAL values
+##
+#############################################################################.
+#############################################################################.
+
+#---------------------------------------------------.
+# indexing with logical values
+#
+# If the index [i.e. the vector in the brackets] is a logical 
+# vector then only the values returned are those values
+# that correspond to the positions that contain TRUE values.
+#---------------------------------------------------.
+
+3 > 2
+
+c(100,200) < c(50,400)  # FALSE TRUE
+
+c(1,2,3,4)  <= c(1,2)  # recycling rule: c(1,2,3,4) <= c(1,2,1,2) 
+
+# an example
+grades <- c(70, 72, 80, 85, 88, 95)
+
+grades
+
+grades[c(TRUE, TRUE, FALSE, FALSE, FALSE, TRUE)]   # 70 72 95
+
+grades    # grades didn't change
+
+# another example
+grades[c(FALSE, FALSE, FALSE, TRUE, TRUE, FALSE)]  # 85 88
+
+#------------------------------------------------------------------------.
+# The recycling rule works to repeat the logical vector as many times
+# as necessary to equal the length of the vector being indexed.
+# This is another exmaple of the "recycling rule".
+#------------------------------------------------------------------------.
+
+grades <- c(70, 72, 80, 85, 88, 95)
+grades
+
+grades[c(TRUE, FALSE)]   # 70    80    88 (every other grade starting with 1st grade)
+
+# original      : grades[c(TRUE, FALSE)]
+# recycling rule: grades[c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE)]
+#               : 70 80 88
+
+grades                   # 70 72 80 85 88 95
+grades[c(FALSE, TRUE)]   #    72    85    95 (every other grade starting with 2nd grade)
+
+# original      : grades[c(FALSE, TRUE)]
+# recycling rule: grades[c(FALSE, TRUE, FALSE, TRUE, FALSE, TRUE)]
+#               : 72 85 95
+
+grades                               # 70 72 80 85 88 95
+grades[c(TRUE, FALSE, TRUE, TRUE)]   # 70    80 85 88 
+# original      : grades[c(TRUE, FALSE, TRUE, TRUE)]
+# recycling rule: grades[c(TRUE, FALSE, TRUE, TRUE, TRUE, FALSE)]
+#               : 70 80 85 88
+
+
+
+
+#----------------------------------------------------------------------------------.
+# we can generate a logical vector with a comparison operator (i.e. > < >= <= == !=)
+#----------------------------------------------------------------------------------.
+
+grades <- c(70, 72, 80, 85, 88, 95)
+grades
+
+grades >= 80   # FALSE FALSE TRUE TRUE TRUE TRUE
+# original       : grades >= 80
+#                : c(70,72,80,85,88,95) >= 80
+# recycling rule : c(70,72,80,85,88,95) >= c(80,80,80,80,80,80)
+#                : c(70>=80 , 72>=80 , 80>=80 , 85>=80 , 88>=80 , 95>=80)
+#                : c(FALSE,   FALSE,   TRUE,    TRUE,    TRUE,    TRUE)
+#                : FALSE FALSE TRUE TRUE TRUE TRUE
+
+
+grades >= c(80, 90)
+# original       : grades >= c(80, 90)
+#                : c(70,72,80,85,88,95) >= c(80,90)
+# recycling rule : c(70,72,80,85,88,95) >= c(80,90,80,90,80,90)
+#                : c(70>=80,72>=90,80>=80,85>=90,88>=80,95>=90)
+#                : c(FALSE, FALSE ,TRUE  ,FALSE  ,TRUE ,TRUE)
+
+
+
+
+#---------------------------------------------------------------------.
+# we can use that logical vector INSIDE the [brackets] to get only 
+# those values that match a specific condition
+#---------------------------------------------------------------------.
+
+grades <- c(70, 72, 80, 85, 88, 95)
+grades
+
+# EXAMPLE: Display only those grades that are 80 or greater
+grades[ grades >= 80 ]   #       80 85 88 95
+# original                                     : grades[ grades >= 80 ]  
+# create the logical vector                    : grades[ c(FALSE,FALSE,TRUE,TRUE,TRUE,TRUE)]
+# extract the grades that are in TRUE positions: 80 85 88 95
+
+
+# EXAMPLE: Show grades that are above average.
+grades                           # 70 72 80 85 88 95
+grades[grades >  mean(grades)]   # 85 88 95
+# original      : grades[grades > mean(grades)]
+# mean          : grades[grades > 81.66667 ]
+# logical vector: grades[c(FALSE, FALSE, FALSE, TRUE, TRUE, TRUE)]
+#               :  85 88 95
+```
+
+## --- Practice ---
+
+```{r}
+###############################################################.
+# QUESTION: grades is a vector that contains student grades.
+# Write a command that will only show those grades that are 
+# an even multiple of 10 (i.e. that end in zero).
+# HINT - think about using the %% operator.
+###############################################################.
+
+grades <- c(70, 72, 80, 85, 88, 95)
+
+grades %% 10
+
+grades [ grades %% 10 = 0    ]   # ERROR - remember - use == for comparisons
+
+grades [ grades %% 10 == 0    ]
+
+grades [ grades %% 10 != 0    ]
+
+# How to think through the problem
+# step 1: You need to get some values from the grades vector. Therefore the command
+#         needs to specify 
+#                    grades[ SOME_VECTOR ]   
+#         You need a vector in the [brackets] that identifies which grades you want.
+#
+#         Exactly which values you need does not depend on position numbers. Rather
+#         the grades that you want depends on a particular condition, ie. those
+#         grades that are evenly divisable by 10. Therefore formulate the command
+#         in the following way:
+# 
+#             grades[ LOGICAL-VECTOR-THAT-HAS-TRUEs-AND-FALSEs-IN-THE-RIGHT-PLACES ]
+#
+# step 2: REMEMBER - the %% operator gets you a remainder so
+#                   42 %% 10 is 2
+#                       but
+#                   40 %% 10 is 0
+#                   70 %% 10 is also 0
+#                   0 %% 0   is also 0
+#         The condition we are looking for is the grade%%10 is 0 (i.e. the grade is divisible by 10)
+#         The condition we are looking for is    :    grades %% 10 == 0
+#
+# step 3: put it all together
+#           grades [ grades %% 10 == 0]
+
+# show all the grades
+grades
+
+# show the grades that are an even multiple of 10
+grades [  grades %% 10 == 0]
+
+# original                   : grades [  grades %% 10 == 0]
+# expand grades inside the []: grades [ c(70,72,80,85,88,95) %% 10 == 0]
+# apply the %% to each grade : grades [ c(70%%10,72%%10,80%%10,85%%10,88%%10,95%%10) == 0]
+#                            : grades [ c(0     ,2     ,0     ,5     ,8     ,5     ) == 0]
+# apply the == to each value : grades [ c(0==0,2==0,0==0,5==0,8==0,5==0) ]
+#                            : grades [ c(TRUE,FALSE,TRUE,FALSE,FALSE,FALSE) ]
+# pull out the values of grades that are in the TRUE positions: 70 80 
+
+
+
+
+
+
+
+###########################################################################.
+# QUESTION: Write a command to display the values in the grades vector 
+#           that are at least 5 points above average
+#########################################################################.
+
+# EXAMPLE 1: 
+grades <- c(70, 72, 80, 85, 88, 95)  # average is 81.6667
+# YOUR CODE GOES HERE     #  88 95
+
+
+# EXAMPLE 2:
+grades <- c(50, 70, 72, 80, 85, 88, 95)  # average is 77.143
+# YOUR CODE GOES HERE     #  85 88 95
+
+
+#---------.
+# ANSWER
+#---------.
+grades <- c(70, 72, 80, 85, 88, 95)  # average is 81.6667
+grades [ grades >= mean(grades) + 5 ]
+
+
+#########################################################################.
+# QUESTION: Show grades that are within 5 points of the highest grade
+# HINT: use max function and a little math
+#########################################################################.
+
+# EXAMPLE 1: 
+grades <- c(70, 72, 80, 85, 91, 93, 93, 95)
+# YOUR CODE GOES HERE     #  91 93 93 95
+
+# EXAMPLE 2: 
+grades <- c(95, 92, 89, 89, 88, 80, 75)
+# YOUR CODE GOES HERE     #  95 92
+
+# EXAMPLE 3: 
+grades <- c(95, 89, 89, 88, 80, 75)
+# YOUR CODE GOES HERE     #  95
+
+
+#---------.
+# ANSWER
+#---------.
+grades <- c(70, 72, 80, 85, 91, 93, 93, 95)
+grades[ grades >= max(grades) - 5]
+
+
+
+#########################################################################.
+#########################################################################.
+##
+## sum ( LOGICAL_VECTOR )      # the number of values that are TRUE
+##
+##     > sum ( c( TRUE, FALSE, TRUE, TRUE) )
+##     [1] 3
+##
+## mean ( LOGICAL_VECTOR)       # the percent of values that are TRUE
+##
+##     > mean ( c( TRUE, FALSE, TRUE, TRUE) )
+##     [1] 0.75
+##   
+#########################################################################.
+#########################################################################.
+
+# If you try to use a logical vector where a number is expected, the TRUE
+# values will become 1 and the FALSE values will become 0
+
+TRUE + 5      # 6    since TRUE + 5 becomes   1+5
+3 * TRUE      # 3    since 3*TRUE becomes 3*1
+
+FALSE + 5      # 5    since FALSE + 5 becomes   0+5
+3 * FALSE      # 0    since 3*FALSE becomes 3*0
+
+c( TRUE, 999, FALSE ) # 1 999 0    you cannot mix logical values and numbers in a vector, TRUE becomes 1 and FALSE becomes 0
+
+sum(c(TRUE, FALSE, TRUE, TRUE))  # 3  since you cannot sum logicals so they become numbers
+
+mean(c(TRUE, FALSE, TRUE, TRUE))  # 0.75    same as mean(c(1,0,1,1))
+
+
+# Indexing can be either done with numbers or with logical values (i.e. TRUE/FALSE values)
+# Therefore, TRUE / FALSE vectors will NOT be converted to 1's and 0's in an index.
+grades = c(70,80,90,100)
+grades[c(TRUE, FALSE, FALSE, TRUE)]  # 70 100
+
+
+# What's going to be displayed by the following? Why?
+grades[c(1, 0, 0, 1)]     # 70 70
+
+grades[c(1, FALSE, FALSE, TRUE)]   # 70 70
+```
+
+#### WILF - UP TO HERE - AFTER CLASS 8  ####
+
+```{r}
+##########################################################################.
+# QUESTION: grades is a vector that contains grades of students on a test.
+#
+#           (a) write a command to show the number of students who got an 80 or above.
+#
+#           (b) write a command to show the percent of the class who got an 80 or above
+# 
+#           (c) show the grades that were 80 or above
+##########################################################################.
+
+#           (a) write a command to show the number of students who got an 80 or above.
+
+# EXAMPLE 1
+grades = c(85, 80, 79, 65, 55, 72, 90, 95)
+sum ( grades >= 80 )
+# Original:  sum ( grades >= 80 )
+#         :  sum ( c(85, 80, 79, 65, 55, 72, 90, 95) >= 80 )
+#         :  sum ( c(85>=80, 80>=80, 79>=80, 65>=80, 55>=80, 72>=80, 90>=80, 95>=80))
+#         :  sum ( c(TRUE, TRUE, FALSE,  FALSE,  FALSE,  FALSE, TRUE, TRUE))
+#         :  sum ( c(1,1,0,0,0,0,1,1))
+#            4
+
+
+
+# EXAMPLE 2
+grades = c(45, 78, 78, 85, 88)   
+sum ( grades >= 80 )
+
+
+
+#           (b) write a command to show the percent of the class who got an 80 or above
+
+# EXAMPLE 1
+grades = c(85, 80, 79, 65, 55, 72, 90, 95)
+# YOUR CODE GOES HERE       # 0.5
+
+# ONE WAY
+mean( grades >= 80 )
+# Original:  mean ( grades >= 80 )
+#         :  mean ( c(85, 80, 79, 65, 55, 72, 90, 95) >= 80 )
+#         :  mean ( c(85>=80, 80>=80, 79>=80, 65>=80, 55>=80, 72>=80, 90>=80, 95>=80))
+#         :  mean ( c(TRUE, TRUE, FALSE,  FALSE,  FALSE,  FALSE, TRUE, TRUE))
+#         :  mean ( c(1,1,0,0,0,0,1,1))
+#            0.5
+
+
+# ANOTHER WAY
+
+sum( grades>= 80) / length(grades)
+
+
+
+
+
+
+# EXAMPLE 2
+grades = c(45, 78, 78, 85, 88)   
+# YOUR CODE GOES HERE       # 0.4
+
+
+#           (c) show the grades that were 80 or above
+
+# EXAMPLE 1
+grades = c(85, 80, 79, 65, 55, 72, 90, 95)
+# YOUR CODE GOES HERE       # 85 80 90 95
+grades[grades>=80]
+# Original:   grades[grades>=80]
+#             grades[c(85, 80, 79, 65, 55, 72, 90, 95)>=80]
+#             grades[c(85>=80, 80>=80, 79>=80, 65>=80, 55>=80, 72>=80, 90>=80, 95>=80)]
+#             grades[c(85>=80, 80>=80, 79>=80, 65>=80, 55>=80, 72>=80, 90>=80, 95>=80)]
+#         :   grades[c(TRUE, TRUE, FALSE,  FALSE,  FALSE,  FALSE, TRUE, TRUE)]
+#             85 80 90 95
+
+# EXAMPLE 2
+grades = c(45, 78, 78, 85, 88)   
+# YOUR CODE GOES HERE       # 85 88
+
+
+
+##########################################################################.
+# QUESTION: Add up the grades that are above 80
+##########################################################################.
+
+grades = c(45, 78, 78, 85, 88)   
+
+# ANSWER
+sum ( grades[grades>=80] )
+
+
+
+#########################################################################.
+#########################################################################.
+#
+# USING THE EXCLAMATION POINT (i.e "not") OPERATOR
+#
+#   ! SOME_LOGICAL_VECTOR    # (i.e. exclamation point before a logical vector)
+#
+# The ! (exclamation point) is known as the "not" operator. 
+# It flips TRUEs and FALSEs.  (i.e. changes TRUE to FALSE and changes FALSE to TRUE)
+#########################################################################.
+#########################################################################.
+
+logicalValues <- c(TRUE, FALSE, TRUE, TRUE)
+logicalValues
+
+!logicalValues    # change TRUE to FALSE and change FALSE to TRUE
+
+logicalValues    # the original vector didn't change
+```
+
+#### BEREN - UP TO HERE - AFTER CLASS 8  ####
+
+```{r}
+#########################################################################.
+#########################################################################.
+#
+# is.na
+#
+# is.na ( someVector ) tests to see if the values are NA.
+# is.na returns a logical vector. Example:
+# 
+#   > is.na(c(10,NA,20,30,NA))
+#   [1] FALSE TRUE FALSE FALSE TRUE
+#
+#########################################################################.
+#########################################################################.
+
+# EXAMPLES
+
+#---------------------------------------------------------------------------.
+# QUESTION: A teacher recorded grades of her students on a test in the vector grades.
+# Some students didn't take the test yet. For those students she recorded a grade of 
+# NA. (see the questions below)
+#---------------------------------------------------------------------------.
+
+grades = c(NA,85,NA,90,88)   # NA is used for students who didn't take the test yet.
+grades
+
+mean(grades)    # NA
+
+?mean
+
+mean(grades, na.rm=TRUE)  # 87.6667
+
+grades == NA   # NA NA NA NA NA
+
+# original:    grades == NA
+#              c(NA,85,NA,90,88) == NA
+#              c(NA==NA,85==NA,NA==NA,90==NA,88==NA) 
+#              NA NA NA NA NA 
+
+
+grades != NA   # NA NA NA NA NA
+
+
+
+# Show a logical vector that indicates which grades are NAs
+
+is.na(grades)     # TRUE FALSE TRUE FALSE FALSE
+
+# Show the actual NAs
+
+grades[ is.na(grades) ]   # NA NA 
+
+# original:    grades[ is.na(grades) ]
+#              grades[ is.na(c(NA,85,NA,90,88)) ]
+#              grades[ c(TRUE,FALSE,TRUE,FALSE,FALSE) ]
+#              NA NA
+
+
+# Show the just the grades that are NOT NA grades
+# REMEMBER (see above) that the ! will flip TRUE to FALSE and FALSE to TRUE
+
+
+grades [ !is.na(grades) ]   # 85 90 88
+
+# original:    grades[ !is.na(grades) ]
+#              grades[ !is.na(c(NA,85,NA,90,88)) ]
+#              grades[ c(FALSE,TRUE,FALSE,TRUE,TRUE) ]
+#              85 90 88
+
+
+# How many students did not take the test yet (i.e. grade is NA)
+sum( is.na(grades) )
+
+# what percent of the class DID take the test already?
+mean( !is.na(grades) )               # one answer (this is the best answer)
+1 - mean (is.na(grades))             # another answer
+sum(!is.na(grades)) / length(grades) # a third answer
+```
+
+
+
+#### 2023 - BEREN - UP TO HERE - AFTER CLASS 9  #####
+
+#### 2023 - WILF - UP TO HERE - AFTER CLASS 9  ####
+
+#### 2023 - BEREN - UP TO HERE - AFTER CLASS 10 (worked on practice problems)
+
+#### 2023 - WILF - UP TO HERE - AFTER CLASS 10 (worked on practice problems)
+
+## --- Practice ---
+```{r}
+#########################################################.
+# QUESTION
+#
+# Write a function with the following signature
+#
+#    positionsOfMin = function( vec ){
+#        # YOUR CODE GOES HERE
+#    }
+#
+# The function should return a vector with the positions
+# of the minimum value in the vector.
+#
+# EXAMPLE 1:
+#    > positionsOfMin(c(10, 5, 2, 100, 2, 35))
+#    [1] 3 5
+#
+# EXAMPLE 2:
+#    > positionsOfMin(c(40, 30, 20, 10))
+#    [1] 4
+#########################################################.
+
+# ANSWER 1 - this version is somewhat longer than it needs to be.
+#            The code is spread out on multiple lines so that you can follow
+#            along with the debugger to understand how everything works.
+
+positionsOfMin = function( vec ){
+
+    allPositions = 1:length(vec)
+    smallest = min(vec)
+    tf = vec == smallest
+    allPositions[tf]
+}
+
+# check the examples
+positionsOfMin(c(10, 5, 2, 100, 2, 35))   # 3 5
+positionsOfMin(c(40, 30, 20, 10)) # 4
+
+
+# ANSWER 2 - this version is more concise but results in the same values.
+positionsOfMin = function( vec ){
+  (1:length(vec)) [vec == min(vec)]
+}
+
+# check the examples
+positionsOfMin(c(10, 5, 2, 100, 2, 35))   # 3 5
+positionsOfMin(c(40, 30, 20, 10)) # 4
+
+
+
+
+#########################################################.
+# QUESTION
+#
+# Write a function with the following signature
+#
+#    addToMinValues = function( nums , value ){
+#        # YOUR CODE GOES HERE
+#    }
+#
+# nums is expected to be a numeric vector
+#
+# value is expected to be a single number
+#
+# The return value should be the same as nums with the value
+# added to the minimum values in nums.
+#
+# HINT - feel free to use the positionsOfMin function that 
+# you defined in the previous question as part of the answer.
+#
+# EXAMPLE 1:
+#    > addToMinValues(c(10, 5, 2, 100, 2, 35) , 100)
+#    [1] 10 5 102 100 102 35
+#
+# EXAMPLE 2:
+#    > positionsOfMin(c(40, 30, 20, 10), 200)
+#    [1] 40 30 20 210
+#########################################################.
+
+
+addToMinValues = function( nums, value ) {
+  positions = positionsOfMin(nums)
+  nums[positions] = nums[positions] + value
+  return(nums)
+}
+
+# check the examples
+addToMinValues(c(10, 5, 2, 100, 2, 35), 100)   
+addToMinValues(c(40, 30, 20, 10), 200) 
+```

@@ -1,0 +1,61 @@
+project:
+  type: book
+
+book:
+  title: "r notes"
+  author: "Y. Rosenthal"
+  date: "10/31/2023"
+  chapters:
+    - index.qmd
+    - part: 000065-quartoBook_part1_midterm2023-v001.qmd
+      chapters:
+      - 000100-a-installingAndUsingR-v011-afterClass.qmd
+      - 000100-b-integerDiv_modulus_variableAssignment_rm_ls-v011-afterClass.qmd
+      - 000150-orderOfOperationsInR-v002.qmd
+      - 000300-functions_vectors-v028.qmd
+      - 000350-b-userDefinedFunctions-v060.qmd
+      - 000350-h-introToTheDebugger_debugonceFunction-v060.qmd
+      - 000350-d-modesOfData_numeric_logical_character-v060.qmd
+      - 000350-e-NA_is.na_na.rm-v060.qmd
+      - 000350-f-indexingWithPositiveNumbers-v060.qmd
+      - 000350-g-indexingWithNegativeNumbers_assumesKnowledgeOfIndexingWIthPositiveNumbers-v060.qmd
+      - 000350-j-indexingWithLogicalValues_notOperator-v060.qmd
+      - 000350-k-characterValues_cat_nchar_paste_paste0-v060.qmd
+      - 000350-i-catFunction_usingCatToDebugYourCode-v060.qmd
+      - 000350-l-parallelVectors-v060.qmd
+    - part: 000354-quartoBook_part_morePracticeQuestions.qmd
+      chapters: 
+      - 000600-HW-vectorsFunctionsRecyclingrule-v003.qmd
+      - 99900-qstns-10-vectors-v035-ANSWERS.qmd
+      - 99900-qstns-20-dataframes-v035-ANSWERS.qmd
+      - 99900-qstns-30-userDefinedFunctions-v035-ANSWERS.qmd
+      - 99900-qstns-40-assortedTopics-v035-ANSWERS.qmd
+      - 000450-additionalPracticeProblems-WITH_ANSWERS-v005.qmd
+    - part: 000376-quartoBook_part2_afterMidterm2023-v001.qmd
+      chapters:
+        - 000350-o-in_intersect_setdiff_usingNotIn-v060.qmd
+        - 000350-p-localVariables_globalVariables-v060.qmd
+        - 000380-logicalOperators_and_or_not-v013-withAnswers-afterBerenClass.qmd
+        - 000380-logicalOperators_and_or_not-v013.qmd
+        - 000390-sciNotation_roundoffError_v005.qmd
+        - 000400-sciNotation_roundoffError_accessingVectorPositions-v000.qmd
+        - 000410-implicitAndExplicitConversions-v025.qmd
+  appendices: 
+    - 000110-RStudioHotkeys-v001.qmd
+    - 000350-n-doNotUseParenthesesWhenTheyAreClearlyNotNecessary-v060.qmd
+    - 000365-matchingBraces_indentation-v001.qmd
+execute: 
+  error: true
+  warning: true
+format:
+  html:
+    theme: cosmo
+    toc-expand: true
+    fontsize: 80%
+    number-depth: 2
+  pdf:
+    documentclass: scrreprt
+    fontsize: 9px
+
+editor: visual
+

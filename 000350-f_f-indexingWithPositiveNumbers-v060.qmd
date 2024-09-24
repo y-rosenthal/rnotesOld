@@ -1,0 +1,453 @@
+# Indexing with positive numbers
+
+```{r}
+###############################################.
+###############################################.
+## INDEXING (i.e. SUBSCRIPTING) A VECTOR
+###############################################.
+###############################################.
+
+# There are several terms that come up in this section
+# that will be defined below (e.g. "element", "index", "subscript").
+# 
+# These terms are not actually typed in R commands.
+# Rather these terms are used to describe features that are common to many
+# programming languages (including R) but they are not actually R commands. 
+# For example, you would never type the word "element" or "index" at an R prompt.
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# DEFINITION:   an "element" of a vector   ####
+#
+# An "element" of a vector is a single item in the vector. For example, 
+# a single number or a single TRUE or FALSE value. For example given 
+# the code:
+#
+#    > x = c(100,200,300) 
+#
+# We can say that: 
+#   100 is an element of the vector x.
+#   200 is also an element of the vector x.
+#   300 is the third, and final element of x.
+#
+# Similarly, given the following code, we can say that 50, 60, 70 and 80 are
+# all elements of the vector y.
+# 
+#    > y = seq(50, length.out=4, by=10)
+#    > y
+#    [1] 50 60 70 80
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# DEFINITION: "indexing" a vector   ####
+#
+# "Indexing a vector" means writing code that retrieves specific
+# elements from the vector. For example the following code  
+# retrieves the 2nd element from the vector, stuff.
+#
+#   > stuff = c(10,20,30)
+#
+#   > stuff[2]
+#   [1] 20
+#
+#   > 10 * stuff[2} + 7
+#   [1] 207
+#
+# Using positive position numbers is just one way to index a vector. There are
+# actually four different ways to index a vector e.g. using
+# "negative position numbers" to identify the values you "don't want". 
+# All of the ways to index a vector will be explained in more detail below.
+#
+#
+# DEFINITION: "subscript"
+#
+# In general, to index a vector you type the name of the vector followed
+# by [square brackets] that contain information that identifies which elements
+# of the vector to retrieve.
+#
+# The information that appears between the [square brackets] when indexing
+# a vector is known as a "subscript". For example, in the code above,
+# stuff[2], the number 2 is a subscript. Some programmers refer to 
+# the act of "indexing a vector" as "subscripting the vector".
+# When speaking casually, programmers will often refer to code such 
+# as "stuff[2]" as "stuff sub two".
+#
+#
+# There are several alternative ways to "index" a vector in R.
+# These include the following ways and will be described in 
+# much more detail below:
+# 
+# WAYS TO INDEX (AKA to subscript) A VECTOR
+#   - indexing a vector with positive numbers
+#   - index with negative numbers to identify the elements you don't want
+#   - indexing with TRUE/FALSE values 
+#   - indexing "named vectors" with the "names" of the elements (we'll cover this later)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+#########################################################.
+# Indexing with positive position numbers (AKA "index" numbers)  ####
+# (this was shown above, but will be elaborated on in more detail here)
+#
+# e.g.   stuff[2] 
+#        stuff[c(2,5)]
+#        stuff[c(5,2,5,2,5,2)]
+#########################################################.
+
+#-----------------------------------------------------------------------------.
+# To identify specific parts of a vector, type [square brackets].
+# Inside the [square brackets] type A SINGLE VECTOR that identifies the
+# values that you want. R has four different ways to specify which values you
+# want. We will learn all of them soon. For now, we will focus on the first
+# way ...
+# 
+# The first way is to specify the values you want is by identifying the 
+# position numbers (AKA "index" numbers)  of the specific elements you
+# are interested in.
+#
+# EXMAMPLE
+#    > stuff = c(10,20,30,40)    
+#    > stuff[2]               # get 2nd element - NOTE, 2 is a vector
+#    [1] 20
+#
+#    > stuff[ c(2,4) ]        # get the 2nd,4th elements - NOTE the c(2,5) is a SINGLE VECTOR
+#    [1] 20  40
+#-----------------------------------------------------------------------------.
+
+stuff <- c(10,20,30,40,50)
+stuff
+
+stuff[2]       # 20                i.e. the 2nd value
+stuff          # 10 20 30 40 50    i.e. stuff didn't change
+
+stuff [c(2,5)] # 20 50             i.e. 2nd and 5th values
+stuff
+
+
+# MAKE SURE that there is a JUST ONE vector in the [brackets]  ####
+stuff[2,5]     # ERROR - 2,5 is TWO VECTORS! 
+
+
+#-------------------------------------------------------.
+# You may repeat the same index numbers more than once     ####
+#-------------------------------------------------------.
+
+stuff[c(2,2,2,2)]  # 20 20 20 20
+
+stuff   # 10 20 30 40 50  (stuff didn't change)
+
+stuff[c(5,2,5,2)]  # 50 20 50 20   (you can repeat values)
+
+
+
+
+#------------------------------------------------------------.
+# QUESTION  - part a
+# 
+# Write a command to change the vector named stuff.
+# After your command runs, the vector should only contain the
+# first 3 elements that were originally in stuff. 
+# For example:
+#
+# EXAMPLE 1
+#   > stuff = c(10,20,30,40,50)
+#   > YOUR COMMAND GOES HERE
+#   > stuff
+#   [1] 10 20 30
+#
+# EXAMPLE 2
+#   > stuff = c(92, 100, 75, 63, 59, 95)
+#   > YOUR COMMAND
+#   > stuff
+#   [1] 92 100 75
+#------------------------------------------------------------.
+
+# ANSWER
+
+# EXAMPLE 1
+# setup some data
+stuff = c(10,20,30,40,50)
+
+#.....................
+# YOUR CODE GOES HERE
+#.....................
+stuff = stuff[1:3]       # **ANSWER**
+
+stuff # 10 20 30         # **ANSWER**
+
+
+# EXAMPLE 2
+
+# set up some data
+stuff = seq(10, 20, by=2)
+stuff     # 10 12 14 16 18 20
+
+#.........................
+# YOUR COMMAND GOES HERE (must be the same code as EXAMPLE 1)
+#.........................
+stuff = stuff[1:3]       # **ANSWER**
+
+stuff # 10 12 14         # **ANSWER**
+
+
+
+
+#------------------------------------------------------------.
+# QUESTION  - part b
+# 
+# Define a function named, firstThreePlus1 that takes a single argument 
+# named, vec that is expected to be a vector. The function should return
+# a vector that contains just the first 3 elements of the vec argument.
+#
+# The values of the elements that are returned should be one more than
+# the values of the elements that were in the argument, vec.
+#
+# FOR EXAMPLE:
+#
+#   > stuff = c(10,20,30,40,50)
+#   > firstThreePlus1(stuff)
+#   [1] 11 21 31
+#
+#   > grades = c(92,100,67,85,93,81)
+#   > firstThreePlus1(vec = grades)        # "vec=" isn't necessary, but should work
+#   [1] 93 101 68
+#
+#   > firstThreePlus1 ( seq(5, 100, by=5) )
+#   [1] 6 11 16
+#------------------------------------------------------------.
+
+
+# ANSWER
+
+firstThreePlus1 = function( vec ) {   # **ANSWER**
+  vec[1:3] + 1                        # **ANSWER**
+}                                     # **ANSWER**
+
+#.......................
+# YOUR CODE GOES HERE
+#.......................
+
+# Check your answer:
+stuff = c(10,20,30,40,50)
+firstThreePlus1(stuff)           # 11 21 31
+
+grades = c(92,100,67,85,93,81)   # 93 101 68
+firstThreePlus1(vec=grades)         
+
+firstThreePlus1 ( seq(5, 100, by=5) )  
+
+
+
+
+
+
+#----------------------------------------------------------------------------.
+# Any code that generates a vector can be specified inside the brackets.####
+# This includes function calls and nested function calls.
+#----------------------------------------------------------------------------.
+
+# You can use any mechanism to generate the vector inside the brackets
+stuff = c(10,20,30,40,50)
+
+stuff[rep(2,5)]  # 20 20 20 20 20      i.e. stuff[c(2,2,2,2,2)]   
+
+
+stuff[ c( rep( seq(3,1) , 2 ) , 5 )]  # 30 20 10 30 20 10 50     see below for explanation
+
+# original:           stuff[ c( rep( seq(3,1) , 2 ) , 5 )]
+# do seq(3,1) :       stuff[ c( rep( c(3,2,1) , 2 ) , 5 ) ]
+# do rep(c(3,2,1),2)  stuff[ c( c(3,2,1,3,2,1)      , 5 )]
+#                     stuff[ c(   3,2,1,3,2,1,        5 )]
+# final answer:       30 20 10 30 20 10 50
+
+#------------------------------------------------------------.
+# If you try to access information past the end of a vector
+# you will get NA, i.e. the information is Not Available
+#------------------------------------------------------------.
+stuff
+stuff[7]   # NA (7th value is Not Available)
+length(stuff)
+
+stuff[3:8] # 30 40 50 NA NA NA
+
+
+#------------------------------------------------------.
+# Index the target of an assignment to assign values to specific positions ####
+#------------------------------------------------------.
+
+stuff <- c(10,20,30,40,50)
+stuff
+stuff[2] <- 999   # put 999 into the 2nd position in stuff ####
+stuff
+
+
+#-----------------------------------------------------------------------------.
+# If the target of the assignment includes [brackets] the assignment happens element by element   ####
+# (see example below)
+#-----------------------------------------------------------------------------.
+
+stuff <- c(10,20,30,40,50)
+stuff  # 10 20  30 40  50
+stuff[c(2,5)] <- c(999, 888)   # put 999 in position 2 and 888 in position 5 ####
+stuff  # 10 999 30 40 888
+
+#-----------------------------------------------------------------------------.
+# This happens as long as TARGET of the assignment uses [square brackets].
+# This works even if the values being assigned do not use [brackets]
+#-----------------------------------------------------------------------------.
+
+newstuff <- c(999,888)
+newstuff
+
+stuff <- c(10,20,30,40,50)
+stuff[ c(2,5) ] = newstuff # same thing, even though there newstuff has no brackets
+stuff  # 10 999 30 40 888
+
+#-----------------------------------------------------------------------------.
+# The left hand side of an assignment that uses brackets (i.e. an index)
+# must specify a variable that ALREADY EXISTS
+#-----------------------------------------------------------------------------.
+
+thisDoesntExist [c(2,5)] <- c(999,888)  # ERROR since thisDoesntExist doesn't exist
+
+
+#-----------------------------------------------------------------------------.
+# Assigning a value to a position much past the end of a vector inserts NAs prior to that value.
+# (see the example)
+#-----------------------------------------------------------------------------.
+
+grades = 100
+grades      # 100
+grades[2]   # NA
+grades[5]   # NA
+grades[c(2,5)] <- c(90, 80)  # assign 90 to 2nd position, 80 to 5th position
+grades      # 100 90 NA NA 80
+
+
+
+
+#-----------------------------------------------------------.
+# Assignment uses the recycling rule ####
+# 
+# If there are more values on the left of the = sign than
+# on the right, R uses the recycling rule to recycle values
+# from the vector on the right hand side of the = sign.
+#-----------------------------------------------------------.
+
+#........................................
+# EXAMPLE 1 - recycling a single value 
+#........................................
+
+stuff = c(10,20,30,40,50)
+stuff
+stuff[c(1,3,5)] = 999        # same as  stuff[c(1,3,5)] = c(999,999,999)
+stuff  # 999 20 999 40 999
+
+# original :       stuff[c(1,3,5)] = 999
+# recycling rule:  stuff[c(1,3,5)] = c(999, 999, 999)
+
+
+#........................................
+# EXAMPLE 2 - recycling multiple values
+#........................................
+
+longerStuff = c(10,20,30,40,50,60,70,80)
+longerStuff
+longerStuff[1:8] = c(888,999)  # uses the recycling rule (see below)
+longerStuff   # 888 999 888 999 888 999 888 999 
+
+# original       : longerStuff[1:8] = c(888,999) 
+# colon operator : longerStuff[c(1,2,3,4,5,6,7,8)] = c(888,999)
+# recycling rule : longerStuff[c(1,2,3,4,5,6,7,8)] = c(888,999,888,999,888,999,888,999)
+
+
+#.................................................................
+# EXAMPLE 3 - left hand side accesses past the end of a vector 
+#.................................................................
+longerStuff = c(10,20,30)
+longerStuff
+
+# In the following line the brackets on the "left hand side" (LHS)
+# contains 1:6, however prior to this line executing, the length of
+# the vector was only 3, ie. 10,20,30
+# That's fine.
+
+longerStuff[1:6] = c(888,999) 
+
+longerStuff   # 888 999 888 999 888 999
+
+#.......................................................
+# EXAMPLE 4 - WARNING - recycling two vectors where length of
+# longer is not a mutliple of length of shorter one. 
+# This warning will appear whenever the recylcing rule is used, not just in 
+# assignments.
+#.......................................................
+
+x = c(10,20,30)
+x
+x[1:3] = c(888,999)  # WARNING - vector lengths are not multiples
+x    # 888 999 888 - even though we got a "warning" it still works.
+
+
+#.......................................................
+# EXAMPLE 5 - same as above happens with empty brackets
+#.......................................................
+x = c(10,20,30)
+x
+x[] = c(888,999)  # WARNING - same reason as previous example
+x    # 888 999 888 - even though we got a "warning" it still works.
+
+
+#.......................................................
+# EXAMPLE 6 - complex expression in the brackets
+#.......................................................
+
+longerStuff = c(10,20,30,40,50,60,70,80)
+
+# The [brackets] in the following command contain a complex expression. That's fine.
+longerStuff[seq(2,length(longerStuff),by=2)] = c(888,999) # 10 888 30 999 50 888 70 999
+
+longerStuff  # 10 888 30 999 50 888 70 999
+
+# original       : longerStuff[seq(2,length(longerStuff),by=2)] = c(888,999)
+#
+# length function: longerStuff[seq(2,8,by=2)] = c(888,999)
+#
+# seq function   : longerStuff[c(2,4,6,8)] = c(888,999)
+#
+# recycling rule : longerStuff[c(2,4,6,8)] = c(888,999,888,999)
+#
+# final result   : 10 888 30 999 50 888 70 999
+
+#.......................................................................................
+# EXAMPLE 7 - entire vector is replaced since target of assignment doesn't use [brackets]
+#
+# This should be obvious! Just remember this and don't get confused ...
+# If the left hand side of the = sign is just a variable name without 
+# any indexes then the entire contents of the variable is replaced.
+#.......................................................................................
+
+# The code below just replaces the entire variable longerStuff with c(888,999).
+# Specifically in 3rd line of code, ie.
+#
+#         longerStuff = c(888,999)              # entire vector is replaced
+#
+# Compare this with EXAMPLE 2 above and compare with the following code.
+# This is the only line of code that differs between the following example and EXAMPLE 2.
+# In EXAMPLE2 the code was:
+#
+#         longerStuff[1:8] = c(888,999)  
+#
+# The extra brackets in EXAMPLE 2 caused the assignment to happen element by 
+# element, rather than replacing the entire vector as in the example below.
+
+longerStuff <- c(10,20,30,40,50,60,70,80)
+longerStuff   
+longerStuff = c(888,999)  # no [brackets] in target of assignment - entire vector is replaced
+longerStuff   # 888 999
+
+##################################################.
+# 2023 - WILF - UP TO HERE - AFTER CLASS 8
+##################################################.
+```

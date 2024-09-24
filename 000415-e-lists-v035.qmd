@@ -1,0 +1,1202 @@
+---
+execute: 
+  error: true
+  warning: true
+number-depth: 4
+---
+
+# NAMED LISTS
+
+```{r}
+#-----------------------------------------------------------------------------.
+# NAMED LISTS
+#
+# The entries in a list can have names associated with them.
+# This makes working with lists much easier.
+#-----------------------------------------------------------------------------.
+
+#........................................................................
+#
+# first way to add names to a list - use the names function
+#........................................................................
+
+# let's recreate all of the data
+rm(list= ls())
+
+gradebook = list(c("bob", "charlie", "frank"), 
+                 c(70,80,90), 
+                 c(75,85,88), 
+                 c(TRUE, FALSE,FALSE))
+```
+
+::: {.callout-note icon=false collapse="true"}
+### Analyze the gradeook object - before adding names -  click here {.unnumbered}
+```{r}
+str(gradebook)  # see the structure
+gradebook # (see the actual values)
+# View(gradebooks)  # see the structure - try this command yourself
+```
+:::
+
+```{r}
+names(gradebook)  # NULL   i.e. no names
+
+# now let's add the names
+names(gradebook) = c("studs", "exam1", "exam2", "honorsStudent")
+
+# The gradebook now displays with $dollar-signs before the names of the 
+# individual pieces of information. 
+
+gradebook  # now there are names
+
+str(gradebook)   # you see the names here too
+```
+
+## Introducing $dollar-sign-notation for named lists
+
+```{r}
+#........................................................................
+# $DOLLAR-SIGN-NOTATION
+#
+# For "named lists" in addition to [[double-bracket-notation]] (as described above)
+# you can ALSO use $dollar-sign-notion (see examples below)
+#........................................................................
+
+# ONCE WE ADDED THE NAMES ...
+
+gradebook[[1]]    # still works
+
+gradebook$studs   # same exact thing
+```
+
+## [[double-brackets]] vs. $dollar-sign-notation (different ways to do same thing)
+
+```{r}
+#--------------------------------------------------------------.
+# TWO WAYS OF DOING THE SAME THING:
+#    [[double-brackets-notation]] and $dollar-sign-notation
+#
+# [[double-brackets]] notation is just a different way of writing
+# $dollar-sign-notation. The result is EXACTLY THE SAME.
+#--------------------------------------------------------------.
+
+gradebook[[2]]    # access the 2nd value of gradebook
+
+gradebook$exam1   # same EXACT thing
+
+#--------------------------------------------------------------.
+# However, [single-brackets] are different !!!
+#--------------------------------------------------------------.
+
+gradebook[2]     # this returns a list
+gradebook[[2]]   # this returns a vector
+gradebook$exam1  # this returns a vector (same as gradebook[[2]] )
+
+# Proof
+mode(gradebook[2])
+mode(gradebook[[2]]) 
+mode(gradebook$exam1)
+
+identical(gradebook[[2]], gradebook$exam1)   # TRUE
+identical(gradebook[2], gradebook$exam1)   # FALSE
+
+#--------------------------------------------------------------.
+# All of the rules that you learned about using [[double-brackets]]
+# work the same way for $names However, $names are a lot easier
+# to use and are less confusing than [[double-brackets]].
+#--------------------------------------------------------------.
+```
+
+
+## --- Practice --- 
+
+```{r}
+################################################################.
+# QUESTION
+#
+# Change the name of the first student to a different name.
+################################################################.
+
+###########.
+# Answer
+###########.
+
+# We have a few ways to do this.
+
+#---------------------------------------------.
+# One way ... using [[double-brackets]]
+#---------------------------------------------.
+
+gradebook[[1]][2] = "avraham" 
+gradebook
+
+#---------------------------------------------.
+# Another way ... using $names
+#---------------------------------------------.
+
+gradebook$studs[2] = "avi"   
+gradebook
+
+#---------------------------------------------.
+# A third way ... using "recursive indexing"
+# change the name from "avi" to "abie".
+#---------------------------------------------.
+
+gradebook[[c(1,2)]] = "abie"
+gradebook
+```
+
+## another way to assign names - specify names when you create the list(...) 
+
+```{r}
+#-------------------------------------------------------------.
+# another way to assign names - give the names directly
+# in the call to the list(...) function
+#-------------------------------------------------------------.
+
+# Remove all variables and start over again. 
+rm(list= ls())  
+
+# This is the data that will go into the list.
+# We can remove these variables once the list is created.
+students = c("bob", "charlie", "frank")
+test1 = c(70,80,90)
+test2 = c(75,85,88)
+honors = c(TRUE, FALSE,FALSE)
+
+# create the list and assign names all in one command.
+#
+# For example, the code, "studs=students", in the command below means that 
+# "studs" will be the name in the list for the data that is inserted into
+# the list from the students vector. (We could also call the name in 
+# the list "students" instead of "studs". We'll see how to do that in the next example.)
+
+gradebook = list(studs=students, exam1=test1, exam2=test2, honorsStudent=honors)
+
+gradebook   
+
+# REMEMBER - the list does NOT depend on the original variables.
+# we can remove the original variables and the list is still there.
+rm(students, test1, test2, honors)   
+gradebook
+```
+
+## REVIEW - comparison of the 2 ways to add names to a list:
+
+```{r}
+#...........................................................................
+# REVIEW - comparison of the 2 ways to add names to a list:
+#
+#     The first time we created the list we did the following
+#
+#        > gradebook = list(students, test1, test2, honors)
+#        > names(gradebook) = c("studs", "exam1", "exam2", "honorsStudent")
+#
+#     an easier way is to do it all in one command like this:
+#
+#        > gradebook = list(studs=students, exam1=test1, exam2=test2, honorsStudent=honors)
+#...........................................................................
+```
+
+## USING THE SAME NAMES AS THE VARIABLES ...
+
+```{r}
+#...........................................................................
+# USING THE SAME NAMES AS THE VARIABLES ...
+#
+# Using the same name as the variable also works but it could look a little
+# confusing when you first see it. In the following command students=students,
+# looks confusing but it isn't so difficult. 
+#
+#   > gradebook = list(students=students, test1=test1, test2=test2, honors=honors)
+#
+# The word, students, on the left hand side of the = sign is the name of the
+# data in the list.
+# 
+# The word, students, on the right hand side of the = sign is the variable students
+# that you are getting the data from.
+#
+# (See the code below ...)
+#...........................................................................
+
+# start over ... remove all variables
+rm (list = ls())
+
+students = c("bob", "charlie", "frank","david")
+test1 = c(60,70,80,90)
+test2 = c(65,75,85,95)
+honors = c(TRUE, FALSE,FALSE)
+
+gradebook = list(students=students, test1=test1, test2=test2, honors=honors)
+gradebook
+```
+
+## Changing the names of the entries in a list
+
+```{r}
+#--------------------------------------------------------------------------.
+# names( SOME_LIST ) = NEW_NAMES
+#
+# The names function simply returns the names of the objects in the list as a vector.
+# You can use this vector to display the names. 
+# You can also use this to change the names. 
+#
+# See the examples below. 
+#--------------------------------------------------------------------------.
+
+rm(list=ls()) # start from scratch
+gradebook = list(students=c("bob", "charlie", "frank"), 
+                 test1=c(70,80,90), 
+                 test2=c(75,85,88), 
+                 honors=c(TRUE, FALSE,FALSE))
+
+gradebook
+
+names(gradebook)   # "students"  "test1"  "test2"  "honors"
+
+names(gradebook)[c(2,3)] = c("exam1", "exam2")   # change tests to exams
+
+names(gradebook)   # "students"  "exam1"  "exam2"  "honors"
+
+gradebook   # notice the test1 and test2 were changed to exam1 and exam2
+```
+
+
+## --- Practice ---
+
+```{r}
+#..............................................................
+# QUESTION - Answer this question using the list defined below.
+#
+# (a) write code to add 2 points to the third student's
+#     grade on test1. Do this using $dollar-sign notation.
+#
+# (b) Do the same thing again but this 
+#     time use [[double-bracket]] notation
+#
+# (c) Do the same thing again with "recursive-indexing"
+#..............................................................
+
+# Use this list 
+rm(list=ls()) # start from scratch
+gradebook = list(students=c("bob", "charlie", "frank"), 
+                 test1=c(70,80,90), 
+                 test2=c(75,85,88), 
+                 honors=c(TRUE, FALSE,FALSE))
+
+str(gradebook)
+
+############.
+# ANSWERS
+############.
+
+# (a) write code to add 2 points to the third student's
+#     grade on test1. Do this using $dollar-sign notation.
+
+gradebook$test1[3] = gradebook$test1[3] + 2 
+
+gradebook
+
+
+# (b) Do the same thing again but this
+#     time use [[double-bracket]] notation
+
+gradebook[[2]][3] = gradebook[[2]][3] + 2
+
+gradebook
+
+# (c)
+
+gradebook[[c(2,3)]] = gradebook[[c(2,3)]] + 2
+gradebook
+```
+
+## is.list( SOME_OBJECT ) &nbsp;&nbsp;&nbsp; mode( SOME_OBJECT )
+
+```{r}
+#----------------------------------------.
+# is.list
+# mode
+#----------------------------------------.
+
+rm(list=ls()) # start from scratch
+gradebook = list(students=c("bob", "charlie", "frank"), 
+                 test1=c(70,80,90), 
+                 test2=c(75,85,88), 
+                 honors=c(TRUE, FALSE,FALSE))
+
+str(gradebook)
+
+is.list(gradebook)           # TRUE
+is.list(gradebook[[1]])      # FALSE
+is.list(gradebook$students)  # FALSE
+
+mode(gradebook)              # "list"
+mode(gradebook[[1]])         # "character"
+mode(gradebook$students)     # "character"
+
+gradebook[[1]][2]       # "charlie"
+mode(gradebook[[1]][2]) # "character"
+```
+
+## A list can contain other lists as well as vectors.
+
+```{r}
+#######################################################.
+#
+# A list can contain other lists as well as vectors.
+#
+#######################################################.
+
+rm(list = ls())
+
+section1 = list ( students = c("abe","bob","charlie"),
+                  test1 = c(70,80,90),
+                  test2 = c(75,85,95))
+
+section2 = list( students = c("fran", "anne", "sue", "bertha", "maxine"),
+                 test1 = c(100,90,80,70,60),
+                 test2 = c(95,85,75,65,55),
+                 test3 = c(93,83,73,63,53))
+
+classes = list( year = 2021,
+                semester = "fall",
+                section1 = section1,
+                section2 = section2 )
+
+# we don't need the original variables anymore
+rm( section1, section2 )
+
+
+classes            # data for all of my sections
+
+classes$section2   # just get the section2 data
+
+$section2  # ERROR - you need to start with the list, classes
+
+section2   # ERROR - variable section2 doesn't exist (we removed it above)
+
+# modes of various portions of the structure
+mode(classes)  # list (obviously)
+mode(classes$section2 )  # list
+mode(classes$section2$test3 )   # numeric
+
+# display the average grade for section 2 on test 3
+mean ( classes$section2$test3 )
+```
+
+## Setting up a complex list structure without extra variables
+
+```{r}
+#..................................................
+# remember - you don't need extra variables. 
+#            the following works too.
+#..................................................
+
+rm(list = ls())
+
+classes = list( year = 2021,
+                semester = "fall",
+                section1 = list ( students = c("abe","bob","charlie"),
+                                  test1 = c(70,80,90),
+                                  test2 = c(75,85,95)),
+                section2 = list( students = c("fran", "anne", "sue", "bertha", "maxine"),
+                                 test1 = c(100,90,80,70,60),
+                                 test2 = c(95,85,75,65,55),
+                                 test3 = c(93,83,73,63,53)) )
+
+classes
+
+classes$section2
+
+mean( classes$section2$test3 )
+
+mean( classes[[4]][[4]] )   # same thing
+```
+
+## --- Practice ---
+
+```{r}
+
+#------------------------------------------------------------------------------.
+# QUESTION - Display the grade for the last student in section 2 on test3
+#------------------------------------------------------------------------------.
+
+# ANSWER - with $ notation
+classes$section2$test3[   length(classes$section2$test3)       ]
+
+# NOTE - you CAN use "recursive indexing" to get the grade using the code
+# below, but the code to get the "last" test3 grade is harder to read.
+# ANSWER - using nested indexing 
+
+classes[[ c(4,    4,           5                 ) ]]  # get the 5th test3 grade
+classes[[ c(4,    4,   length(classes[[c(4,4)]]) ) ]]  # get the last test3 grade
+
+
+#------------------------------------------------------------------------------.
+# QUESTION 
+# write code to display anne's grade on test2
+# anne is in section2
+# do NOT assume that anne is the 2nd person, i.e. 
+# write the code so that no matter how many people are in the class
+# and no matter the order of those people in the data, you will get anne's grade
+#------------------------------------------------------------------------------.
+
+# ANSWER
+
+classes$section2$test2[ classes$section2$students == "anne" ]
+
+
+#------------------------------------------------------------------------------.
+# QUESTION - write code to find the name of the person in 
+# section 1 who scored highest on test2
+# AGAIN - do not assume that the data is any particular order
+#------------------------------------------------------------------------------.
+
+# ANSWER 
+
+classes$section1$students[  classes$section1$test2 == max ( classes$section1$test2 )     ]
+```
+
+## REVIEW OF WAYS TO ACCESS DATA IN A LIST
+
+```{r}
+#--------------------------------------------------------------------------.
+# REVIEW OF WAYS TO ACCESS DATA IN A LIST
+#
+#   SOME_LIST[[ A_SINGLE_POSITIVE_NUMBER ]]
+#
+#   SOME_LIST[[ VECTOR_OF_POSITIVE_NUMBERS ]]   # i.e. recursive indexing
+#
+#   SOME_LIST[ SOME_VECTOR_INDEX ]     # a list
+#
+#   SOME_LIST$SOME_ENTRY_NAME      # same as double bracket notation
+#
+#--------------------------------------------------------------------------.
+#
+# With [[double-bracket]] notation you always get back ONE object.
+#
+#   SOME_LIST [[ A_SINGLE_POSITIVE_NUMBER ]]
+#       returns the object in the list at the specified position
+#
+#       Example:
+#         > stuff = list ( c("apple", "orange", "pear") , c("table", "chair") )
+#
+#         > stuff[[1]]
+#         [1]  "apple"  "orange"  "pear"
+#
+#         > stuff[[2]]
+#         [1] "table"  "chair"
+#
+#
+#   SOME_LIST [[ A_VECTOR_OF_POSITIVE_NUMBERS ]]
+#       If the subscript in the [[double brackets]] contains more than one
+#       positive number then the values in the subscript are applied one after the other
+#       until you wind up with a single object. This is known as "recursive indexing".
+#       For example:
+# 
+#       Example:
+#         > stuff = list ( c("apple", "orange", "pear") , c("table", "chair") )
+#
+#         > stuff[[1]]
+#         [1]  "apple"  "orange"  "pear"
+#
+#         > # get the 1st object from the list then the 2nd item from that vector
+#
+#         > stuff[[c(1,2)]]    
+#         [1] "orange"
+#
+#       Unfortunately, most R programmers are not familiar with using subscripts that 
+#       are vectors with more than one number. This feature is not documented well.
+#       It's hard to find a good explanation of this in the official R documentation.
+#
+#       Therefore I don't recommend that you use this in your code a lot
+#       as many other R programmers will not understand what you are doing.
+#       However, it does work. 
+#
+#
+#   SOME_LIST[ SOME_VECTOR_INDEX ]   
+#          
+#       You can use [single-bracket] notation to get back a NEW LIST
+#       of values from the original list.
+#
+#       With [single-bracket] notation, you can use any of methods that
+#       we learned about for indexing vectors, i.e. 
+#         - positive position numbers
+#         - negative position numbers
+#         - logical values
+#       to get as many values back as you want. 
+#
+#       All the values are put into a NEW LIST.
+#
+#
+#
+#---------------------------------------------------------------.
+```
+
+## Removing items from a list (THIS WAS COVERED IN PREVIOUS SECTION)
+
+```{r}
+#---------------------------------------------------------------.
+# Removing items from a list.
+#
+# NULL is a "special value" that can be understood as "nothing".
+# To remove an item from a list, you can assign NULL to that value.
+# This works whether you specify the item to remove
+#   with the [[double-bracket]] notation, 
+#   with the [single-bracket] notation or
+#   with the $dollar-sign-notation
+#
+# NULL is DIFFERERNT from NA.
+# ---------------------------.
+# NA means there is some information being recorded but the exact
+# value of that information is not available.
+#
+# NULL means that there is no information being recorded.
+#
+# Therefore if you set an item in a list to NULL, the item is
+# removed from the list. However, if you set an item in a list to NA
+# then the item becomes NA.
+#---------------------------------------------------------------.
+
+# let's recreate all of the data
+rm(list= ls())
+
+# gradebook = list(students, test1, test2, honors)
+
+gradebook = list(students=c("bob", "charlie", "frank"), 
+                 test1=c(70,80,90), 
+                 test2=c(75,85,88), 
+                 honors=c(TRUE, FALSE,FALSE))
+
+gradebook
+str(gradebook)
+
+#gradebook = list(students=students, test1=test1, test2=test2, honors=honors)
+#gradebook               # gradebook contains 4 items
+
+gradebook[[3]] = NULL   # remove the third item from the gradebook (i.e. $test2)
+gradebook               # $test2 (which was the 3rd value is removed)
+str(gradebook)
+
+gradebook$test1 = NULL  # remove the $test1 item from the gradebook
+gradebook               # test1 is removed
+str(gradebook)
+
+gradebook[2] = NULL    # single brackets also works, honors is currently the 2nd item
+gradebook              # honors was removed from the gradebook
+str(gradebook)
+
+gradebook[[1]] = NULL  # you can remove the last item too
+gradebook              # named list()   - i.e. an empty list that has names
+
+# add an item to the now empty list (see below for more info
+# about how to add items)
+
+gradebook[[1]] = c("apple", "cucumber", "tomato")
+gradebook
+str(gradebook)
+
+gradebook[[1]] = NULL
+gradebook
+```
+
+## Adding items to a list - using $newNames (or [[double-brackets]])
+
+
+```{r}
+#---------------------------------------------------------------.
+# Adding items to a list.
+#---------------------------------------------------------------.
+
+#...................................................................
+# You can assign a new value in the list using either
+# [[double-bracket]] notation
+# or $dollar-sign notation
+#...................................................................
+rm(list=ls())
+
+students = c("bob", "charlie", "frank")
+
+stuff = list()  # let's start with an empty list
+stuff           # list()
+
+stuff[[1]] = students     # position 1 is created
+stuff
+
+stuff$exam1 = c(71,81,91) # add another entry to the list
+stuff
+
+# You can use either notation, [[double-brackets]] or $dollar-signs
+# to refer to the data you just added
+stuff$exam1
+stuff[[2]]   #same thing
+```
+
+
+## NAVIGATING A COMPLEX NAMED LIST WITH MULTIPLE LEVELS OF NESTING
+
+```{r}
+############################################################################.
+#
+# NAVIGATING A COMPLEX NAMED LIST WITH MULTIPLE LEVELS OF NESTING
+#
+############################################################################.
+
+# create a list that has names
+# This is a list with multiple levels of nesting
+# (i.e. lists inside lists inside lists ... etc)
+
+gradebook = list( year = 2022,
+                  semester = "fall",
+                  classes = list (
+                    
+                    ids1020 = list(
+                      
+                      section211 = list (
+                        students=c("bob", "charlie", "frank"), 
+                        test1=c(70,80,90), 
+                        test2=c(75,85,88), 
+                        honors=c(TRUE, FALSE,FALSE)
+                      ),
+                      
+                      sectionB = list(
+                        students=c("sarah", "anne", "lisa"), 
+                        test1=c(71,81,91), 
+                        test2=c(72,82,92), 
+                        honors=c(FALSE,FALSE,TRUE)
+                      )
+                    ),
+                    
+                    ids2030 = list(
+                      
+                      section311 = list(
+                        students=c("abe", "carl", "dave"), 
+                        test1=c(73,83,93), 
+                        honors=c(FALSE, FALSE,FALSE)
+                      ),
+                      
+                      sectionC = list(
+                        students=c("alice", "bracha"), 
+                        test1=c(86,96), 
+                        honors=c(TRUE,TRUE)
+                      )
+                    )
+                  )
+)
+
+# The following can be very hard to read
+gradebook
+
+# It may be easier to analyze this list with str or with View (capital "V")
+# or by pressing the arrow ">" button next to the gradebook variable in the Environment tab.
+str(gradebook)
+
+# View(gradebook)   # this opens a new tab. Uncomment this line if you want to run it.
+
+gradebook
+str(gradebook)
+
+#------------------------------------------------------------------------.
+# REMEMBER - you can use the $dollar-sign notation to navigate the list
+#------------------------------------------------------------------------.
+
+gradebook$classes$ids2030$section311$students   # "abe" "carl" "dave"
+
+gradebook$classes$ids2030$section311$test1   # 73 83 93
+
+gradebook$classes$ids1020$sectionB$students   # "sarah" "anne" "lisa"
+
+gradebook$classes$ids1020$sectionB  # an entire list
+# $students
+# [1] "sarah" "anne"  "lisa" 
+# 
+# $test1
+# [1] 71 81 91
+# 
+# $test2
+# [1] 72 82 92
+# 
+# $honors
+# [1] FALSE FALSE  TRUE
+
+str(gradebook$classes$ids1020$sectionB) # easier to read with str
+# List of 4
+# $ students: chr [1:3] "sarah" "anne" "lisa"
+# $ test1   : num [1:3] 71 81 91
+# $ test2   : num [1:3] 72 82 92
+# $ honors  : logi [1:3] FALSE FALSE TRUE
+
+# a list of lists
+gradebook$classes$ids1020  
+str(gradebook$classes$ids1020)
+```
+
+## Using names another way, e.g. - someList[c("vector","of","quoted","names")]    
+
+```{r}
+#---------------------------------------------------------------------------.
+# someList[c("vector","of","quoted","names")]       (with [single-brackets])
+# 
+# You can use a vector of quoted "names" as an index for the list.
+# The result is a list that contains just the specified elements. 
+#---------------------------------------------------------------------------.
+
+length(gradebook)   # 3
+
+length(gradebook$classes) # 2
+
+gradebook[c("year", "semester")]   
+
+# $year
+# [1] 2022
+# 
+# $semester
+# [1] "fall"
+
+gradebook[ c(1,2) ]  # same result
+```
+
+## RECURSIVE INDEXING WITH A VECTOR OF NAMES, eg. someList[[c("vec","of","names")]]
+
+```{r}
+#------------------------------------------------------------------------.
+# RECURSIVE INDEXING WITH A VECTOR OF NAMES, eg.
+# someList[[c("vector","of","quoted","names")]]       (with [[double-brackets]])
+#
+# We are adding this section to be complete. However, this technique
+# is not used very often (see below for why).
+#
+# Just like you can use "recursive indexing" with
+# a vector of numbers in [[double-brackets]]
+# you can also use "recursive indexing" with
+# a vector of names in [[double-brackets]]
+#
+# Remember that when using code such as someList[[c(3,2,4)]], 
+# ie. [[double-brackets]] with a vector of positive numbers
+# R performs "recursive indexing" (see above for more info).
+#
+# In a similar way, you use similar code with a vector of names instead of
+# a vector of numbers, R will also do "recursive indexing", based on the names
+# instead of the numbers. However, this technique is not used very often,
+# because $dollar-sign notation accomplishes the same thing and is much
+# easier to read and type.
+#
+#      someList[[c("name","anotherName","yetAThirdName","etc")]]
+#
+#             is the same as 
+#
+#      someList$name$anotherName$yetAThirdName$etc
+#
+#------------------------------------------------------------------------.
+
+# You may use [["oneQuotedName"]] in double-brackets.
+
+gradebook[["semester"]]   # [1] "fall"
+
+gradebook$semester        # "fall" - same thing 
+
+
+# If you use more than one quoted name in the [[double-brackets]]
+# R does "recursive indexing" and finds the one item that you specified
+# which may be inside nested named lists or nested named vectors
+#
+# The following returns JUST the vector of student 
+# names that is in section311 in ids2030 in the classes list
+
+gradebook[[c("classes","ids2030","section311","students")]] # "abe" "carl" "dave"
+
+# This is the same thing ... and much easier to type
+
+gradebook$classes$ids2030$section311$students        # same thing - "abe" "carl" "dave"
+
+gradebook [[ c(3,2,1,1)]]  # same thing - 
+
+
+gradebook [[ c(3,2,1,1,2)]]  # "carl"
+```
+
+## NAMED VECTORS
+
+```{r}
+##############################################################################.
+##############################################################################.
+## NAMED VECTORS
+##
+## Just like you can have named lists, you can also have vectors with names.
+##
+## You can use a vector of quoted "names" as an index for a vector or a list.
+##############################################################################.
+##############################################################################.
+
+#-------------------------------------------------------.
+# HOW TO CREATE A NAMED VECTOR - FIRST WAY
+#
+#   someVector = c(name1=value1, name2=value2, etc)
+#
+#   (No need to put "quotes" around the names)
+#-------------------------------------------------------.
+
+# create a numeric vector with names
+test1 = c(joe=50, sam=60, sue=70, bob=80, anne=90)
+
+#-------------------------------------------------------.
+# The names are displayed with the vector.
+#-------------------------------------------------------.
+test1
+# joe  sam  sue  bob anne 
+#  50   60   70   80   90 
+
+#-------------------------------------------------------.
+# HOW TO CREATE A NAMED VECTOR - SECOND WAY
+#
+#   names(someVector) = c("name1", "name2", ... etc.)
+#-------------------------------------------------------.
+
+# Create a vector without names
+calories = c(95, 102, 45)
+calories 
+# [1] 95 102 45
+
+# Add names.
+names(calories) = c("apple", "pear", "orange")
+calories
+# apple   pear orange 
+#    95    102     45
+```
+
+### A vector with names has the same mode as if it didn't have names.
+
+```{r}
+#------------------------------------------------------------------------.
+# A vector with names has the same mode as if it didn't have names.
+# You can continue to treat numeric data as numeric, logical data as logical, etc.
+#------------------------------------------------------------------------.
+
+test1
+# joe  sam  sue  bob anne 
+#  50   60   70   80   90 
+
+mode(test1)   # "numeric"
+
+mean(test1)   # this still works
+# [1] 70
+
+test1 + 1     # this still works
+# joe  sam  sue  bob anne 
+#  51   61   71   81   91
+
+
+#------------------------------------------------------------------------.
+# You can see from the output of str that a vector has names
+#------------------------------------------------------------------------.
+
+str(test1) 
+# Named num [1:5] 50 50 70 80 90
+# - attr(*, "names")= chr [1:5] "joe" "sam" "suzanne" "bob" ...
+```
+
+### names(SOME_VECTOR) returns a character vector of the names - you can use this to change the names
+
+```{r}
+#------------------------------------------------------------------------.
+# You can use the names() function to access just the names of a vector or list.
+# The value returned from names() is a "character" vector.
+# You can change the names by using the names() function.
+#------------------------------------------------------------------------.
+
+# You can access just the names with the names function
+names(test1)
+# [1] "joe"  "sam"  "sue"  "bob"  "anne"
+
+
+# You can change SOME of the names 
+names(test1)[3] = "suzanne"
+
+test1
+# joe     sam suzanne     bob    anne 
+#  50      60      70      80      90 
+
+# ... or you can change ALL of the names 
+names(test1) = c("joseph", "samuel", "suzanne", "robert", "anne")
+test1
+# joseph  samuel suzanne  robert    anne 
+#     50      50      70      80      90 
+```
+
+### INDEXING A NAMED VECTOR WITH THE NAMES
+
+```{r}
+############################################################################.
+# INDEXING WITH NAMES
+#
+# You can use a vector of names as the index to a named vector. 
+# You must use "quotes" around the names in the index.
+# This also works for lists that have names.
+############################################################################.
+
+rm(list =ls())
+
+# create a named vector
+test1 = c(joe=50, sam=60, sue=70, bob=80, anne=90)
+test1
+
+
+# Use a vector of quoted "names" as the index
+
+test1[c("sue", "anne")]  
+# sue anne 
+#  70   90
+
+
+
+# add 5 points to just sue and anne's grades
+test1[c("sue", "anne")] = test1[c("sue", "anne")] + 5
+
+test1
+# joe  sam  sue  bob anne 
+#  50   60   75   80   95 
+
+#--------------------------------------------------------------------------.
+# Even though a vector or a list have names, all the other 
+# indexing methods (i.e. positive numbers, negative numbers, TRUE/FALSE)
+# continue to work.
+#--------------------------------------------------------------------------.
+
+test1
+# joe  sam  sue  bob anne 
+# 50   60   75   80   95 
+
+test1[c(3,5)]                # use positive position numbers as the index
+# sue anne 
+#  75   95
+
+test1[c(-1,-2,-4)]           # use negative position numbers as the index
+# sue anne 
+#  75   95
+
+test1[c(FALSE,FALSE,TRUE,FALSE,TRUE)]   # use a logical vector as the index
+# sue anne 
+#  75   95
+```
+
+
+## someVector = unlist( SOME_LIST )    # convert a list into a vector
+
+```{r}
+#############################################################################.
+#############################################################################.
+##
+## someVector = unlist( SOME_LIST )
+##
+##    Creates a vector from the contents of SOME_LIST
+##
+##############################################################################.
+##############################################################################.
+
+rm(list=ls())
+
+#...........................................................................
+# example 1 - a simple list - all values are put into a single vector
+#...........................................................................
+
+listOfNumerics = list( c(1,2,3),
+                       c(10,20,30),
+                       c(100,200,300))
+listOfNumerics
+
+nums = unlist(listOfNumerics)
+nums      # [1] 1 2 3 10 20 30 100 200 300 
+
+#-----------------------------------------------------------------------------.
+# example 2
+# If the list contains nested lists, you still get a single vector that
+# contains all of the values from all of the lists.
+#
+# NOTE this can be modified by specifying 
+#   unlist(SOME_VECTOR, recursive=FALSE)
+#
+# See the documentation for more info: ?unlist
+#-----------------------------------------------------------------------------.
+
+# create a list with multiple nested lists
+
+listOfLists = list( c(10,20),
+                    list (
+                      c(30,40),
+                      c(50,60),
+                      list(
+                        c(70,80),
+                        c(90,100)
+                      )
+                    ),
+                    list ( 200, 400 )
+)
+
+# unlist takes all values and puts them into a single vector.
+
+unlist(listOfLists) # [1]  10  20  30  40  50  60  70  80  90 100 200 400
+
+
+
+#...........................................................................
+# example 3 - 
+#   If only SOME of the items in the list have names,
+#   so only some of the values in the resulting vector will have names.
+#   The resulting vector positions "without" names
+#   actually have "" as their name. (see code below)
+#...........................................................................
+
+# setup a list with only some names
+listWithSomeNames = list( c(1,2),
+                          tens=c(10,20,30),
+                          c(100,200),
+                          famous=round(c(pi, exp(1)), digits=2)
+)
+str(listWithSomeNames)
+
+# convert to a vector
+vec = unlist(listWithSomeNames)  # see result below
+vec
+# Result:
+#                tens1   tens2   tens3                 famous1 famous2 
+# 1.00    2.00   10.00   20.00   30.00  100.00  200.00    3.14    2.72 
+
+
+# The value in the names vector for those values that "dont have names"
+# is the empty string, i.e. "" (nothing - not even a space - is between the quotes)
+names(vec) # ""  ""  "tens1" "tens2" "tens3"  ""  ""  "famous1" "famous2"
+
+
+#...........................................................................
+# example 4 - 
+#   For nested list with names. The names in the vector are a combination
+#   of the names from each list in the hierarchy (see example)
+#...........................................................................
+
+# Setup a nested list with names at each level.
+nestedList = 
+  list( 
+    fin = list (
+      taxes = c(10, 20),
+      invest = c(30, 40)
+    ),
+    shop = list(
+      fruit   = c("apples", "oranges"),
+      amount = c(5,        4)
+    )
+  )
+
+str(nestedList)
+
+# Names in the vector combine names from different levels in the nested list
+# (see result below)
+unlist(nestedList)
+
+# Result: 
+# fin.taxes1   fin.taxes2  fin.invest1  fin.invest2  shop.fruit1  shop.fruit2 shop.amount1 shop.amount2 
+#       "10"         "20"         "30"         "40"     "apples"    "oranges"          "5"          "4" 
+
+
+#...........................................................................
+# example 5 - 
+#   For nested list with names, if you specify use.names=FALSE
+#   the vector will NOT have names.
+#...........................................................................
+
+# using same list as previous example
+str(nestedList)
+
+unlist(nestedList)  # generates a NAMED vector
+
+unlist(nestedList, use.names = FALSE)  # gernerates an UNnamed vector
+
+
+#--------------------------------------------------------------------------.
+# ADDITIONAL FEATURES OF unlist() FUNCTION
+#
+# The unlist function has two additional arguments that control how it works
+# with nested lists and with named lists.
+# See the help page ?unlist for more info.
+# 
+#   - The recursive argument controls exactly how unlist works when the list
+#     contains nested lists. The default is recursive=TRUE. See the help
+#     file for more info, ?unlist
+#
+#   - The use.names argument controls exactly how unlist works when the list
+#     contains names. (see example 5 above).
+#     The default is use.names=TRUE.  For more info see ?unlist
+#
+#--------------------------------------------------------------------------.
+```
+
+## REVIEW
+
+```{r}
+############################################################################.
+# REVIEW
+#
+# SIMILARITIES BETWEEN VECTORS AND LISTS 
+#
+# - Both VECTORS and LISTS can have names
+#
+# - Indexing with [single-brackets]
+# 
+#   VECTORS and LISTS can be indexed with [single-brackets] in the same ways. 
+#   With VECTORS the result is a VECTOR and  with LISTS the results is a LIST.
+#
+#   There are 4 ways of using [single-brackets] for indexing.
+#
+#     o position position numbers, eg. someVector[c(1,2)]        or someList[c(1,2)]
+#     o negative position numbers, eg. someVector[c(-1,-2)]      or someList[c(-1,-2)]
+#     o logicals (TRUE/FALSE),     eg. someVector[c(TRUE,FALSE)] or someList[c(TRUE,FALSE)]
+#     o names, eg.  someVector[c("oneName","anotherName")] or someList[c("oneName","anotherName")]
+#
+# - Indexing with [[double-brackets]]
+#   
+#     o Retrieves exactly one value from the VECTOR or the LIST
+#
+#     o Only positive numbers or names can be used for the index
+#
+#     o If more than one positive number is used e.g. someList[[c(3,2,4)]]
+#       or more than one name is used, eg. someList[c("classes","ids2030","sectionC")]
+#       then recursive indexing is used. 
+#       This is really the same concept for vectors, however, since a vector can
+#       only contain individual values (and not lists) you cannot have more 
+#       than one positive number or one name in the double brackets.
+#
+# - length() returns the length of both vectors and lists
+#
+# DIFFERENCES BETWEEN VECTORS AND LISTS
+#
+# - You can use $dollar-sign notation with lists but NOT with vectors
+############################################################################.
+```
+
+## TERMINOLOGY: "atomic vector" (is a vector)  "recursive vector" (is a list)
+
+```{r}
+###########################################################################.
+# TERMINOLOGY
+#
+#    "atomic vector"    is just a fancy name for a "vector"
+#    "recursive vector" is just a fancy name for a "list"
+#
+# Most books, tutorials, etc. refer to "vectors" and "lists" as distinct
+# and separate types of objects - exactly as we have.
+#
+# However, sometimes what we have been calling "vectors" are referred to 
+# as "atomic vectors" (since they contain individual "atomic" values that 
+# cannot be broken down further.) Sometimes what we have been calling
+# "lists" are referred to as "recursive vectors", i.e. vectors that can
+# have other vectors inside of them. Most people who use R are not
+# familiar with these more complicated terms. However, it is good to
+# be aware of these terms in case you come across them while
+# reading documentation or other advanced information about R. 
+# For example: https://r4ds.had.co.nz/vectors.html
+#
+# Bottom line:
+#    "atomic vector" is just a fancy name for a "vector"
+#    "recursive vector" is just a fancy name for a "list"
+###########################################################################.
+```

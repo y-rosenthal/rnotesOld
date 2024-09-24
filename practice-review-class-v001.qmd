@@ -1,0 +1,294 @@
+---
+format: html
+---
+
+## Topics: for loops
+
+What is displayed by the following code?
+
+```{r}
+
+f = function(n){
+  
+  for (x in 1:n){
+    cat(x * x, " ")
+  }
+  
+  cat("\n")
+  
+  return(c(x, n))
+
+}
+
+# What does this display?
+#result = f(4)
+
+# What does this display?
+#result
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+```{r}
+# What does this display?
+result = f(4)
+
+# What does this display?
+result
+```
+:::
+
+## Topics: while loops, cat vs return
+
+What is displayed by the following code?
+
+```{r}
+
+f = function(n){
+  
+  x = 1
+  while  (n >= 1){
+    cat(x, " ")
+    x = x * 2
+    n = n - 1
+  }
+  
+  cat("\n")
+  
+  return(c(x, n))
+
+}
+
+# What does this display?
+#x = f(4)
+
+# What does this display?
+#x
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+```{r}
+# What does this display?
+x = f(4)
+
+# What does this display?
+x
+```
+:::
+
+
+
+## Topics: for loops
+
+What is displayed by the following code?
+
+```{r}
+f = function(n){
+  
+  for (x in 1:n){
+    cat("*** starting outer for loop again***\n")
+    for (y in x:n){
+      cat("x is ", x, "    ")
+      cat("y is ", y, "\n")
+    }
+  }
+  
+  return( c(x,y) )
+}
+
+# What does this display?
+#result = f(4)
+
+# What does this display?
+#result
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+```{r}
+# What does this display?
+result = f(4)
+
+# What does this display?
+result
+```
+:::
+
+
+
+
+## Topics: for loops, nested loops, if
+
+What is displayed by the following code?
+
+```{r}
+
+drawSomething = function(size){
+  
+  if (!is.numeric(size) || trunc(size) != size || size < 0){
+    stop("size must be a non-negative whole number")
+  }
+  
+  for (row in 1:size){
+    
+    for (col in 1:size){
+      
+      if (col == row || col == size - row + 1){
+        cat("@")
+      } else {
+        cat(".")
+      }
+        
+    }
+    
+    cat("\n")
+  }
+  
+  cat("\nHope you like the picture! :)\n")
+    
+
+}
+
+# What do these display?
+#drawSomething(3)
+#drawSomething(5)
+#drawSomething(1)
+#drawSomething(0)  # be careful! This is tricky. Probably not what you'd expect.
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+```{r}
+# What do these display?
+drawSomething(3)
+drawSomething(5)
+drawSomething(1)
+drawSomething(0)  # be careful! This is tricky. Probably not what you'd expect.
+```
+:::
+
+
+
+
+## Topics: for loops, nested loops, if
+
+The only thing that changed are the lines that are highlighted 
+in the code with "# THIS CHANGED".  
+What will be displayed now?
+
+
+```{r}
+drawSomething = function(size){
+  
+  if (!is.numeric(size) || trunc(size) != size || size < 0){
+    stop("size must be a non-negative whole number")
+  }
+  
+  for (row in 1:size){
+    
+    for (col in 1:size){
+      
+      if (col == row || col == size - row + 1){  # THIS CHANGED
+                                                 # THIS CHANGED
+        if ( row %% 2 == 0)                      # THIS CHANGED
+          cat("0")                               # THIS CHANGED
+        else                                     # THIS CHANGED
+          cat("X")                               # THIS CHANGED
+                                                 # THIS CHANGED
+      } else {
+        cat(".")
+        
+      }
+        
+    }
+    
+    cat("\n")
+  }
+  
+  cat("\nHope you like the picture! :)\n")
+    
+
+}
+
+# What does this display?
+#drawSomething(5)
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+```{r}
+# What does this display?
+drawSomething(5)
+```
+:::
+
+
+
+
+## Topics: for loops, nested loops, if
+
+What is displayed by the following code?
+
+```{r}
+drawSomething = function(size){
+  
+  if (!is.numeric(size) || trunc(size) != size || size < 0){
+    stop("size must be a non-negative whole number")
+  }
+  
+  for(row in 1:size){
+
+    if( row == 1 || row == size ){
+      for (x in 1:size){
+        cat("-")
+      }
+      cat("\n")
+      
+    } else {
+      for (col in 1:size) {
+        if( row == 1 || row == size ){
+          for (x in 1:size){
+            cat("-")
+          }
+          cat("\n")
+          
+        } else {
+          if (col == 1){
+            cat("|")
+          } else if (col == size){
+            cat("|\n")
+          } else if (row == col) {
+            cat("x")
+          } else {
+            cat(".")
+          }
+        }
+      }
+    }
+
+  }
+}
+
+# What does this display?
+#drawSomething(5)
+
+# What does this display?
+#drawSomething(10)
+```
+
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+```{r}
+# What does this display?
+drawSomething(5)
+
+# What does this display?
+drawSomething(10)
+```
+:::
+
+
+
+

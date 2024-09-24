@@ -1,0 +1,363 @@
+# variables, integer division and remainder operators
+
+## %/% for integer division &nbsp;&nbsp;&nbsp; %% for remainder (AKA modulus)
+
+```{r}
+# Symbols such as +, -, *, /, ^ and (parentheses) are known as "operators"
+# since they perform "operations". For example, the + performs the "addition operation"
+# and "*" performs the "multiplication operation".
+
+# R has additional operators that go beyond regular math. For example
+# Some operators consist of two percent signs with possibly something in between ...
+
+# Integer division is done using %/%. This gives the whole number result of dividing a
+# number by another number. Any numbers after a decimal point are removed.
+13 %/% 4  # answer: 3
+
+# Remainder (also known as, AKA, "modulus") is done using just two %% signs. This is the
+# "remainder" of dividing the first number by the 2nd number. For example, 15 %% 4, is 1
+# since 4 goes into 15 3 times with 1 left over (3*4 is only 12, but 13 is 1 more than that)
+13 %% 4   # answer: 1
+
+# remember 13/4 is regular division, i.e. 3.25
+13/4
+```
+
+## ---------- PRACTICE ----------
+
+```{r}
+# Use the following variables while answering the questions below.
+#
+# Your answers to the questions should work even if these variables 
+# would have been assigned different values (i.e. different numbers).
+
+numberOfCandies = 27
+numberOfChildren = 5
+
+#-----------------------------------------------------------------------------.
+# QUESTION: 
+# 
+# Write R code to figure out the following ...
+#
+# If there are numberOfCandies, pieces of candy in a package and numberOfChildren
+# children, what is the maximum number of
+# candies we can give each child so that all the children get the same number of candies?
+#-----------------------------------------------------------------------------.
+
+# ANSWER
+numberOfCandies %/% numberOfChildren  
+
+#-----------------------------------------------------------------------------.
+# QUESTION: 
+#
+# (see the information in the previous question)
+# How many candies will be left over after we give out the candies to the children?
+#-----------------------------------------------------------------------------.
+
+# ANSWER
+numberOfCandies %% numberOfChildren   
+```
+
+## Variables   and   "assignment statements"
+
+```{r}
+# You can use "variables" to represent values in R.
+# A variable has a "variable name" and a "value". For example, suppose Joe's salary
+# is 50 thousand dollars. You can represent that as follows:
+
+joesSalary = 50000    # notice that "Salary" has a capital "S" to make it easy to read.
+
+# The "name" of the variable (i.e. joesSalary) is on the left hand side of the = sign and 
+# the "value" of the variable (i.e. 50000) is on the right hand side of the = sign.
+
+# You may NOT include spaces in variable names!
+
+# To see the value of joesSalaray, you can simply type the word joesSalary
+joesSalary
+
+# The line above, "joesSalary=50000", is known as an "assignment statement. It assigns
+# a value to a variable name. The left hand side of the "=" sign is a single
+# variable name. The right hand side could be any "expression". For example
+
+priceOfApple = 1.99
+
+# Suppose a person buys 5 apples and hands the cashier a $20 bill. Write a command
+# that assigns the amount of change the person gets back into the variable change.
+
+change = 20 - priceOfApple * 5
+
+# Show the change
+change
+```
+
+## rules for variable names
+
+### Variable names may NOT start with a number   
+
+```{r}
+oneOrange = 1.50    # good
+
+# 1Banana = 1.25      # ERROR
+
+price1 = 50.00    # good
+```
+
+### Variable names may ONLY include letters, numbers, underscores "_" and periods "." 
+
+```{r}
+this.is.a.good.variable.name = 100
+
+this_is_also_a_good_variable_name = 200
+
+# this$is$not = 300    # ERROR - bad variable name
+```
+
+### Variable names are case sensitive.
+
+```{r}
+# The following are TWO DIFFERENT VARIBLES
+Lettuce = 0.99
+lettuce = 3.50
+
+# Show the values of each variable
+Lettuce
+lettuce
+```
+
+## Managing your variables:
+
+###   Environment window
+
+You can see the values of all variables in the "Environment" window in R Studio
+By default, the "Environment" window is in the upper right hand corner of your screen.
+
+
+###   ls()
+
+```{r}
+# To see the names of all your existing variables you can run the ls() command  ####
+
+ls()    # you MUST include the (parentheses)
+```{r}
+
+# Don't forget the parentheses!
+```
+
+### Don't forget the parentheses!   ls()   NOT    ls     ####
+
+```{R}
+# Uf you forget to type the parentheses, you will see a bunch of stuff that is
+# way beyond the scope of what we are talking about today (we'll get to that 
+# later in the course)
+
+ls
+```
+
+### rm(SOME_VARIABLE)
+
+```{r}
+# Use the rm() command to remove a variable from R's memory
+#
+# You can include the variable name in "quotes" or not include it in quotes.
+# For example:
+
+# show all defined variables
+ls()
+
+# Remove the lettuce variable
+rm(lettuce)
+
+# show that lettuce is no longer defined - or just look at the Environment window
+ls()
+
+# In quotes also works 
+rm("change")
+```
+
+### rm( list=ls() )
+
+```{r}
+# To remove ALL of your variables, type the following command:
+rm( list=ls() )
+
+# When there are no variables at all, the ls() command will display "character(0)".  ####
+# This may be confusing. We'll explain why you get this confusing result a
+# little later in the course.
+
+
+# There are no more variables - character(0)
+ls()    # you will see "character(0)" if there are no variables.
+```
+
+## ---------- PRACTICE ----------
+
+```{r}
+#-----------------------------------------------------------.
+# QUESTION:
+#
+# The price of an apple is $1.50. Create a variable named priceOfApple that contains that value.
+#-----------------------------------------------------------.
+
+# ANSWER: 
+priceOfApple = 1.50   # ANSWER
+
+
+
+#-----------------------------------------------------------.
+# QUESTION:
+#
+# Given the information below, write a command that creates a variable
+# named "costOfPie" that stores the amount of money it takes to create a
+# single apple pie. (do not use $ signs):
+#
+#   - The price of an apple is stored in the variable priceOfApple
+#   - The price of a prepared pie crust is $7.50
+#   - It takes 10 apples and one pie crust to make an apple pie.
+#-----------------------------------------------------------.
+
+# ANSWER: 
+costOfPie = priceOfApple * 10 + 7.50    # ANSWER
+
+
+
+#-----------------------------------------------------------.
+# QUESTION    ####
+#
+# ( see the information in the previous question )
+# Write a command that stores the amount of money it takes to make 3 apple pies
+# in the variable named totalAmount
+#-----------------------------------------------------------.
+
+# ANSWER: 
+totalAmount = costOfPie * 3   # ANSWER
+```
+
+
+## Changing the value of a variable, eg.   x = x + 5    ####
+
+```{r}
+# Let's get back to Joe's salary.
+joesSalary = 50000
+
+
+# if Sue's salary is 70000 you can store that information in another variable
+suesSalary = 70000
+
+# You can show the total salary for the company by adding together the two salaries
+joesSalary + suesSalary
+
+# notice that joesSalary didn't change
+joesSalary
+
+# suesSalary didn't change either
+suesSalary
+
+# to figure out the total salary you can type the same comamnd again
+joesSalary + suesSalary
+
+# But typing the same commands over and over is not very efficient.
+# Instead, you can create a new variable, e.g. totalSalary, that contains the result of
+# adding together the two salaries.
+totalSalary = joesSalary + suesSalary
+
+# notice that when we type the above command that the "answer" isn't displayed. The command
+# simply saves the result in the variable named, totalSalary. To see the result, you can
+# type the variable name:
+totalSalary
+
+# if want to give Joe a 10% raise. We can calculate the new Salary as follows:
+joesSalary * 1.10
+
+# However, that still didn't actually change joesSalary
+joesSalary
+
+# To actually change joesSalary, we can use an assignment statement as follows.
+# The first step is that the value on the right hand side of the = sign is calculated using
+# whatever values we already know. The 2nd step is that the variable on the left hand
+# side of the = sign gets this new value.
+joesSalary = joesSalary * 1.10
+
+# Now let's see what joesSalary became
+joesSalary
+
+# Notice that the totalSalary did NOT change.
+totalSalary
+
+# To change the totalSalary, we would have to calculate it again.
+totalSalary = joesSalary + suesSalary
+
+# show the new totalSalary
+totalSalary
+```
+
+## ---------- PRACTICE ----------
+
+```{r}
+# QUESTION:   
+#
+# There are 5 children. 
+# Each package of candy costs $3.50 and contains 23 pieces.
+# What is the maximum number of candies could we give to each child if we only have $15.00 to spend? 
+# How much money will be left over? 
+# How many candies will be left over?
+#
+# HINTS: 
+# - create a variable, numPackages that contains the # of packages we can buy with $15.00
+# - create a variable, totalCandies, that contains the total # of candies we will have
+# - calculate the number of candies for each child
+# - calculate the amount of money left over
+# - calculate the number of candies left over
+
+rm(list=ls())  # lets start with a clean slate     # ANSWER
+numberOfChildren = 5                               # ANSWER
+priceOfPackage = 3.50                               # ANSWER
+candiesInPackage = 23                               # ANSWER
+moneyToSpend = 15                               # ANSWER
+
+numPackages = moneyToSpend %/% priceOfPackage        # ANSWER
+
+totalCandies = numPackages * candiesInPackage        # ANSWER
+candiesPerChild = totalCandies %/% numberOfChildren  # ANSWER
+moneyLeftOver = moneyToSpend - priceOfPackage * numPackages # ANSWER
+```
+## *** BEREN (FALL 2023) - UP TO HERE - AFTER DAY 1 ####
+
+## Other ways of assigning variables &nbsp;&nbsp;&nbsp; = &nbsp;&nbsp; <- &nbsp;&nbsp;&nbsp; ->
+
+```{r}
+#-------------------------------------------------------------.
+# Other ways of assigning variables     =   <-  ->     ####
+#
+#    variable = value
+#
+#    variable <- value
+#
+#    value -> variable
+#-------------------------------------------------------------.
+
+# R allows an assignment statement to be written in 3 different ways. These all
+# produce the exact same results.
+
+# OPTION 1 - use an = sign
+# This is what we've been doing all along up until now. Example:
+
+numStudents = 32
+
+# OPTION 2 - same as above but use "<-" instead of an = sign. The <- looks like
+# an arrow. It consists of a less than sign followed by a minus sign. There may NOT
+# be any spaces between the "<" and the "-"
+
+numProfessors <- numStudents %/% 6
+
+# OPTION 3 - same as above but the name of the varible goes on the right hand side
+# and the "arrow" faces right ... e.g.
+
+numProfessors - 1 -> numDeans
+
+# show the variables values
+numStudents
+numProfessors
+numDeans
+```
+
+## *** WILF (FALL 2023) - UP TO HERE - AFTER DAY 1  ####

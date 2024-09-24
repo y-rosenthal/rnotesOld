@@ -1,0 +1,927 @@
+# matrices
+
+```{r}
+####################################################
+####################################################
+##
+## TOPICS covered in this file:
+##
+## matrices  ("matrices" is the plural of matrix)
+##
+## - a matrix is a vector with a "dim" attribute whose
+##   value is a numeric vector of length 2. The first value
+##   in the dim attribute is the # of rows, the 2nd value is 
+##   the # of columns in the matrix. The underlying vector 
+##   can be of any type, e.g. numeric, character or logical
+##
+## - create a matrix with the matrix function
+##
+## - create a matrix by assigning a value to the dim attribute of a vector
+##
+## - functions: dim  rownames  colnames  nrow  ncol 
+##
+## - mode(SOME_MATRIX)   is the mode of the underlying vector
+##
+## - class(SOME_MATRIX)  is "matrix" "array"
+##
+## - is(SOME_OBJECT, "SOME_CLASS") returns TRUE if the specified class is 
+##   one of the values in the vector that is returned by class(SOME_OBJECT)                              
+##
+## - using two vectors between the [brackets], i.e. somematrix[ ROW_VECTOR , COL_VECTOR ]
+##
+## - using ONE vector between the [brackets], i.e. somematrix[ SOME_VECTOR ]
+##   retrives data from the underlying vector
+##
+## - data from 2 or more rows and 2 or more cols is returned as a matrix
+##
+## - data from a single row or single column is returned as a vector
+##
+## - you can use the matrix as a vector, e.g. mean(some_matrix)
+## 
+## - specifying row and column names with dimnames argument to matrix function
+##
+## - rownames and colnames functions
+##
+## - changing the dimensions of a matrix
+##
+## - convert a matrix to a vector using functions: as.vector, as.numeric, as.character, as.logical
+##
+## - change a matrix back to a vector by setting the dim attribute to NULL
+##   e.g.  attr(someMatrix, "dim") <- NULL
+##
+## - built in vectors    LETTERS ("A" "B" "C" ... "Z")  and  leters ("a" "b" "c" ... "z")
+##
+## - using the byrow=TRUE option when creating a matrix
+##
+## - functions:  as.numeric, as.logical, as.character
+##
+## - is.numeric, is.logical, is.character is.matrix is.list
+##
+## - every matrix is an array, but not every array is a matrix
+##
+##      an array can have 2 OR MORE dimensions
+##
+##      a matrix is by definition a 2 dimensional array
+##
+##   That is why you get the following results
+##
+##      > class ( SOME_ARRAY_OF_3_OR_MORE_DIMENSIONS ) 
+##      [1] "array"
+##
+##      > class ( SOME_MATRIX )
+##      [1] "matrix" "array"
+## 
+## 
+## - Some examples of how to use a 3 dimensional array
+##
+####################################################
+####################################################
+
+rm(list=ls())
+
+####################################################
+####################################################
+##
+## Matrices  ("matrices" is the plural of matrix)
+##
+####################################################
+####################################################
+```
+
+## DEFINITION: matrix
+
+```{r}
+#-------------------------------
+# DEFINITION: matrix
+#-------------------------------
+
+# A matrix is a VECTOR (e.g. numeric, logical or character) that is organized
+# into rows and columns. 
+#
+# The vector has a "dim" attribute that contains the #of rows and #of columns
+# (more on this later)
+#
+# Since a matrix IS a vector - all of the data must be of the same mode,
+# i.e. all numeric, all character or all logical
+#
+# see examples and usage below ...
+```
+
+## FIRST WAY TO CREATE A MATRIX
+
+```{r}
+#--------------------------------
+# FIRST WAY TO CREATE A MATRIX
+#--------------------------------
+# You can use the matrix() function to create a matrix from a vector.
+# The general form of this function is:
+#      matrix(data = NA, nrow = 1, ncol = 1, byrow = FALSE,    dimnames = NULL)
+#
+# The data argument is a vector that contains the data. nrow and ncol are the
+# number of rows and number of columns for the matrix. 
+?matrix    # see the documentation for the matrix function
+
+# EXAMPLE: a matrix with 3 rows and 4 columns:
+nums <- matrix( c(10,20,30,40,50,60,70,80,90,100,110,120) , nrow = 3, ncol=4)
+nums
+
+# ASIDE BASED ON A QUESTION FROM A STUDENT
+# (this is covered in more detail below)
+#
+# YOU CAN FILL IN THE DATA OF A MATRIX "row by row" or "column by column"
+# THIS IS CONTROLLED BY THE byrow ARGUMENT TO THE matrix FUNCTION. 
+# BY DEFAULT, byrow=FALSE, AND THE DATA IS FILLED IN THE MATRIX
+# "column by column". TO HAVE THE DATA BE FILLED IN "row by row" SIMPLY
+# SET byrow=TRUE WHEN YOU CALL THE matrix FUNCTION.
+numsFilledInByRow <- matrix( c(10,20,30,40,50,60,70,80,90,100,110,120) , nrow = 3, ncol=4, byrow = TRUE)
+numsFilledInByRow
+```
+
+## dim( SOME_MATRIX ) &nbsp;&nbsp; ncol( SOME_MATRIX ) &nbsp;&nbsp; nrow( SOME_MATRIX )
+
+```{r}
+#-------------------------------------------------.
+# dim( SOME_MATRIX )
+#   returns a vector,  c(# of rows,# of columns)
+#   shorthand for attr(SOME_MATRIX, "dim")
+#
+# nrow( SOME_MATRIX )
+#   returns # of rows
+#   shorthand for dim(SOME_MATRIX)[1]
+#
+# ncol( SOME_MATRIX )
+#   returns # of columns
+#   shorthand for dim(SOME_MATRIX)[2]
+#-------------------------------------------------.
+
+# The "dim" attribute is a numeric vector that contains 
+# - the number of rows in the first position
+# - the number of columns in the 2nd position
+# ("dim" stands for the English word "dimensions")
+
+# Let's start over with a matrix whose values are filled in column by column
+nums <- matrix( c(10,20,30,40,50,60,70,80,90,100,110,120) , nrow = 3, ncol=4)
+nums
+
+attributes(nums)  # show the list of all attributes
+attr(nums, "dim") # just get the dim attribute
+dim(nums)         # same thing - a shorthand for attr(nums,"dim")
+
+mode(dim(nums))   # "numeric"
+
+length(dim(nums)) # 2
+
+nrow(nums)  # shorthand for dim(nums)[1]
+dim(nums)[1] # nrow(nums) is same thing
+attr(nums,"dim")[1]  # also same thing
+
+attr(nums,"year") = 2021
+nums
+attributes(nums)
+
+ncol(nums)  # shorthand for dim(nums)[2]
+dim(nums)[2] # ncol(nums) is same thing
+attr(nums,"dim")[2]  # also same thing
+```
+
+
+## mode( SOME_OBJECT)   vs   class( SOME_OBJECT )
+
+```{r}
+#----------------------------------------------------------------------------.
+# mode( SOME_OBJECT )    vs     class( SOME_OBJECT )
+#
+#   mode( SOME_OBJECT )
+#      mode returns the underlying basic type of the data
+#      - i.e. "numeric" or "logical" or "character" or "list"
+#      Every object has just ONE mode
+#
+#   class( SOME_OBJECT )
+#      For "regular" vectors and lists, class returns the 
+#      same value as mode returns.
+#      For more complex "derived" types, such as matrices, dataframes, factors, etc.
+#      class returns the name(s) of the derived type(s).
+#      For example:
+#         class( SOME_DATAFRAME ) is "data.frame"
+#         class( SOME_MATRIX ) is "matrix" "array" (since a matrix is also an array)
+#
+#      (see more info below)
+#----------------------------------------------------------------------------.
+
+nums
+
+attr(nums,"year") = NULL  # get rid of the "year" attribute
+
+nums
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# mode( SOME_OBJECT )
+#
+# mode returns the underlying basic type of the data
+# - i.e. "numeric", "logical", "character" or "list"
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+mode(nums)   # numeric , i.e.  a numeric vector
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# class (SOME_OBJECT)
+#
+# For "standard plain old" vectors and lists, class(SOME_OBJECT) returns
+# the same value as mode(SOME_OBJECT)
+#
+# For more complex "derived" types, such as matrix
+# class returns the name of the derived type(s).
+# Since a "matrix" is also a type of "array" the class function
+# for matrices returns  "matrix" "array"
+#
+# Note - in older versions of R, class(SOME_MATRIX) used to return just "matrix".
+# This changed in R 4.0 to "matrix" "array". There may still be documentation and
+# tutorials online that refer to the older functionality.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+class(nums)  # "matrix" "array"
+
+attr(nums,"dim") = NULL     # remove dim attribute
+
+# dim(nums)        = NULL     # this does the same thing ...
+
+nums
+
+class(nums)   # "numeric" - it's not a matrix anymore.
+```
+
+## is( SOME_OBJECT , "SOME_TYPE" )
+
+```{r}
+#--------------------------------------------------.
+# is( SOME_OBJECT , "SOME_TYPE" )
+# 
+# This function returns TRUE if "SOME_TYPE" is in the vector that is
+# returned by class(SOME_OBJECT). Basically it's the same as  
+#
+#    "SOME_TYPE" %in% class(SOME_OBJECT) 
+#
+# NOTE - The inherits and isa functions are similar to the is function.
+#        For R beginners I recommend you use the "is" function. 
+#        The name is easier to remember than "inherits" and the "isa" 
+#        function has some peculiarities that "is" doesn't. 
+#--------------------------------------------------.
+
+mat <- matrix( c(10,20,30,40,50,60,70,80,90,100,110,120) , nrow = 3, ncol=4)
+mat
+
+class(mat)
+
+is(mat, "array")  # TRUE
+
+is(mat, "matrix")  # TRUE
+
+is(mat, "data.frame")  # FALSE
+
+#--------------------------------
+# SECOND WAY TO CREATE A MATRIX
+#--------------------------------
+
+rm(list=ls()) # start over
+
+# Since a matrix is just a vector with a dim attribute (see above) we
+# can "create" a matrix by explicitly adding the dim attribute to a vector.
+
+nums <- c(10,20,30,40,50,60,70,80,90,100,110,120)  # start with a regular vector
+nums
+mode(nums) # "numeric"
+class(nums) # "numeric"
+
+dim(nums) <- c(3,4)    # add a dim attribute i.e. 3 rows, 4 columns, same as: attr(nums,"dim") <- c(3,4)
+nums  # we now have a matrix
+mode(nums)   # "numeric"
+class(nums)  # "matrix" "array"
+
+# Remember ...
+attributes(nums)  # show the list of all attributes (for right now this only contains dim)
+attr(nums, "dim") # just get the dim attribute
+dim(nums)     # a shorthand for attr(nums,"dim")
+```
+
+## matrix vs dataframe
+
+```{r}
+#----------------------------------------------------------------------------
+# NOTE: YOU MAY IGNORE THIS FOR NOW.
+#
+# We will cover dataframes later, but for those who already know about 
+# dataframes from other classes, this migh clarify some things for you.
+#----------------------------------------------------------------------------
+# matrix VS dataframe
+#
+# - A MATRIX is a vector
+#     o The vector has a dim attribute whose value is a 
+#       numeric vector with the number of rows and number of columns
+#
+#
+# - A DATAFRAME is a list 
+#     o The list contains several vectors of the same length. 
+#       (the vectors are shown as columns when the dataframe is displayed)
+#
+#     o A dataframe has the following attributes:
+#         1. "class" is an attribute whose value is "data.frame"
+#         1. "names" is an attribute whose value is a character vector of column names
+#         2. "row.names" is an attribute whose value is  a character vector of row names
+#----------------------------------------------------------------------------
+```
+
+## someMatrix [ ROWS_VECTOR , COLS_VECTOR ]
+
+```{r}
+#---------------------------------------------
+#
+# someMatrix [ ROWS_VECTOR , COLS_VECTOR ]
+#
+#  (returns the info in the ROWS and COLS
+#   similar to how a dataframe works)
+#
+#---------------------------------------------
+rm(list=ls())
+
+nums <- matrix( c(10,20,30,40,50,60,70,80,90,100,110,120) , nrow = 3, ncol=4)
+nums
+
+# In [brackets], specify the [ ROWS , COLUMNS ] that you want.
+# This is very similar to the way dataframes are accessed.
+
+nums[c(1,2,3), c(2,4)]  # rows: 1,2,3  columns: 2,4
+
+nums[c(1,3), c(2,4)]    # rows 1,3  columns: 2,4
+
+nums[ , c(2,4)]         # all rows,  columns: 2,4 
+
+nums[ c(2,3) , ]        # rows 2,3  columns: ALL
+```
+
+## drop=TRUE   vs   drop=FALSE
+
+```{r}
+#-------------------------------------------------------------------
+# Sometimes the data is returned AS A MATRIX.
+#
+# - If the data comes from at least two rows and at least two columns
+#   then the data is returned as a MATRIX.
+#
+#
+# Sometimes the data is returned AS A VECTOR.
+#
+# - If the data comes from only one row or one column, 
+#   then the data is returned as a VECTOR and not as a matrix.
+#
+#
+# How to override this behavior - someMatrix[ ROWS , COLS , drop=TRUE ]
+#
+# - If you specify drop=TRUE as a third arguemnt between the [single-brackets]
+#   Then the data will ALWAYS be returned as a matrix EVEN IF the
+#   data is all from one row or one column
+#------------------------------------------------------------------
+
+# The following only retrieves the data from the 2nd column. 
+# The data doesn't have a rectangular structure so it is 
+# returned as a VECTOR and not as a matrix.
+nums[ , 2 ]  # 2nd column as a vector - since all the data being returned is in one column.
+class(nums[ , 2 ])     # numeric (only one column - this is NOT a matrix)
+nums[ , 2, drop=FALSE ]   # same data as a matrix
+
+# Similarly ... we're limiting the rows, but still only one column
+
+nums[ c(1,2) , 2 ]  # all data from a single column - result is vector (not a matrix)
+class(nums[ c(1,2), 2 ])     # numeric (only one column - this is NOT a matrix)
+nums[ c(1,2) , 2, drop=FALSE ]   # same data as a matrix
+
+# At least two rows and at least two cols - returned info IS a MATRIX
+nums[ c(1,2), c(2,4)]        # matrix  (2 or more rows and 2 or more cols - this IS a matrix)
+class(nums[ c(1,2), c(2,4)]) # matrix  (2 or more rows and 2 or more cols - this IS a matrix)
+
+
+# At least two rows and at least two cols - returned info IS a MATRIX
+nums[c(1,3) , ]        # matrix  (2 or more rows and 2 or more cols - this IS a matrix)
+class(nums[c(1,3) , ]) # matrix  (2 or more rows and 2 or more cols - this IS a matrix)
+
+nums[3 , ]          # numeric (only one row - result is NOT a matrix)
+class(nums[ 3 , ])  # numeric (only one row - result is NOT a matrix)
+
+nums[3 , c(1,2)]        # numeric (only one row - result is NOT a matrix)
+class(nums[3 , c(1,2)]) # numeric (only one row - result is NOT a matrix)
+```
+
+## You can use a matrix like a vector.
+
+
+```{r}
+#----------------------------------------------------------
+# Use a matrix like a vector.
+#
+# Remember since "under the covers" a matrix IS a vector.
+# you can do anything with a matrix that you can do with a vector.
+#
+#   - access individual values using one vector in the [brackets]
+#
+#   - pass the matrix to functions like mean, sum, length, round, etc
+#----------------------------------------------------------
+
+# If you use just ONE vector between the [square brackets] and
+# you don't include a comma between the brackets, you will wind up
+# retrieving the data as if you were retrieving it from the underlying
+# vector.
+#
+# The following retrieves JUST A SINGLE VALUE - i.e. the 2nd value
+# from the vector. It does NOT retrieve the 2nd row or the 2nd 
+# column but the 2nd value!
+
+nums
+nums [ 2 ]   # 20 - i.e. the 2nd item in the underlying vector!
+
+# BE CAREFUL! - adding a comma before or after the 2 changes the meaning.
+nums [ , 2 ]   # all ROWs   , 2nd column of data
+nums [ , 2 , drop=FALSE]
+
+# ... and the following will return the 2nd row (as we already saw above):
+nums [ 2 , ]   # 2nd ROW   ,   all COLUMNS
+
+# since the following only specifies one vector between the
+# [square brackets] it retrieves the 2nd and 4th items from the VECTOR:
+
+nums [ c(2, 4) ]  # 20 40 - position 2 and position 4 in underlying vector
+
+# Be careful ...
+nums [ 2 , 4 ] # 110 - i.e. ROW 2 , COL 4 (because there are two vectors in the brackets)
+```
+
+## 4 different types of indexing still works with rows and cols of matrices
+
+```{r}
+############################################################################.
+# You can use any of the 4 types of indexing that we learned about to 
+# specify which rows and columns you want. Specifically these are:
+#
+#    - positive index numbers
+#    - negative index numbers
+#    - TRUE/FALSE values
+#    - a vector of row/column names (if there are row/column  names)
+############################################################################.
+
+#--------------------------------
+# Using negative position numbers
+#--------------------------------
+nums
+nums[,-2]   # get all except for 2nd column
+
+ 
+nums[  , c(-2,-3)]   # get all except for 2nd and 3rd columns
+ 
+nums[c(1,3), c(-2,-3)]  # get rows 1,3 and all columns except for 2nd and 3rd
+
+
+# The following only has one vector in the brackets 
+# so we will access the data as a VECTOR
+# This returns all values except the 3rd value from the underlying vector.
+nums[-3]  # one vector in [brackets] - access nums as a VECTOR 
+
+# This returns all values except the 2nd and 3rd from the underlying vector
+nums [-c(2,3)] # one vector in brackets - access data as if it were a vector
+
+nums[-(3:10)]  # all values except the 3rd through 10th from the vector
+
+#---------------------------------------------------------------------
+# using logical vectors 
+#---------------------------------------------------------------------
+
+# specify two vectors in the brackets, i.e. [ROWS,COLS]
+
+nums[ , c(TRUE,FALSE,FALSE,TRUE)]  # get the 1st and 4th columns
+ 
+nums[c(TRUE,TRUE,FALSE) , ]        # get the first two rows
+
+# specify one vector in the brackets to get info from the underlying vector
+nums [c(TRUE, FALSE)]  # get every other value from the underlying vector 
+ 
+nums[c(TRUE,FALSE), c(TRUE, FALSE)]  # rows: every other     cols: every other
+```
+
+## rownames and colnames
+
+```{r}
+#--------------------------------------------------
+# rownames and colnames - i.e. using names for rows and columns
+#   - matrix function dimnames argument
+#   - rownames function
+#   - colnames function
+#--------------------------------------------------
+
+
+# use matrix function to setup a matrix with row and column names
+# dimnames argument takes a list 
+#   - 1st entry in the list is character vector with ROW names
+#   - 2nd entry in the list is character vector with COLUMN names
+nums <- matrix(c(10,20,30,40,50,60,70,80,90,100,110,120), 
+               nrow = 3, 
+               ncol=4, 
+               dimnames=list(
+                             c("row1", "row2","row3"),                      # ROW NAMES
+                             c("first","second","third","fourth") # COL NAMES
+                           ))
+
+nums
+
+# QUESTION
+# x is a positive number
+# Create a vector "row1" "row2" "row3" .... "rowx"
+
+x=9
+paste0("row", 1:x)
+
+# QUESTION
+# r is the number of rows you want
+# c is the number of columns you want
+# create a matrix that has the followign structure
+#
+#         "col1"    "col2"  ....  "col-c"
+# "row1"
+# "row2"
+# .
+#.
+# .
+# "row-r"
+#
+# the values of the matrix should be 10,20,30, etc
+r = 4
+c = 7
+
+answer <- matrix( 1:(r*c) * 10  ,   # another way: seq(10, r*c*10, by=10)
+               nrow = r, 
+               ncol = c, 
+               dimnames=list(
+                  paste0("row", 1:r), # ROW NAMES
+                  paste0("col", 1:c) # COL NAMES
+               ))
+answer
+
+
+# see the documentation for the matrix function
+?matrix
+
+attributes(nums)       # "dim" (a vector) and "dimnames" (a list of 2 vectors)
+str(attributes(nums))
+
+#--------------------------------------------
+# access the rownames / colnames
+#--------------------------------------------
+
+rownames(nums)                 # the vector of row names
+attributes(nums)$dimnames[[1]] # same thing
+
+colnames(nums)                 # the vector of column names
+attributes(nums)$dimnames[[2]] # same thing
+
+# change the rownames / colnames
+
+rownames(nums)[c(1,3)] <- c("apple","pear")
+nums  
+
+
+rownames(nums)[2] <- "peach"
+nums  
+
+rownames(nums) <- c("a","b","c")
+nums
+  
+nums[ c("a","c") , ]   # get the 1st and 3rd rows
+ 
+nums[ , c("first", "fourth")]  # get the 1st and 4th columns
+
+nums[ c("a", "c"), c("first", "fourth")]   # get the 1st and 3rd rows from the 1st and 4th columns
+
+nums[c(1,3), c(1,4)]
+
+#----------------------------------------------------------
+# Combining the different ways to access rows and columns
+#----------------------------------------------------------
+
+# EXAMPLES
+
+# logical vector and negative position numbers
+nums [ c(TRUE, FALSE, TRUE), c(-2,-3) ]  # rows: 1,3   columns: all except for 2nd and 3rd
+
+# vector of names and vector of positions
+nums [ c("a","c"), c(1,4) ]  # rows 1,3   columns 1,4
+```
+
+## Changing the dimensions of a matrix 
+
+```{r}
+
+#-------------------------------------------
+#
+# Changing the dimensions of a matrix 
+#
+#-------------------------------------------
+
+# You can change the dimensions of a matrix too:
+
+nums <- matrix(c(10,20,30,40,50,60,70,80,90,100,110,120), nrow = 3, ncol=4)
+nums
+
+dim(nums) <- c(4,3)  # change to 4 rows and 3 columns
+nums
+
+dim(nums) <- c(2,6)  # change to 2 rows and 6 columns
+nums
+```
+
+## matrices can be based on any mode of vector: including "character", "logical" and "numeric"
+
+```{r}
+#------------------------------------------------------------------------------
+# 
+# A matrix can be based on any type (i.e. mode) of underlying vector:
+#    including "character", "logical" and "numeric"
+#
+# As with all vectors - all values in the vector must be the
+# same mode (ie. "character", "logical" or "numeric")
+#
+#------------------------------------------------------------------------------
+
+# Character, logical and numeric matrices
+#
+# Just like you can have numeric matrices you can also have character
+# and logical matrices:
+
+
+# A matrix with character data
+students <- matrix(c("joe","sam","sue","bill","anne","heather","mike","alice","chana"),
+                   nrow=3, 
+                   ncol=3,
+                   dimnames = list(
+                     1:3,                           # row names
+                     c("group1", "group2", "group3")   # column names
+                   ))
+students
+
+as.vector(students)      # get the underlying character vector
+as.character(students)   # same thing
+
+students # students didn't change
+
+
+# A matrix with logical data
+yesNo <- c(TRUE, TRUE, TRUE, FALSE, FALSE, TRUE)
+yesNo
+
+dim(yesNo) <- c(3, 2)
+yesNo
+
+dim(yesNo)
+nrow(yesNo)  # same as: dim(yesNo)[1] 
+ncol(yesNo)  # same as: dim(yesNo)[2]
+
+
+
+# SOME OTHER EXAMPLES:
+letters   # built in vector of lowercase letters "a" "b" "c" ... etc ... "z"
+LETTERS   # built in vector of UPPERCASE letters "A" "B" "C" ... etc ... "Z"
+class(LETTERS)
+class(letters)
+
+stuff <- letters[1:20]   # assign the first 24 lowercase letters to stuff
+mode (stuff)  # "character"
+stuff  # "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t"
+
+dim(stuff) <- c(4,5)  # add dimensions
+stuff
+ 
+# Get 2nd and 3rd rows,  5th column
+stuff [ c(2,3), 5]  # "r" "s"
+```
+
+## Convert a matrix to a vector
+
+```{r}
+#-----------------------------------------------------------------------------------
+# Convert a matrix to a vector
+#
+# A few ways:
+#
+#   - remove the dim attribute in any of the following ways (they are all equivalent)
+#     (this also automatically removes the dimnames attribute if it exists)
+#
+#         o dim(SOME_MATRIX) = NULL
+#
+#         o attr(SOME_MATRIX, "dim") = NULL
+#
+#         o attributes(SOME_MATRIX)$dim = NULL
+#
+#   - use one of the as.xxxxx functions
+#     (this will remove ALL attributes, including the dim attribute)
+#
+#         o SOME_MATRIX = as.vector(SOME_MATRIX)
+#
+#         o you can similarly use as.numeric, as.logical or as.character to convert
+#           to a numeric, logical or character vector
+#-----------------------------------------------------------------------------------
+
+# View the underlying vector with the as.vector function for any
+# vector (or the as.numeric, as.character or as.logical for those types of vectors).
+
+nums <- matrix(c(10,20,30,40,50,60,70,80,90,100,110,120), nrow = 3, ncol=4)
+nums
+
+as.numeric(nums) # a numeric vector
+as.vector(nums)  # same - return the underlying vector
+
+nums    # nums didn't change
+
+# TO change the variable to a vector you would have to assign the new value
+# back to the same variable. For example:
+
+nums = as.vector(nums)
+nums     #  10  20  30  40  50  60  70  80  90 100 110 120 
+
+
+# Set the dimensions of a matrix to NULL
+# 
+# TO remove the dimensions from a matrix, You can also set the value of the
+# dim attribute to NULL. The variable will cease to be a matrix and will
+# be treated as a regular vector. For exmample:
+
+nums <- matrix(c(10,20,30,40,50,60,70,80,90,100,110,120), nrow = 3, ncol=4)
+nums
+
+dim(nums)
+dim(nums) <- NULL    # remove the dimensions
+nums                 # nums is no longer a matrix
+```
+
+## byrow=TRUE
+
+```{r}
+############################
+#
+# byrow=TRUE
+#
+###########################
+
+# When you create a matrix the values can be filled in either "by row" or  "by
+# column" For example, in the following code, the first values in the original
+# vector (i.e. 10,20,30) are used to fill in the first column of the matrix.
+# Then the following values (i.e. 30,40,50) are used to fill in the 2nd column,
+# etc. This is knowns a "filling in the values by column":
+originalValues <- c(10,20,30,40,50,60,70,80,90,100,110,120)
+originalValues
+numsA <- matrix(originalValues, nrow = 3, ncol=4)
+numsA
+
+
+ 
+# The byrow argument to the matrix function can be used to change this behavior.
+# By default the byrow  argument is set to FALSE. Therefore the data is filled
+# in "by column" as shown above.  However by setting byrow=TRUE, the values
+# would be filled into the matrix "by row" as shown below:
+originalValues <- c(10,20,30,40,50,60,70,80,90,100,110,120)
+originalValues
+numsB <- matrix(originalValues, nrow = 3, ncol=4, byrow=TRUE)
+numsB
+numsB[2]   # using byrow=TRUE rearranges the values in the underlying vector
+ 
+# Note that if you convert the matrix back to a vector (as shown earlier in this
+# document) then if the data was filled in by column (i.e. byrow=FALSE) then the
+# new vector will be in the exact same order as the original data. As shown here
+# with the matrix numsA from above:
+dim(numsA) <- NULL
+numsA   #  10  20  30  40  50  60  70  80  90 100 110 120
+
+
+# However, if the matrix was filled in by row (by setting byrow=TRUE) then the
+# arrangement in the underlying vector is changed to the order that would be
+# used to fill in the matrix by column. Therefore when the dimensions are
+# removed and the matrix is converted back to a vector the data will be in a
+# different order. This is seen here with the matrix numsB from above:
+dim(numsB) <- NULL
+numsB  #  10  50  90  20  60 100  30  70 110  40  80 120
+
+# Notice that the order in the resulting vector is derived by reading across the
+# rows from the matrix, one row at a time.
+ 
+
+# Remember, you can use a matrix as a vector - EXAMPLE
+nums <- matrix(c(10,20,30,40,50,60,70,80,90,100,110,120), nrow = 3, ncol=4)
+nums
+mean(nums)
+sum(nums)
+nums[nums>100]  # 100 120  
+```
+
+## CONVERTING DATA FROM ONE TYPE TO ANOTHER USING "as.___" functions, 
+
+```{r}
+######################################################################
+######################################################################
+##
+## CONVERTING DATA FROM ONE TYPE TO ANOTHER USING "as.___" functions, 
+## e.g. as.numeric, as.character, as.logical
+##
+## Testing the type of data using "is.___" functions
+## e.g. is.numeric, is.character, is.logical
+##
+######################################################################
+######################################################################
+
+# Remember, logicals when used in the context of numerics get converted
+# implicitly (i.e. "automatically") to numbers. TRUE is converted to 1 and FALSE is converted to 0.
+
+sum (c(TRUE, FALSE, TRUE))   # 2
+mean(c(TRUE, FALSE, TRUE))   # 0.66666, i.e. (1+0+1)/3, i.e. % of values that are true
+nums <- c(50, 150, 300)
+sum(nums > 100)  # 2
+
+# Using the as.numeric function you can force that conversion to happen.
+someLogicals <- c(TRUE, FALSE, TRUE)
+someLogicals                # TRUE FALSE TRUE
+as.numeric (someLogicals)   # 1 0 1
+someLogicals                # TRUE FALSE TRUE  (the variable didn't change)
+
+# "TRUE" as a character value is NOT the same as 
+# TRUE as a logical value.
+nums <- seq(10,100,10)
+nums
+nums[c(TRUE,FALSE)]      # every other number: 10 30 50 70 90
+nums[c("TRUE","FALSE")]  # NA NA  (there are no values named "TRUE" or "FALSE")
+
+# You can convert logicals into character also
+someLogicals               # TRUE FALSE TRUE       (no quotes, i.e. logical)
+as.character(someLogicals) # "TRUE" "FALSE" "TRUE" ("quotes", i.e. character)
+
+# In general, you can convert from just about any type into any other
+# type. These conversions are accomplished with similar functions such as
+#
+#    as.numeric, as.logical, as.character, etc.
+#
+# We will discuss these as necessary as the need for them comes up.
+
+
+prices <- c(1.99,2.99)            # numeric data
+mean(prices)                      # 2.49
+
+otherPrices <- c("1.99","2.99")   # character data
+mean(otherPrices)                 # NA with a warning 
+
+as.numeric(otherPrices)           # convereted to numeric
+mean(as.numeric(otherPrices))     # 2.49
+
+# Similarly, you can check to see if some data is a particular type 
+# using "is.____" functions such as is.numeric, is.character, is.logical
+is.numeric(otherPrices)  # FALSE
+is.numeric(prices)       # TRUE
+
+is.character(otherPrices) # TRUE
+is.character(prices)      # FALSE
+
+prices                # 1.99 2.99      (numeric data)
+as.character(prices)  # "1.99" "2.99"  (character data)
+```
+
+## arrays - (A matrix is a 2 dimentional array).
+
+```{r}
+#-------------------------------------------------------------------
+# arrays
+#
+# A matrix is a 2 dimentional array.
+#
+# arrays can have more than 2 dimensions
+#-------------------------------------------------------------------
+
+nums = seq(10,240,by=10)
+
+length(nums)   # 24
+
+
+
+# EXAMPLE - a 3 dimensional "array"
+#
+# The product of the dimensions should equal the length of the underlying vector
+dim(nums) = c(3,4,2)   # 3*4*2 is 24
+
+nums
+class(nums)
+
+nums[,,1]   # 1st matrix in the array
+
+nums[,,2]   # 2nd matrix in the array
+
+
+nums[3,,1]  # 3rd row of first matrix
+nums[3,,2]  # 3rd row of 2nd matrix
+
+nums[3,,1]  # 3rd row of first matrix
+nums[3,,2]  # 3rd row of 2nd matrix
+
+nums[1,c(2,3),1]  # rows: 1   cols: 2,3    matrix: 1
+nums[1,c(2,3),2]  # rows: 1   cols: 2,3    matrix: 2
+
+```

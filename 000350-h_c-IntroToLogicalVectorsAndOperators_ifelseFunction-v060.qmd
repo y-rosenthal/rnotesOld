@@ -1,0 +1,232 @@
+# Logical vectors, relational (AKA logical) operators, ifelse
+
+```{r}
+##################################################################################.
+##################################################################################.
+##
+## logical data - TRUE / FALSE    ####
+##
+## logical operators:  >    <    >=    <=    == (equal to)  != (not equal to) #### 
+##
+##################################################################################.
+##################################################################################.
+```
+
+## Logical value - TRUE and FALSE
+
+```{r}
+# R has two "logical values", i.e. TRUE and FALSE.
+#
+# These values are NOT variables.
+#
+# They are "logical values"
+#
+# We will understand more about why they are special and how to use them.
+# Keep reading ...
+TRUE
+
+FALSE
+```
+
+## Relational operators ( e.g. > ) result in TRUE or FALSE
+
+```{r}
+#--------------------------------------------------------------------------.
+# Using logical operators ( e.g. > ) results in TRUE or FALSE ####
+#--------------------------------------------------------------------------.
+
+3 > 2     # TRUE
+
+2 > 3     # FALSE
+```
+
+## multiple answers for longer vectors, recycling rule
+
+```{r}
+#--------------------------------------------------------------------------.
+# Using logical operators ( e.g. > ) with vectors of many values results in many TRUE/FALSE values ####
+#--------------------------------------------------------------------------.
+c(10,20,30,40) > 25      # FALSE FALSE TRUE TRUE
+
+# Values are compared position by position
+c(10,20,30,40) > c(100, 1, 1, 100)      # FALSE TRUE TRUE FALSE
+
+# Recycling rule works
+c(10,20,30,40) > c(1, 100)      # TRUE FALSE TRUE FALSE
+
+# original: c(10,20,30,40) > c(1, 100)
+#
+# recycle:  c(10,20,30,40) > c(1, 100, 1, 100)
+# 
+# >      :  c(10>1, 20>100, 30>1, 40>100) 
+#
+# Final:    TRUE    FALSE   TRUE  FALSE
+```
+
+## The == and != operators
+
+```{r}
+#------------------------------------------------------------.
+# USE == (i.e. double == signs) to test for equality.   
+#
+# USE != to test for "not equal to"   
+#------------------------------------------------------------.
+
+# REMEMBER - test for equality uses two == signs  (assignment uses one = sign) 
+
+# Use double == to test the TRUTH of an expression
+10+2 == 4*3  # TRUE
+
+10+2 = 4*3   # Error - single = sign is for assignment to a variable or specifying an argument value
+
+
+# Test for not-equals using !=
+10+2 != 4*4   # TRUE, i.e. 10+2 is NOT EQUAL to 4*4
+
+10+2 != 4*3   # FALSE
+
+10+2 == 4*4   # FALSE
+```
+
+## Type ?">" to get help on relational operators
+
+```{r}
+# To get help for the relational operators, type ?`>`       ####
+?">"
+
+# Relational operators (i.e. > < >= <= == !=) also use vector operations and the recycling rule. ####
+
+c(10, 20, 30, 40) > c(5, 25, 28, 100)
+
+# original       : c(10, 20, 30, 40) > c(5, 25, 28, 100)
+#                : c(10>5 , 20>25 , 30>28 , 40>100)
+#                : c(TRUE , FALSE , TRUE  , FALSE)
+
+
+c( rep(10,4), rep(20, 4)) > c(5,25,28,100)
+
+
+# original:        c( rep(10,4), rep(20, 4)) > c(5,25,28,100)
+# do the rep's:    c(c(10,10,10,10), c(20,20,20,20) )  > c(5, 25, 28, 100)
+# combine the c's : c( 10,10,10,10,20,20,20,20) > c(5,25,28,100)
+# recycling:      :c(10,10,10,10,20,20,20,20) > c(5,25,28,100,5,25,28,100)
+# final answer    : TRUE FALSE FALSE FALSE TRUE FALSE FALSE FALSE
+
+
+
+# The following uses the recycling rule 
+c(10, 20) > c(5, 25, 30, 12)
+
+# original      : c(10, 20)         > c(5, 25, 30, 12)
+# recycling rule: c(10, 20, 10, 20) > c(5, 25, 30, 12)
+#               : c(10>5 , 20>25, 10>30 , 20>12)
+#               : c(TRUE , FALSE,  FALSE, TRUE)
+
+
+# You can store logical values (i.e. TRUE and FALSE) in a vector.
+# A vector may only contain one "mode" or "type" of data, e.g. numeric or logical.  ####
+
+someLogicalValues = c(TRUE,FALSE, TRUE, TRUE)
+
+someLogicalValues
+
+someNumbers = c(100,200,300)
+
+someNumbers
+
+# Soon, we'll learn much more about logical values and how they 
+# are used in R ...
+```
+
+## --- Practice
+
+```{r}
+############################################################################.
+# QUESTION:
+# 
+# Write a function with the following "signature" (the signature of a 
+# function includes the name of the function and the names of the arguments
+# for the function)
+# 
+#     isEven = function( nums )
+#
+# nums is expected to be a numeric vector. The function should return 
+# TRUE values for the even values in nums and FALSE values for the odd
+# values in nums.
+#
+# EXAMPLE:
+#      > isEven( c(2,5,10,20,23) )
+#      [1] TRUE FALSE TRUE TRUE FALSE
+#
+# HINT: Even numbers have a remainder of zero when they are divided by two.
+############################################################################.
+
+# ANSWER
+
+isEven = function( nums ){
+  
+  nums %% 2 == 0
+  
+}
+
+# Test cases:
+isEven( c(2,5,10,20,23) )  # should return TRUE FALSE TRUE TRUE FALSE
+
+isEven( 11 )  # should return FALSE
+
+isEven( -8 )  # should return TRUE
+```
+
+## ifelse( LOGICAL_VECTOR , SOME_VECTOR , ANOTHER_VECTOR )
+
+```{r}
+
+###########################################################################.
+# ifelse( LOGICAL_VECTOR , SOME_VECTOR , ANOTHER_VECTOR )
+#
+# NOTE: R's ifelse function, works similarly to Excel's "if" function. 
+#       However, R's version is "vectorized" (see below for examples)
+############################################################################.
+
+?ifelse
+
+# Example:
+
+# In the following example we explicitly write TRUE, FALSE, TRUE just to make
+# it more obvious how the ifelse function works. Obviously you would
+# not write code like this.
+ifelse(c(TRUE, FALSE, TRUE), c(5, 10 , 15) , c(100, 200, 300))   # 5 200 15
+
+# Rather, the following is more like what you might see. However, this wouldn't
+# appear in real code either since everyone knows that 10>2 is TRUE - why would 
+# we need to write that.
+ifelse(c(10>2, 100>99999, 5==3+2), c(5, 10 , 15) , c(100, 200, 300))   # 5 200 15
+
+# In "real life code" there would be variables that are part of the code (see
+# examples below.)
+
+
+# Display the word "even" for the even numbers and "odd" for the odd numbers:
+nums = c(2, 5, 10, 21, 23, 30)
+ifelse( nums %% 2 == 0,"even","odd") # "even" "odd"  "even" "odd"  "odd"  "even"
+
+# original: ifelse( nums %% 2 == 0,"even","odd")
+#
+# expand logical expression: ifelse(c(TRUE FALSE  TRUE FALSE FALSE  TRUE), "even", "odd")
+#
+# recyle the "even" and "odd" values into vectors of lenghth 6 to match the lenght
+# of the logical vector.
+#      ifelse(c(TRUE FALSE  TRUE FALSE FALSE  TRUE), 
+#             c("even", "even", "even", "even", "even", "even"),
+#             c("odd",   "odd",   "odd",   "odd",   "odd",   "odd"))
+#
+# result:    "even" "odd"  "even" "odd"  "odd"  "even"
+
+
+
+
+
+# If the function isEven exists already then the above code could be
+# rewriten as follows:
+ifelse(isEven(nums), "even","odd") # "even" "odd"  "even" "odd"  "odd"  "even"
+```

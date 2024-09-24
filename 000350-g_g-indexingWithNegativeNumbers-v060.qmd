@@ -1,0 +1,586 @@
+# Indexing with NEGATIVE numbers
+
+```{r}
+##################################################.
+# Indexing with NEGATIVE numbers
+# e.g. 
+#      stuff[-3]
+#      stuff[c(-3,-5)]
+#      stuff[-c(3,5)]
+#      stuff[-seq(1,length(stuff),by=3)]
+##################################################.
+
+#-------------------------------------------------------------------------.
+# If the index is a negative number or a vector of negative numbers, 
+# all except those positions will be accessed.                       
+#-------------------------------------------------------------------------.
+
+stuff <- c(10,20,30,40,50,60)
+
+stuff
+
+stuff[-2]   # 10 30 40 50 60 (all except for 2nd value)
+
+stuff       # 10 20 30 40 50 60 (stuff didn't change)
+
+stuff[c(-2,-4)] # 10 30 50 60  (all except 2nd and 4th values)   ####
+
+stuff 
+
+stuff[-c(2,4)]  # 10 30 50 60  (same result)    ####
+
+stuff[ - seq(3, length(stuff), by=3) ] # 10 20 40 50  (all except every 3rd value)
+
+stuff[ seq(-3, -length(stuff), by=-3) ] # same result
+
+
+##################################################################.
+# QUESTION - part a
+#
+# Write a command that displays the entire vector, x, except
+# for the first and last values of x.
+#
+# EXAMPLE 1
+#   > x = c(10,20,30,40,50)
+#   > YOUR CODE GOES HERE
+#   [1] 20 30 40
+#
+# EXAMPLE 2
+#   > x = c(100,30,999)
+#   > YOUR CODE GOES HERE
+#   [1] 30
+##################################################################.
+
+#...........................................
+# DO THE ANSWER TWO DIFFERENT WAYS
+#
+# - ONCE WITH POSITIVE INDEX NUMBERS
+#
+# - ONCE WITH NEGATIVE INDEX NUMBERS
+#...........................................
+
+
+# ANSWER : Positive index value
+# Example 1
+x =    # ANSWER
+  x = x[2:(length(x)-1)]
+x
+
+
+x = c(100,90,57,88)
+x = x[2:(length(x)-1)]
+x
+
+
+
+# Negative index value
+x = c(10,20,30,40,50,60,70,80,90,100)
+x = x[c(-1,-length(x))]
+x
+
+
+x = c(100,90,57,88)
+x = x[c(-1,-length(x))]
+x
+
+
+
+##################################################################.
+# QUESTION - part b
+#
+# Similar to previous question. However, this time, 
+# define a FUNCTION named removeFirstAndLast that takes a single
+# argument named vec. The function should return the values in 
+# vec but without the first and last values.
+#
+# EXAMPLES
+#   > removeFirstAndLast ( c(10,20,30,40,50) )
+#   [1] 20 30 40
+#
+#   > removeFirstAndLast() c(100,30,999) )
+#   [1] 30
+##################################################################.
+
+# Using positive index numbers
+
+removeFirstAndLast = function ( vec ){
+  
+  vec [ 2 : (length(vec) - 1)   ] 
+}
+
+
+removeFirstAndLast ( c(10,20,30,40,50) )   # 20 30 40
+
+removeFirstAndLast( c(100,30,999) )        # 30 
+
+
+
+# Using negative index numbers
+
+removeFirstAndLast = function ( vec ){
+  
+  vec [ c( -1 , - length(vec) ) ]  
+}
+
+removeFirstAndLast ( c(10,20,30,40,50) )   # 20 30 40
+
+removeFirstAndLast( c(100,30,999) )        # 30 
+
+
+
+##################################################################.
+# QUESTION - part c
+#
+# Define a function named removeFirstLastFew that takes the following arguments
+#
+# ARGUMENTS 
+#    vec - a vector that is expected to contain a few values
+#    amount - the number of values to trim from the beginning and end of vec
+#
+#    You may assume that length(vec) is greater than or equal to amount * 2.
+#
+#
+# EXAMPLE A
+#   > removeFirstLastFew ( vec = c(10,20,30,40,50,60,70), amount = 2)
+#   [1] 30 40 50  
+#
+# EXAMPLE B
+#   > removeFirstLastFew ( vec = c(90,100,80,65,92), amount = 1)
+#   [1] 100 80 65  
+#
+# EXAMPLE C
+#   > removeFirstLastFew ( vec = c(10,20,30,40,50,60,70), amount = 3)
+#   [1] 40  
+#
+##################################################################.
+
+
+#...................................
+# DO THE ANSWER TWO DIFFERENT WAYS
+#
+# - ONCE WITH POSITIVE INDEX NUMBERS
+# - ONCE WITH NEGATIVE INDEX NUMBERS
+#...................................
+
+# Using positive index numbers
+removeFirstLastFew = function( vec, amount) {
+  startingPosition = amount + 1
+  endingPosition = length(vec) - amount
+  vec[ startingPosition:endingPosition]
+}
+
+
+removeFirstLastFew(c(10,20,30,40,50,60,70), 3)
+
+removeFirstLastFew(c(10,20,30,40,50,60,70), 2)
+
+removeFirstLastFew(c(10,20,30,40,50,60,70), 1)
+
+removeFirstLastFew(c(10,20,30,40,50,60,70), 4)
+
+##################################################################.
+# QUESTION - part a
+#
+# Write a command that returns the contents of the vector, x,
+# in reverse order. Write the command so that it works
+# no matter how many elements the vector contains.
+#
+# Your command must work UNCHANGED for both examples
+# (and all other examples that are not shown below).
+#
+# EXAMPLE 1
+#   > x = c(10,20,30,40,50)
+#   > YOUR CODE GOES HERE
+#   [1] 50 40 30 20 10
+#
+# EXAMPLE 2
+#   > x = c(100,30,999)
+#   > YOUR CODE GOES HERE
+#   [1] 999 30 100
+##################################################################.
+
+# EXAMPLE 1 - Set up some values
+x = c(10,20,30,40,50)     # **ANSWER**
+
+#....................
+# YOUR CODE GOES HERE
+#....................
+
+x[length(x):1]            # **ANSWER**
+
+
+
+# EXAMPLE 2 - Set up some values
+
+x = c(100,30,999)
+
+#....................
+# YOUR CODE GOES HERE
+#....................
+
+x[length(x):1]          # **ANSWER**
+
+
+
+##################################################################.
+# QUESTION - part b
+# 
+# Same as above but this time make a function named myrev.
+# The myrev function should take a single argument named x.
+# The function return the reverse of x.
+#
+# Note - there is a function in R named rev that does this. 
+# your code should create a function named myrev that does the 
+# same thing as the built in rev function.
+#
+# HINTS 
+#   - your answer should use the length function
+#   - your answer should use the : operator or the seq function
+#
+# EXAMPLE 1
+#   > myrev ( c(10,20,30,40,50) )
+#   [1] 50 40 30 20 10
+#
+# EXAMPLE 2
+#   > myrev ( x=c(100,30,999) )
+#   [1] 999 30 100
+##################################################################.
+
+#...........................
+# Your code goes HERE
+#...........................
+
+# ANY OF THE FOLLOWING FUNCITON DEFINTIONS WILL WORK JUST FINE.  # **ANSWER**
+myrev = function( x ){  # **ANSWER**
+  x[length(x):1]        # **ANSWER**
+}                       # **ANSWER**
+
+myrev = function( x ){   # **ANSWER**
+  return(x[length(x):1]) # **ANSWER**
+}                        # **ANSWER**
+
+
+myrev = function( x ){      # **ANSWER**
+  answer = x[length(x):1]   # **ANSWER**
+  return(answer)            # **ANSWER**
+}                           # **ANSWER**
+
+myrev = function( x ){    # **ANSWER**
+  answer = x[length(x):1] # **ANSWER**
+  answer                  # **ANSWER**
+}                         # **ANSWER**
+
+# EXAMPLE 1
+myrev ( c(10,20,30,40,50) ) # 50 40 30 20 10
+
+# EXAMPLE 2
+myrev ( x=c(100,30,999) ) # 999 30 100
+
+
+# DONT DO THIS!!!!
+# DO NOT RETURN THE VALUE OF AN ASSIGNMENT STATEMENT.
+# THE VALUE OF AN ASSIGNMENT STATEMENT IS "INVISIBLE"
+
+myrev = function( x ){         # **ANSWER** - DON'T DO THIS
+  answer = x[length(x):1]      # **ANSWER** - DON'T DO THIS
+}                              # **ANSWER** - DON'T DO THIS
+
+myrev ( c(10,20,30,40,50) ) # no results are displayed  # **ANSWER** - DON'T DO THIS  
+
+myrev ( x=c(100,30,999) ) #  no results are displayed   # **ANSWER** - DON'T DO THIS
+
+
+##########################################################################.
+# QUESTION - part a
+# 
+# Write code that displays every other value of x.
+# The same code should work for all values of x.
+#
+# HINTS: 
+#   - Use the length function to make it work no matter how many values
+#     are in x.
+#
+#   - use the seq function
+#
+# EXMPLE 1
+#
+#    > x = c(100,200,300,400)
+#    > YOUR CODE GOES HERE (must be same code as for EXAMPLE 2)
+#    [1] 100 300
+#
+# EXMPLE 2
+#
+#    > x = c(83,99,82,67,85,100,89)
+#    > YOUR CODE GOES HERE (must be same code as for EXAMPLE 1)
+#    [1] 83 82 85 89
+#
+##########################################################################.
+
+###########.
+# ANSWER 
+###########.
+
+# EXAMPLE 1
+
+x = c(100,200,300,400)
+
+#...........................................................
+# YOUR CODE GOES HERE (must be same code as for EXAMPLE 2)
+#...........................................................
+
+x [ seq(1, length(x), by=2) ]     # **ANSWER**
+
+
+
+# EXAMPLE 2
+
+x = c(83,99,82,67,85,100,89)
+
+#...........................................................
+# YOUR CODE GOES HERE (must be same code as for EXAMPLE 1)
+#...........................................................
+
+x [ seq(1, length(x), by=2) ]     # **ANSWER**
+
+
+
+##################################################################.
+# QUESTION - part b
+#
+# Write a command that returns two copies of every other element 
+# that is in x, starting with the 1st. Write the command so that it will work
+# correctly no matter how many elements the vector contains.
+#
+# HINTS 
+#   - Build on your from the previous part of this question
+#
+#   - You answer should use the rep function
+#
+#
+# EXAMPLE 1
+#   > x = c(10, 20, 30, 40, 50)
+#   > # YOUR CODE GOES HERE
+#   [1] 10 10  30 30 50 50 
+#
+# EXAMPLE 2
+#   > x = c(92, 100, 79)
+#   > # YOUR CODE GOES HERE
+#   [1] 92 92  79 79
+##################################################################.
+
+###########.
+# ANSWER 
+###########.
+
+# EXAMPLE 1
+
+x = c(10, 20, 30, 40, 50)
+
+#................................................................
+# YOUR CODE GOES HERE (must be the same code as for EXAMPLE 2)
+#................................................................
+
+rep(x[ seq(1, length(x), by=2) ], each=2)    # 10 10 30 30 50 50   # **ANSWER**
+
+
+# EXAMPLE 2
+
+x = c(92, 100, 79)
+
+#................................................................
+# YOUR CODE GOES HERE  ( must be same code as above)
+#................................................................
+
+rep(x[ seq(1, length(x), by=2) ], each=2)    # 92 92 79 79      # **ANSWER**
+
+
+
+#########################################################.
+# WILF - UP TO HERE - AFTER CLASS 7  ####
+#########################################################.
+
+
+#-----------------------------------------------------------------.
+# REMEMBER - 2 ways we learned about (so far) to "index a vector"
+#            (i.e. to identify specific values in the vector)
+#
+#-----------------------------------------------------------------.
+
+# FIRST WAY - use a vector in [brackets] that specifies the positions you want
+
+bigNumbers = c(1000,2000,3000,4000,5000)
+
+bigNumbers [ c( 1, 3) ]    # 1000 3000
+
+
+# SECOND WAY - use negative numbers to indicate the positions you DON'T want
+
+bigNumbers [ c(-1, -4, -5)]   # 2000 3000
+
+# the same thing ...
+
+bigNumbers [ - c(1, 4, 5)]   # 2000 3000
+
+
+
+
+
+
+
+################################################################.
+# don't mix positive index numbers with negative index numbers ####
+################################################################.
+
+stuff = c(10,20,30,40,50)
+
+stuff[c(2,3)]
+
+stuff[c(-2,-3)]
+
+stuff[c(-2,3)]   # ERROR
+
+
+
+#########################################################.
+# BEREN - UP TO HERE - AFTER CLASS 7  ####
+#########################################################.
+
+
+
+##############################################################.
+# QUESTION
+#
+# Write a function, longestSeq that takes a single argument named nums.
+# The function should return the sequence counting
+# by ones, starting from the smallest value in nums to the largest value
+# in nums.
+#
+# HINT - you can use the functions min and max in your answer
+#
+# EXAMPLE 1
+#       > longestSeq( c ( 3, 9, 4, 2, 5, 5, 4, 8 ))
+#       [1] 2 3 4 5 6 7 8 9
+#
+# EXAMPLE 2
+#       > longestSeq( c(100, 99, 103, 100))
+#       [1] 99  100  101  102  103
+##############################################################.
+
+# ANSWER 
+
+#...................................
+# YOUR CODE GOES HERE
+#...................................
+
+longestSeq = function(nums) {   # **ANSWER**
+  min(nums):max(nums)            # **ANSWER**
+}                               # **ANSWER**
+
+# ANOTHER ANSWER                 # **ANSWER**
+longestSeq = function(nums) {    # **ANSWER**
+  sorted = sort(nums)             # **ANSWER**
+  sorted[1]:sorted[length(nums)]  # **ANSWER**
+}                                # **ANSWER**
+
+# YET ANOTHER ANSWER           # **ANSWER**
+longestSeq = function(nums) {  # **ANSWER**
+  lowest = min(nums)            # **ANSWER**
+  highest = max(nums)           # **ANSWER**
+  lowest:highest                # **ANSWER**
+}                              # **ANSWER**
+
+# EVEN YET ONE MORE ANSWER    # **ANSWER**
+longestSeq = function(nums) { # **ANSWER**
+  lowest = min(nums)           # **ANSWER**
+  highest = max(nums)          # **ANSWER**
+  answer = lowest:highest      # **ANSWER**
+  answer                       # **ANSWER**
+}                             # **ANSWER**
+
+# EXAMPLE 1
+longestSeq( c ( 3, 9, 4, 2, 5, 5, 4, 8 ))   # 2 3 4 5 6 7 8 9
+
+# EXAMPLE 2
+longestSeq( c(100, 99, 103, 100))  # 99  100  101  102  103
+
+
+
+###############################################################################.
+# QUESTION    TOPICS:  indexing with numbers ####
+# 
+# Write a function named squish, that takes a single argument named nums.
+# The function should 
+#
+#   add together the first value with the 2nd value
+#   add together the 2nd value with the 3rd value
+#   etc.
+#
+# EXAMPLE 1:
+#   > squish( c(10,20,30,40) )
+#   [1] 30 50 70
+#
+# EXAMPLE 2:
+#   > squish( c(100,50,30,200,150,10) )
+#   [1] 150 80 230 350 160
+#
+#
+# PART A - write the answer by indexing with POSITIVE numbers
+# PART B - write the answer by indexing with NEGATIVE numbers
+#############################################################################.
+
+#------------.
+# ANSWER
+#------------.
+
+# First think about the problem. It often is useful to start thinking
+# about the problem with a simple example.
+#
+# In the example, we are given the vector c(10,20,30,40)
+# For this example, adding together 
+#    the 1st number with the 2nd number, 
+#    the 2nd number with the 3rd number, 
+#    etc
+# 
+# Is the same as adding together the following two vectors:
+#    c(10,20,30) + c(20,30,40)
+#
+# The 1st vector, c(10,20,30) is the original vector without the last number.
+# The 2nd vector, c(20,30,40) is the original vector without the first number.
+# 
+# Therefore our function needs to calculate these two vectors and then add them.
+# We can do this with either POSITIVE index numbers or NEGATIVE index numbers
+# as shown below.
+
+#--------------------------------------------------------------.
+# PART A - write the answer by indexing with POSITIVE numbers
+#--------------------------------------------------------------.
+squish = function (vec) {
+  allButLast = vec[1:(length(vec)-1)]
+  allButFirst = vec[2:length(vec)]
+  
+  answer = allButLast + allButFirst
+  
+  return(answer)
+}
+
+# Make sure both examples work
+squish(c(10,20,30,40))
+squish( c(100,50,30,200,150,10) )
+
+
+#--------------------------------------------------------------.
+# PART A - write the answer by indexing with POSITIVE numbers
+#--------------------------------------------------------------.
+squish = function (vec) {
+  allButLast = vec[-length(vec)]
+  allButFirst = vec[-1]
+  
+  answer = allButLast + allButFirst
+  
+  return(answer)
+}
+
+# Make sure both examples work
+squish(c(10,20,30,40))
+squish( c(100,50,30,200,150,10) )
+```

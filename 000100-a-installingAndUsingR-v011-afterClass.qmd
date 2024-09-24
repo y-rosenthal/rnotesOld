@@ -1,0 +1,405 @@
+# Installing and using R
+
+## Getting access to the R software
+
+### Option 1: Installing R and RStudio on your computer ####
+
+In order to install the software on your personal computer, you should install
+two different software products. The basic "R" software is installed first.
+The "base R" (i.e. R) is usable by itself
+but RStudio adds many features that makes using R much easier to use.
+I therefore recommend that you also install R Studio and use it for all of 
+your work.
+
+The "R Studio" program requires that the "R" program already be installed
+on your computer. Therefore it is important that you install these products
+in the following order.
+
+1. install R first
+
+2. Install RStudio next
+
+For the specifics of how to install these products, 
+see instructions on Canvas or see this webpage:
+https://rstudio-education.github.io/hopr/starting.html
+
+#### WARNING - DON'T run two copies of RStudio at the same time (this might have been fixed) ####
+
+```{r}
+#--------------------------------------------------------------------------.
+#
+# DON'T run two copies of RStudio at the same time (this might have been fixed) ####
+#
+#    This issue only applies to the version of RStudio that you install on
+#    your personal machine. 
+#
+#    This does NOT apply to the online version of RStudio - 
+#
+#--------------------------------------------------------------------------.
+# Running two copies of RStudio at the same time can sometimes
+# lead to problems. These problems are often not obvious. Therefore it is
+# highly recommended that you do NOT run two copies of RStudio at the same
+# time. If you notice strange things happening in RStudio, your first thing
+# to check is that you don't have two copies of RStudio running
+# simultaneously. If you do then shutdown one or both of them and see if the
+# problem goes away.
+#
+# NOTE - this used to be a problem prior to 2023. However, I've noticed
+# recently that it doesn't seem to be a problem anymore. However, if you notice
+# that something weird is happening with RStudio, just make sure that you're
+# not running RStudio in two different windows at the same time.
+```
+
+
+### Option 2: Using the online version of the software, i.e. https://posit.cloud/ 
+
+https://posit.cloud hosts an online version of the RStudio program.
+You can get started simply with the "free" plan.
+It should be pretty easy to figure out how to do that
+by navigating to https://posit.cloud
+
+When you login to posit.cloud you should create a "New RStudio Project".
+You can then use that project for all of your R work.
+
+posit.cloud also has several tutorials (i.e. "primers").
+You can get to these by clicking the "primers" button.
+The first primer is called "The Basics".
+"The Basics" primer is divided into "Visualization Basics"
+and "Programming Basics".
+This class will focus on programming, not visualization.
+To get a better feel for R, you may optionally go throught the
+"programming basics" section of "The Basics" primer on posit.cloud
+
+
+
+## Using RStudio - window panes, arrow keys, ESC key, etc
+
+### What are RStudio "panes" ####
+
+```{r}
+#-----------------------------------------------------------.
+#
+# RStudio "panes" ####
+#
+#-----------------------------------------------------------.
+
+# RStudio's "window panes" - R Studio has 4 sections on the screen. 
+# When you first install RStudio the window panes are in the following
+# configuration (this can be changed).
+#
+#   upper left: source - use this to write commands that you want to save
+#   lower left: console - this is where all commands are acutally "run"
+#   upper right: environment, history - (more about this later)
+#   lower right: files, plots, help - (more about this later)
+#
+# If you don't see all the "panes" choose the following from the RStudio menu:
+#      View --> Panes --> Show All Panes
+#
+# You can change which info appears in which pane with the following RStudio menu:
+#      View --> Panes --> Pane Layout
+#      (I recommend that you don't change this until you get more experience with R).
+```
+
+### The "console" pane ####
+
+```{r}
+#-----------------------------------------------------------.
+#
+# The "console" pane ####
+#
+#-----------------------------------------------------------.
+
+# To write code you can type it directly in the "console" (lower left pane).
+# You'll see the answer immediately. For example, if you type
+# 3+2 into the console, you will see the answer 5.
+3+2
+```
+
+### Modifying previous commands (use the arrow keys) ####
+
+```{r}
+#-----------------------------------------------------------.
+#
+# Modifying previous commands (use the arrow keys) ####
+#
+#-----------------------------------------------------------.
+
+# If you want to modify a command that you previously typed, you can use the
+# up-arrow and down-arrow to search for commands that you previously typed.
+# When you find the command that you want, you can
+# (a) either press ENTER to run it again
+# (b) or use the left-arrow, right-arrow, backspace, delete (windows) keys to edit the command.
+#
+# For example, in the console,
+# (1) use the up arrow, and change 3+2 to 4+2 then hit ENTER to get the new value.
+# (2) use the up-arrow and down-arrow to see your history of commands.
+#
+# You can also see all of your previous commands in the "history" pane (which is by default
+# in the upper right hand corner of your screen). You can double-click any command to show
+# it in the console.
+```
+
+### insert key (on Windows) ####
+
+```{r}
+#-----------------------------------------------------------.
+#
+# insert key (on Windows) ####
+#
+#-----------------------------------------------------------.
+
+# On Windows, the "insert" key will switch between "overstrike" mode and "insert" mode.
+# If you see that you are "typing over" existing text instead of inserting new text
+# then press the "insert key" to switch to "insert mode".
+```
+
+### Erasing commands - ESC key ####
+
+```{r}
+#-----------------------------------------------------------.
+# Erasing commands - ESC key ####
+# 
+# Clearing the console - ctrl-L (windows) or  cmd-L (mac)
+#
+#-----------------------------------------------------------.
+
+# If you type a long line that you want to erase, press the ESC key.
+
+# If you want to clear the entire console window, press ctrl-L (windows) or cmd-L (mac)
+```
+
+### The "source" pane - for saving code   ####
+
+```{r}
+#-----------------------------------------------------------.
+#
+# The "source" pane - for saving code   ####
+#
+#-----------------------------------------------------------.
+
+# To write code that you want to save you need to create a new "R Script" file.
+# Choose the following menu choice:
+#    File --> New File --> R Script
+#
+# This will open a new file in the "source" pane (which is by default in
+# the upper-left corner of the screen).
+# 
+# You can type any commands in this file.
+#
+# You can run any command that is in a script file in the following ways:
+# (a) place your cursor on the line you want to executed and then
+#     press ctrl-ENTER (on Windows) or cmd-ENTER (on Mac)
+#
+# (b) to run several commands, select all of the lines you want to execute
+#     then press ctrl-ENTER (windows) or cmd-ENTER (mac)
+#
+# (c) you can even select just PART of a line to execute JUST THAT PART.
+#     For example, if the script contains the line:
+#         3+4*5-1
+#     and you highlight JUST the 4*5 and press ctrl-ENTER/cmd-ENTER you will see the answer 20.
+#     This even works with code in a comment. Try it with the line 3+4*5-1 above.
+#
+# (d) press ctrl-a (windows) or cmd-a (mac) to select all of the code
+#     then press ctrl-ENTER (windows) or cmd-ENTER (mac) to run all of the code.
+
+
+# To save changes you make to the file - press ctrl-s (windows) or cmd-s (mac)
+#
+# These files are saved with a .R (captial "R") filename extension.
+# If you don't know what a filename extension is, watch these videos
+# (or search for other videos or explanations ...)
+# Windows Filename Extensions: https://www.youtube.com/watch?v=m58rkfVRDlc
+# Mac Filename Extensions: https://www.youtube.com/watch?v=mYNchWitkyg
+#
+# If you double-click on the file, it should open up RStudio to display the file.
+```
+
+### Other RStudio features 
+
+```{r}
+# Other RStudio features 
+#
+# There are many different RStudio features. You can explore the various
+# menus and tabs to learn more. Don't be afraid to try things. Search online
+# for explanations.
+```
+
+## Do NOT use Word (or similar programs) to type your commands ####
+
+```{r}
+###########################################################################.
+###########################################################################.
+#
+# Do NOT use Word (or similar programs) to type your commands ####
+#
+###########################################################################.
+###########################################################################.
+
+# It is important to note that Microsoft Word and other similar programs will
+# sometimes replace minus signs (i.e. "-") with "long dash" characters (these
+# look like minus signs but are a little longer). Word also may quotes (")
+# with "smart quote" characters. All of these changes will make a command
+# that "looks" correct, not work when you paste the code into R.
+#
+# The moral of the story is NEVER USE WORD to type R code.
+```
+
+## Using R to do basic arithmetic      ####
+
+```{r}
+############################################################.
+############################################################.
+#
+# Using R to do basic arithmetic      ####
+#
+############################################################.
+############################################################.
+
+# R can be used as a simple "calculator"
+
+3 + 2    # This will show 5. The part after the # is a "comment" that is ignored.
+
+# In general, extra spaces are meaningless. They can be added to improve readability of your code.
+# The following two command will produce the exact same answers.
+3+2-100+50             # you don't need spaces
+   3 + 2 -   100 + 50  # but spaces do not change the result
+
+
+# Exponents are written using the caret character, ^ (above the 6 on most keyboards).
+   
+2^3   # ie. "2 to the power of 3", i.e. 8
+
+
+# Division is done using the FORWARD SLASH (i.e. /)
+# (The backslash (i.e. "\" will NOT work for division)
+
+10/4   # this will show 2.5
+
+#10\4   # ERROR - don't use a backslash!
+```
+
+### Order of operations
+
+```{r}
+# R follows the "order of operations" in math (i.e. PEMDAS), specifically ...
+# FIRST:  All parentheses are done first
+# SECOND: All exponents are done next
+# THIRD:  All multiplications and divisions are done next (starting from the
+#                                                     leftmost * or / and working to the right)
+# FOURTH: All additions and subtractions are done (from left to right)
+
+# Examples
+3+2*5   # 13, not 30, i.e. the * is done before the +
+
+# In the following command: 100-12/3*4/2+10
+# the answer is 102.
+# It gets calculated as follows:
+#
+# original                     --> 100-12/3*4/2+10
+#
+# first step: 12/3 becomes 4   --> 100-(4)*4/2+10
+#
+# second step: 4*4 becomes 16  --> 100-(16)/2+10
+#
+# third step: 16/2 becomes 8   --> 100-(8)+10
+#
+# fourth step: 100-8 become 92 --> (92)+10
+#
+# last step: 92+10 becomes 102 --> 102
+
+100-12/3*4/2+10   # This becomes 102 (see explanation in comments above)
+```
+
+### Do NOT use commas, dollar signs, etc in numbers ####
+
+```{r}
+#-----------------------------------------------------------.
+# 
+# Do NOT use commas, dollar signs, etc in numbers ####
+#
+#-----------------------------------------------------------.
+
+# R does NOT recognize commas, dollar signs, etc as part of numbers.
+
+3.25 + 2.00   # 5.25
+
+# $3.25 + $2.00  # ERROR
+
+50000 + 20000   # 70000
+
+# 50,000 + 20,000 # ERROR
+```
+
+
+## R prompts you with "+" signs if it expects you to type more
+
+```{r}
+####################################################################.
+# R prompts you with "+" signs if it expects you to type more ... ####
+####################################################################.
+#
+# If you write a line of code in the Console window
+# and press ENTER before you finish typing a full command, 
+# R will display a "+" sign to indicate
+# that R is expecting you to enter more info. For example
+#
+#    > 100 /  
+#    + 4
+#    [1] 25
+#
+# These "+" signs do NOT have anything to do with "addition".
+# They are just prompts to indicate that you need to enter more information.
+###########################################################.
+```
+
+## PRESS ESC TO CANCEL A COMMAND
+
+```{r}
+####################################################################.
+# PRESS ESC TO CANCEL A COMMAND (and get the "> prompt" back)
+####################################################################.
+# If you keep pressing ENTER, without finishing the command you will 
+# simply get more "+ sign prompts" (since R is still waiting for you 
+# to finish the command). If you press the ESC key the command will be 
+# cancelled and you will once again get the ">" prompt so that you can continue.
+# EXAMPLE: 
+#
+#    > 100 /       # pressed ENTER
+#    +             # pressed ENTER
+#    +             # pressed ENTER
+#    +             # pressed ENTER
+#    +             # etc.
+#    +
+#    +             # pressed ESC  (this cancels the command)
+#    >
+#
+# This works for any line of code.
+# If you press ESC in the Console window while you are typing a line
+# of code, the line of code is "cancelled". For example:
+#
+#    > 3+2*123/5-7 (press ESC)   # NOTHING HAPPENS - LINE IS ERASED
+#    >
+####################################################################.
+
+```
+
+## R Studio HotKeys - SCRIPT window
+
+
+Pressing ctrl-ENTER (win) or cmd-ENTER (mac) runs all code that is currently highlighted in the Script window.  The output will appear in the console window. (also see shift-arrow-keys below).	If no code is highlighted then this runs just the line of code where the cursor is in the script window.
+		
+Pressing shift-arrow-keys in the script window extends the highlight in the direction of the arrow key. This is a very quick way to highlight a few lines of code. Press shift while holding the down arrow (or up arrow) to highlight just a few lines of code. Then if you press ctrl-ENTER (win) or cmd-ENTER (mac) you can run just those lines of code.
+
+
+		
+## R Studio HotKeys - CONSOLE window
+
+Pressing ctrl-L	clears the "console" window.
+	
+Pressing ESC in the console window clears the current command that you typed. Use this if you typed a long command and you want to erase it before pressing ENTER.
+		
+Pressing the left/right arrows move in the console window moves left/right in the current line of code. This allows you to edit the line. 
+
+Pressint the up/down arrows in the console windows brings back commands that were typed earlier/later. This allows you to quickly rerun commands that you have typed earlier or to modify earlier commands. (Also see the ""history" tab in the upper right window pane.)
+
+

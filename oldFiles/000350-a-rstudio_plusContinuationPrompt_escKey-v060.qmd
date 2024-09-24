@@ -1,0 +1,56 @@
+####################################################################.
+####################################################################.
+#
+# SOME TIPS ABOUT USING RSTUDIO  ####
+#
+####################################################################.
+####################################################################.
+
+
+####################################################################.
+# Press ESC in the Console to erase the entire line of code ####
+####################################################################.
+# If you press ESC in the Console window while you are typing a line
+# of code, the line of code is "cancelled". For example:
+#
+#    > 3+2*123/5-7 (press ESC)   # NOTHING HAPPENS - LINE IS ERASED
+#    >
+####################################################################.
+
+
+####################################################################.
+# R prompts you with "+" signs if it expects you to type more ... ####
+####################################################################.
+#
+# If you write a line of code in the Console window
+# and press ENTER before you finish typing a full command, 
+# R will display a "+" sign to indicate
+# that R is expecting you to enter more info. For example
+#
+#    > 100 /  
+#    + 4
+#    [1] 25
+#
+# These "+" signs do NOT have anything to do with "addition".
+# They are just prompts to indicate that you need to enter more information.
+#
+# ---------------------------------------------------------------.
+# PRESS ESC TO CANCEL A COMMAND (and get the "> prompt" back)
+# ---------------------------------------------------------------.
+# If you keep pressing ENTER, without finishing the command you will 
+# simply get more "+ sign prompts" (since R is still waiting for you 
+# to finish the command). If you press the ESC key the command will be 
+# cancelled and you will once again get the ">" prompt so that you can continue.
+# EXAMPLE: 
+#
+#    > 100 /       # pressed ENTER
+#    +             # pressed ENTER
+#    +             # pressed ENTER
+#    +             # pressed ENTER
+#    +             # etc.
+#    +
+#    +             # pressed ESC  (this cancels the command)
+#    >
+#
+###########################################################.
+

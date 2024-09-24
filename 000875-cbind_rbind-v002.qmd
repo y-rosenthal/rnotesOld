@@ -1,0 +1,111 @@
+# cbind and rbind (to combine dataframes)
+
+```{r}
+#-----------------------------------------------------------------------------
+# cbind and rbind functions
+#
+# cbind combines (i.e. "binds") columns from multiple dataframes, matrices and vectors.
+# rbind combines (i.e. "binds") columns from multiple dataframes, matrices and vectors.
+#
+# For both cbind and rbind
+#   - If all items being "bound" are vectors and matrices then the result is a matrix.
+#   - If any of the items being "bound" is a dataframe, the result is a dataframe.
+#-----------------------------------------------------------------------------
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# Use cbind to vectors into a matrix
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+ones = c(1,2,3,4,5)
+tens = c(10,20,30,40,50)
+hundreds = c(100,200,300,400,500)
+
+nums = cbind(ones, tens, hundreds)   # a matrix with 3 columns
+class(nums)   # "matrix" "array"
+
+
+# add another column to the matrix
+nums = cbind(nums, thousands = c(1000,2000,3000,4000,5000))
+nums
+
+# another matrix
+mat = matrix( c(11,22,33,44,55,66,77,88,99,0), nrow=5, ncol=2)
+mat
+
+cbind(nums, mat)
+mat = matrix(doubles=c(11,22,33,44,55), tripples=c(111,222,333,444,555))
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# Use cbind to combine columns from different
+# dataframes and vectors into one dataframe
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+# A few rows
+df1 = data.frame ( students = c("alice", "bob", "carla"),
+                   
+                   #                   year     = factor( c("junior", "freshman", "junior"),
+                   #                                levels = c("freshman", "sophomore", "junior", "senior"),
+                   #                                ordered = TRUE),
+                   
+                   test1 =    c(71, 81, 91),
+                   
+                   stringsAsFactors = FALSE)
+df1
+
+# two more tests
+df2 = data.frame ( test2 = c(72, 82, 92),
+                   test3 = c(73, 83, 93),
+                   test4 = c(74, 84, 94) )
+df2
+
+# yet another test
+df3 = data.frame ( test4 = c(74, 84, 94) )
+df3
+
+# use cbind to create a new data.frame with all the columns
+allTests = cbind(df1, df2, df3)   
+allTests
+
+
+# cbind can combine vectors and dataframes
+
+cbind( satScore = c(1200, 1150, 1400), allTests, test5=c(75,85,95) )
+
+# You can also use cbind to combine a vectors
+# The result is a matrix
+mat = cbind (x = c(1,2,3), y=c(100,200,300), z=c(111, 222, 333))
+mat
+
+
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# Use rbind to combine rows from different dataframes
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+# A few more rows
+df3 = data.frame ( students = c("david", "ed", "fran"),
+                   
+                   #                   year     = factor( c("junior", "freshman", "junior"),
+                   #                                      levels = c("freshman", "sophomore", "junior", "senior"),
+                   #                                      ordered = TRUE),
+                   
+                   test1 =    c(75, 85, 95),
+                   
+                   stringsAsFactors = FALSE)
+df2 
+
+
+# Use "rbind" to combine the rows from df1 with the rows from df2 into a
+# single data.frame.
+#
+# The "r" in "rbind" stands for "row" since we are "binding the rows together")
+
+allRows = rbind(df1, df2)
+allRows
+
+x = rbind(allRows, c("a","b","c"))
+
+str(x)
+
+rbind(ones=c(1,2,3), tens=c(10,20,30) )
+```

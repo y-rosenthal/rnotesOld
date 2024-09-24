@@ -1,0 +1,196 @@
+# Parallel vectors
+
+```{r}
+############################################.
+############################################.
+## 
+## Parallel vectors
+##
+############################################.
+############################################.
+
+# Sometimes it is convenient to store multiple different pieces of information
+# in different vectors. For example the four vectors below store information
+# about the names of students in a class, their genders, their year in school
+# and their grades in the class.
+#
+# For example the 1st entry in each array is information about a student named "joe".
+# His name is "joe", he is male (i.e. "m"), he is a "senior" and he got an 85 in the class.
+# The 2nd student is "sue", she is female ("f"), she is a "freshman" and got an 82 in the class.
+# etc. 
+#
+# Data that is arranged between multiple vectors in this way are often
+# referred to as "parallel vectors". It is up to the programmer to make sure that 
+# the vectors all have the same number of entries and that data in the vectors 
+# remain in the proper order.
+#
+# Note that there are better ways to store this type
+# of information that we have not learned about yet (i.e. dataframes). However
+# parallel vectors are a concept that is also important to understand and 
+# will help you to understand dataframes when we get to them.
+
+students <- c("joe",    "sue",      "al",     "anne",      "esther", "bob")
+gender   <- c("m",      "f",        "m",      "f",         "f",      "m")
+year     <- c("senior", "freshman", "senior", "sophomore", "senior", "senior")
+grades   <- c(85,       65,         70,        95,         93,       65)
+honors   <- c(TRUE,     FALSE,      FALSE,     TRUE,       FALSE,    FALSE)
+students
+gender
+year
+grades
+honors
+
+# Show the grades of 80 and up
+grades [ grades > 80 ]
+# original      : grades [ grades > 80 ]
+#               : grades [ c(85,65,70,95,93,65) > 80]
+# recycling rule: grades [ c(85,65,70,95,93,65) > c(80,80,80,80,80,80)]
+#               : grades [ c(85>80, 65>80, 70>80, 95>80, 93>80, 65>80) ]
+#               : grades [ c(TRUE, FALSE, FALSE, TRUE, TRUE, FALSE) ]
+#               : 85 95 93
+
+
+# show the names of the students who got those grades
+students [ grades > 80 ]
+# original      : students [ grades > 80 ]
+#               : students [ c(85,65,70,95,93,65) > 80]
+# recycling rule: students [ c(85,65,70,95,93,65) > c(80,80,80,80,80,80)]
+#               : students [ c(85>80, 65>80, 70>80, 95>80, 93>80, 65>80) ]
+#               : students [ c(TRUE, FALSE, FALSE, TRUE, TRUE, FALSE) ]
+#               : "joe" "anne" "esther"
+
+
+
+
+# show the genders of those students
+gender[ grades > 80]
+
+# show the years of those students
+year[ grades > 80]
+
+# show the names of the women in the class
+
+students [  gender == "f" ]
+
+
+
+####################################################################.
+# QUESTION - Refer to the data above.  (student, gender, year, grades, honors)
+#
+# (a) Write a command to show the average grade for the seniors in the class
+#
+# (b) Write a command to show the highest grade that a senior got.
+#
+# (c) Show the names of the students who got above the average grade of the seniors in the class
+#
+# (d) Show the names of the seniors who got above the average grade of the seniors in the class
+####################################################################.
+
+
+# (a) Write a command to show the average grade for the seniors in the class
+
+# mean(  THE GRADES FOR THE SENIORS )
+
+# mean(  grades [ year == "senior" ]  )
+
+
+# (b) Write a command to show the highest grade that a senior got.
+#
+# max()
+#
+max ( grades [ year == "senior" ]  )
+
+
+# (c) Show the names of the students who got above the average grade of the seniors in the class
+
+# student [ SOMETHING_HERE ]
+
+avgGradeOfSeniors = mean(  grades [ year == "senior" ]  )
+
+students [ grades > avgGradeOfSeniors ]
+
+# BTW- not all of these students are seniors
+year [ grades > avgGradeOfSeniors ]
+
+# (d) Show the names of the seniors who got above the average grade of the seniors in the class
+
+
+
+
+
+# ANSWER - (a) Write a command to show the average grade for the seniors in the class
+mean( grades [   year == "senior"      ] )
+
+
+# ANSWER - (b) Write a command to show the highest grade that a senior got.
+max ( grades [ year == "senior" ] )
+
+
+
+# ANSWER - (c) Show the names of the students who got above the average grade of the seniors in the class
+
+# In more than one line
+avgGradeOfSeniors = mean( grades [ year == "senior" ] )
+students[ grades > avgGradeOfSeniors ]
+
+# Same thing all in one line 
+students [ grades > mean( grades [ year == "senior" ] ) ]
+
+
+
+# ANSWER - (d) Show the names of the seniors who got above average of the seniors in the class
+
+# Note that this is different from question (c). 
+#
+# Question (c) asked for ANY student in the class who scored better than
+# the avg senior. The final answer may show students from ANY year, e.g.
+# freshmen, sophomores, juniors and seniors.
+# Question (d) asks for JUST SENIORS who scored better than the avg senor.
+#
+# There is a way to answer this question in one line of code, but we 
+# didn't learn how to do that yet. (we will soon)
+
+gradesOfSeniors = grades [   year == "senior"      ]
+gradesOfSeniors
+
+avgGradeOfSeniors =     mean( grades [   year == "senior"      ] ) 
+avgGradeOfSeniors
+
+gradesOfSeniors > avgGradeOfSeniors
+
+namesOfSeniors = students[ year == "senior"]
+namesOfSeniors
+
+# ANSWER
+namesOfSeniors[ gradesOfSeniors > avgGradeOfSeniors]
+# all in one command
+
+
+# BEREN - HOLD OFF ON THIS ... WE'LL COME BACK TO EXPLAIN THIS LATER
+students[ year == "senior"][ grades [   year == "senior"      ] > mean( grades [   year == "senior"      ] )]
+
+
+
+
+
+####################################################################.
+# QUESTION - Refer to the data above.
+#
+# Write a command to take the average of all grades, but drop the lowest grade.
+#
+# HINT: do NOT use the mean function
+####################################################################.
+
+# You can answer this question using just the material that we learned
+# in the first couple of classes - do this as a practice problem.
+
+# BE CAREFUL:
+# You might be tempted to do the following, but it is not correct:
+
+lowestGrade = min(grades)
+lowestGrade
+(sum(grades) - min(grades)) / (length(grades)-1)
+
+# Answer without using the mean function
+(sum(grades) - min(grades)) / (length(grades)-1)
+```

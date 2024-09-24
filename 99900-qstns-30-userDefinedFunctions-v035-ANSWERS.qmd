@@ -1,0 +1,1175 @@
+# Practice Questions - TOPIC: User Defined Functions
+
+## User Defined Functions
+
+### QUESTION 67 TOPICS: user defined functions
+
+
+```{r}
+##############################################################.
+##############################################################.
+##
+##   TOPIC: USER DEFINED FUNCTIONS  (i.e. creating your own functions
+##     For each of the following questions, write a function that
+##     matches the description in the comment and that 
+##     has the "signature" shown below the comment.
+##
+##############################################################.
+##############################################################.
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 67
+# TOPICS: user defined functions
+#
+# getGpa calculates a student's Grade Point Average (GPA)
+# as a "weighted average" of the grades for the courses
+# the student has taken, weighted by the number of credits
+# for each course. 
+#
+# The grades argument is expected to be a vector that 
+# contains one numeric grade for each course. The expected 
+# numeric values are 4,3,2,1 or 0 for grades of A,B,C,D or F 
+# respectively. 
+# 
+# The credits argument is expected to be a vector the same 
+# length as the grades argument. The values in the credits
+# vector represent the credits for each course from the 
+# corresponding grades vector.
+# 
+# The function should return a single number that represents
+# the GPA.
+#
+# Example: The following function call is used to calculate
+# the GPA of a student who took 3 classes. The grades in the
+# three classes were A,B,B (i.e. 4,3,3) and the credits for
+# the classes were 2, 4 and 3 credits respectively.
+# This is calculated as (4*2 + 3*4 + 3*3)/9  to get 3.222222
+#
+#    > getGpa(c(4,3,3), c(2,4,3))
+#    3.222222
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+getGpa <- function(grades , credits) {
+  sum(grades * credits) / sum(credits) 
+}
+```
+:::
+
+---
+
+### QUESTION 68a. TOPICS: user defined functions
+
+
+```{r}
+############################################################################################.
+# QUESTION_GROUP: 68
+# TOPICS: user defined functions
+#
+# The next few questions are related to each other.
+#
+# For each part below, create the function as described
+############################################################################################.
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 68a.
+# TOPICS: user defined functions
+#
+# ARGUMENTS/PARAMETERS 
+#
+#   vec - a vector that contains 2 or more values
+#
+# Returns a vector that contains the two largest
+# values from the vector,vec . The values should 
+# be returned IN INCREASING ORDER regardless
+# of the order in the original vector. For example:
+#     > getTopTwoValues(c(1,4,2,5,3))
+#     4  5
+#     > getTopTwoValues(c(1,5,2,4,3))
+#     4  5
+# If the largest value in vec appears more than once
+# then the return value should include that value twice.
+# For example:
+#     > getTopTwoValues(c(1,4,2,4,3,4))
+#     4  4
+#
+# Hints: You can write the function in many different ways. 
+# Some functions that might help are: sort, head, tail 
+#
+# Signature:    getTopTwoValues <- function(vec) 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+getTopTwoValues <- function(vec) {
+  sorted <- sort(vec)
+  sorted[ c ( length(vec)-1 , length(vec) ) ]
+}
+```
+:::
+
+---
+
+### QUESTION 68b. TOPICS: user defined functions
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 68b.
+# TOPICS: user defined functions
+#
+# Same as previous question but this function takes a parameter
+# named "n" that indicates how many values to return. "n" has a default
+# value of 2. Also vec, may contain 1 or more values instead of 2 or more values.
+# If there are fewer values in vec than "n" then the function should
+# return all of the values from vec.
+#
+# ARGUMENTS/PARAMETERS 
+#
+#   vec - any vector
+#
+#   n - the number of largest values to return
+#
+# Returns a vector that contains the "n" largest
+# values from the vector. If "n" is larger than the number of 
+# values in vec then the function should return all of the 
+# values in vec.
+#
+# Examples:
+#     > getTopValues(c(1,9,2,5,3),3)
+#     3  5  9
+#     > getTopValues(c(1,5,2,9,3))
+#     5  9
+#     > getTopValues(c(1,99,55,2,99),3)
+#     55  99  99
+#     > getTopValues(c(1,99),3)
+#     1  99
+#
+# SIGNATURE:  getTopValues <- function(vec, n=2)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# ONE ANSWER
+getTopValues <- function(vec, n=2) {
+  n = min( n , length(vec) )  # ensure n is not longer than length(vec)
+  sorted <- sort(vec)
+  position <- length(vec)-(n-1)
+  sorted[ position : length(vec) ]
+}
+
+# Test the answer
+getTopValues(c(1,9,2,5,3),3)   #     3  5  9
+getTopValues(c(1,5,2,9,3))     #     5  9
+getTopValues(c(1,99,55,2,99),3)#     55  99  99
+getTopValues(c(1,99),3)        #     1  99
+
+
+
+# ANOTHER ANSWER
+getTopValues <- function(vec, n=2) {
+  sorted <- sort(vec)
+  position <- length(vec)-(n-1)
+  if (position < 1) {
+    position <- 1
+  }
+  sorted[ position : length(vec) ]
+}
+
+# Test the answer
+getTopValues(c(1,9,2,5,3),3)   #     3  5  9
+getTopValues(c(1,5,2,9,3))     #     5  9
+getTopValues(c(1,99,55,2,99),3)#     55  99  99
+getTopValues(c(1,99),3)        #     1  99
+```
+:::
+
+---
+
+### QUESTION 68c TOPICS: user defined functions
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 68c
+# TOPICS: user defined functions
+#
+# same as previous question except the values that are 
+# returned should NOT be the same, unless, the vector contains 
+# too few unique values
+#
+# For example:
+#     > getTopValues(c(1,9,3,9), 2)
+#     3  9
+#     > getTopValues(c(9,9,9,9), 2)
+#     9  9
+#     > getTopValues(c(9,1,9,2), 3)
+#     1  2  9
+#
+# Hints: You can write the function in many different ways. 
+# The following are some functions that might help. If you are
+# not familiar with any of these functions, search the R help
+# pages: unique, sort, head, tail
+#
+# FUNCTION SIGNATURE: getTopValues <- function(vec, n=2)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+getTopValues <- function(vec, n=2) {
+  sortedUnique <- sort(unique(vec))
+  numValues <- min(n,length(sortedUnique))
+  sortedUnique[ (length(sortedUnique)-(numValues-1)) : length(sortedUnique) ]
+}
+```
+:::
+
+---
+
+### QUESTION 68d TOPICS: user defined functions
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 68d
+# TOPICS: user defined functions
+#
+# The following is similar to part (a) above, 
+# with the following change: "The largest values should
+# appear IN THE SAME ORDER AS THOSE VALUES APPEAR IN vec."
+# See the description below for more info:
+#
+# ARGUMENTS/PARAMETERS 
+#
+#   vec - a vector that contains 2 or more values
+#
+# Returns a vector that contains the two largest
+# values from the vector,vec . The largest values
+# should appear IN THE SAME ORDER AS THOSE VALUES
+# APPEAR IN vec. For example:
+#     > getTopTwoValues(c(1,9,2,5,3))
+#     9  5
+#     > getTopTwoValues(c(1,5,2,9,3))
+#     5  9
+# If the largest value in vec appears more than once
+# then the return value should include that value twice.
+# For example:
+#     > getTopTwoValues(c(1,9,2,9,3,9,9))
+#     9  9
+#
+# FUNCTION SIGNATURE: getTopTwoValues <- function(vec)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+################.
+#  68d - ANSWER
+################.
+
+# The following solution works in the following way to make sure
+# that the 2 values that are returned are in the same order
+# as in the original list:
+#
+# "Psuedo-code" for the answer:
+#
+#     First find the POSITION number of the highest value. 
+#     
+#     Copy the vector,x , into another variable, y.
+#
+#     In the new copy of the vector, REPLACE the highest
+#     value with the min of the vector.
+#
+#     Then get the POSITION number of the next highest value
+#     in the same way.
+#
+#     Now you know the position numbers of the two highest
+#     values. You should be able to get just the values from
+#     those two positions in the original vector.
+
+getTopTwoValues <- function(x) {
+  positions <- 1:length(x)
+  positionOfTopValue <- positions[ x == max(x) ][1]
+  y <- x       # save a copy of x in y
+  y[positionOfTopValue] <- min(x)
+  positionOf2ndValue <- positions[ y ==  max(y) ][1]
+  x[positions==positionOfTopValue | positions==positionOf2ndValue]
+}
+
+##############################################################################################.
+# END_OF_QUESTION_GROUP: 68
+##############################################################################################.
+```
+:::
+
+---
+
+### QUESTION 69. TOPICS: user defined functions, if_elseif_else
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 69.
+# TOPICS: user defined functions, if_elseif_else
+#
+# For the purposes of the following questions, the following definition of
+# "prime number" is assumed:   "An integer greater than one is called a prime number
+# if its only positive divisors (factors) are one and itself."  Therefore, 1 is not
+# a prime and neither is any negative number.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 69a.
+#
+# ARGUMENTS/PARAMETERS:
+# 
+#    num - a single numerical value
+#
+# Returns TRUE if num is a prime number and returns FALSE if num is not a prime number 
+#
+# Examples:
+#    > is.prime1(-1)
+#    FALSE 
+#    > is.prime1(1)
+#    FALSE 
+#    > is.prime1(2)
+#    TRUE 
+#    > is.prime1(7)
+#    TRUE
+#    > is.prime1(9)
+#    FALSE 
+#
+# FUNCTION SIGNATURE:   is.prime1 <- function( num )
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+is.prime1 <- function( num ) {
+  if (num < 2) {
+    return (FALSE)
+  } else if(num == 2) {
+    return (TRUE)  # the code in the else will not work for 2 (try it to see why)
+  } else {
+    divisors <- 2:(num/2)    # note, the following is more efficient: 2:sqrt(num)    
+    remainders <- num %% divisors
+    numberOfRemaindersThatAreZero <- sum (remainders == 0)
+    return (numberOfRemaindersThatAreZero == 0)
+  }
+}
+```
+:::
+
+---
+
+### QUESTION 69b. TOPICS: user defined functions, sapply_lapply
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 69b.
+# TOPICS: user defined functions, sapply_lapply
+#
+# ARGUMENTS/PARAMETERS:
+# 
+#    vec - a numeric vector 
+#
+# Returns a logical vector that describes if each corresponding
+# number in vec is a prime number. 
+#
+# Examples:
+#    > is.prime(c(1,2,3,4,5,6,7))
+#    FALSE  TRUE  TRUE  FALSE  TRUE  FALSE  TRUE
+#
+#    > is.prime(c(107,109,111,1000))   # note 111 is divisble by 3 (3*37 is 111)
+#    TRUE  TRUE  FALSE  FALSE
+#
+# HINT: You can actually use the sapply and the lapply functions with a vector 
+# (technically a "vector" is known as an "atomic list"). Use the sapply function 
+# and the is.prime1 function from the previous question to generate the answer
+# for this function. (Why did I say to use the sapply and not the lapply function???)
+#
+# FUNCTION SIGNATURE:   is.prime <- function( vec )
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+##############
+# ANSWER - 
+##############
+
+
+# ONE ANSWER (preferred approach)
+is.prime <- function(vec) {
+  sapply(vec,is.prime1)
+}
+
+
+# ANOTHER ANSWER (if you haven't learned "sapply" yet)
+is.prime <- function(vec) {
+  answers = lapply(vec,is.prime1)
+  unlist(answers)
+}
+```
+:::
+
+---
+
+### QUESTION 69c. TOPICS: user defined functions, loops
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 69c.
+# TOPICS: user defined functions, loops
+#
+# ARGUMENTS/PARAMETERS:
+#
+#    n - return all primes that are less than or equal to this value
+#
+# Returns a vector that contains all of the prime numbers that are less than or
+# equal to "n".
+# 
+# EXAMPLES:
+#    > primes.up.to(15)
+#    2  3  5  7  11  13
+#
+# FUNCTION SIGNATURE:   primes.up.to <- function(n = 100)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+#################################################################.
+# ANSWER #1  -  BEST ANSWER
+# The following version is the best. It does not use any loops.
+# However, you should still understand the code for the other
+# answers below.
+#################################################################.
+primes.up.to <- function(n = 100){
+  tfVector <- is.prime(2:n)   # tfVector will be a vector of TRUE/FALSE values
+  return ( (2:n)[tfVector] )  # Return the numbers whose values from tfVector are TRUE. NOTE: the word "return" is optional.
+}
+
+#################################################################.
+# ANSWER #2 
+# The following version uses a "for" loop
+#################################################################.
+primes.up.to <- function(n = 100){
+  primes <- vector()          # start with an empty vector
+  
+  for (num in 2:n) {          # check each number from 2 until n
+    if (is.prime1(num)) {     # if the current value of num is a prime number ...
+      primes <- c(primes,num)   # ... add it to the vector of primes
+    }
+  }
+  
+  return (primes)        # the word "return" is optional. The following will work too:   primes  
+}
+
+
+#################################################################.
+# ANSWER #3
+# The following version uses a "while" loop
+#################################################################.
+primes.up.to <- function(n = 100){
+  primes <- vector()          # start with an empty vector
+  num <- 2                    # set num to the first value to check
+  
+  while  (num <= n) {          # keep checking as long as num is less than n
+    if (is.prime1(num)) {      # if the current value of num is a prime number ...
+      primes <- c(primes,num)  # ... add it to the vector of primes
+    }
+    
+    num <- num + 1  # get the next num to check. Note that this
+    # must be done OUTSIDE of the if since this should be done
+    # whether or not the last number checked turned out to be prime or not.
+  }
+  
+  return (primes)        # the word "return" is optional. The following will work too:   primes  
+}
+```
+:::
+
+---
+
+### QUESTION 69d. TOPICS: user defined functions, loops
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 69d.
+# TOPICS: user defined functions, loops
+#
+# ARGUMENTS/PARAMETERS:
+#
+#    n - the number of prime numbers to return
+#
+# Returns a vector that contains the first "n" prime numbers>
+#
+# FUNCTION SIGNATURE:   first.n.primes <- function(n = 10)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+get.first.n.primes <- function(n) {
+  
+  # The next few lines prepare the variables that will be needed by the while loop below
+  
+  answer <- vector()      # setup an empty vector to contain the primes
+  nextNumberToCheck <- 2  # The first number we will check to see if it is a prime is 2. 
+  # (Yes I know that 2 is a prime, but you have to start somewhere ...)
+  numberPrimesFoundSoFar <- 0  # Before we start the loop, we havent "found" any primes yet.
+  
+  while(numberPrimesFoundSoFar < n) {  # If we haven't "found" n primes yet, keep looping to find another prime.
+    if (is.prime1(nextNumberToCheck)){  # check to see if the "nextNumberToCheck" is a prime number
+      answer <- c(answer,nextNumberToCheck) # If the number is a prime then add it to the "answer" vector.
+      # Note that the line "answer <- vector()" that appears above was
+      # necessary so that this line works the first time it is run. 
+      # If "answer" wasn't set to something at the top of this function 
+      # then the first time we would execute this line we would get
+      # an error since "answer" in "c(answer,nextNumberToCheck)" would not 
+      # have had been defined.
+      numberPrimesFoundSoFar <- numberPrimesFoundSoFar + 1  # If the number was a prime then add one to the
+      # variable "numberPrimesFoundSoFar"
+    }  # end of code for the "if"
+    nextNumberToCheck <- nextNumberToCheck + 1  # Whether or not the last number was a prime, move on to
+    # check the next number by adding one to "nextNumberToCheck"
+  } # end of code for the "while"
+  
+  return (answer)
+}
+```
+:::
+
+---
+
+### QUESTION 70.   TOPICS: user defined functions, matrices
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 70.   TOPICS: user defined functions, matrices
+#
+#   For the following question refer to the following definitions:
+#   A "square matrix" is a matrix that has the same number of rows and columns.
+#
+#   A "diagonal matrix" is a square matrix that has 1's (or another value) on the
+#     "main diagonal" that runs from the upper left hand corner to the lower right
+#     hand corner and zeros everywhere else. Examples:
+#                               1  0  0     3 0 0 0
+#                               0  1  0     0 3 0 0 
+#                               0  0  1     0 0 3 0
+#                                           0 0 0 3
+# An "upper triangular" matrix is a square matrix that has non-zero values on
+#   the main diagonal and in the upper right hand "triangle" of the matrix and
+#   zeros everywhere else. Examples:
+#                               1  1  1     3 3 3 3
+#                               0  1  1     0 3 3 3 
+#                               0  0  1     0 0 3 3
+#                                           0 0 0 3
+# A "lower triangular" matrix is a square matrix that has non-zero values on
+#   the main diagonal and in the upper right hand "triangle" of the matrix and
+#   zeros everywhere else. Examples:
+#                               1  0  0     3 0 3 0
+#                               1  1  0     3 3 0 0 
+#                               1  1  1     3 3 3 0
+#                                           3 3 3 3
+# ARGUMENTS/PARAMETERS:
+#
+#     size - a single number that represents the number of rows (and hence
+#            the number of columns) of a square matrix
+#
+#     shape - expected to be either "diagonal", "upperTriangular" or "lowerTriangular"
+#
+#     fillValue - a value that is used to fill the nonzero entries in the resulting matrix
+#
+# Returns a square matrix of the specified "size" and "shape". The nonzero entries in the
+# matrix should be filled with the value of "fillValue"
+#
+# HINTS: See the R documentation for the row() and col() functions. Try a 
+#        few examples of using the row() and col() functions. Then try to
+#        use those functions to implement the solution to this question. 
+#
+# FUNCTION SIGNATURE: 
+#     makeSquareMatrix <- function (size = 3 , shape = "diagonal" , fillValue = 1)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+makeSquareMatrix <- function (size = 3 , shape = "diagonal" , fillValue = 1) {
+  mat <- matrix ( rep(0,size^2), nrow=size, ncol=size)
+  
+  if (shape == "upperTriangular") {
+    
+    mat[ row(mat) <= col(mat)] <- fillValue
+    
+  } else if (shape == "lowerTriangular") {
+    
+    mat[ row(mat) >= col(mat)] <- fillValue
+    
+  } else {
+    mat [ row(mat) == col(mat) ] <- fillValue
+  }
+  
+  mat
+}
+
+# Examples of using the function:
+makeSquareMatrix(4,"upperTriangular", 99)
+makeSquareMatrix(3,"lowerTriangular", 2)
+makeSquareMatrix(3,"diagonal", 1)
+makeSquareMatrix(3,"bogusValueForShape", 1)  # based on the code above this will create a "diagonal" matrix
+```
+:::
+
+---
+
+
+### QUESTION 71a.   TOPICS: user defined functions, vectors
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 71a.   TOPICS: user defined functions, vectors
+#
+# This function returns the "middle" values from a vector in the same order
+# that they appear in the vector (see the examples below).
+#
+# ARGUMENTS/PARAMETERS:
+#
+#    data - a vector
+#    n   - the number of middle values to return. This defaults 
+#          to the entire vector.
+#
+# Examples: 
+#    > middle.values( c(40,30,20,10), 2)  # return the middle 2 values
+#    30  20 
+#
+#    > middle.values( c(40,30,20,10))   # n wasn't specified so default is entire vector
+#    40  30  20  10
+#
+#    > # If there aren't exactly "n" "middle values" (i.e. if n is odd and length(data) is even
+#    > # or n is even and length(data) is odd) then the function should return
+#    > # one more value from the first half of "data" and one fewer value from
+#    > # the second half of "data". For example in the following, 
+#    > # there isn't just one middle value - there are two, so return the first "middle value".
+#    >
+#    > middle.values( c(40,30,20,10), 1)  
+#    30
+#
+#    > # similarly:
+#    > middle.values( c(40,30,20,10), 3)    # rerurn the 40, but not the 10
+#    40  30  20
+#
+#    > # SOME OTHER EXAMPLES:
+#    > middle.values( c(2,9,3,8,4,7,5), 4)
+#    9  3  8  4
+#    > middle.values( c(2,9,3,8,4,7,5), 2)
+#    3  8 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+middle.values <- function ( data , n = length(data)) {
+ 
+  middlePosition = length(data) %/% 2  
+  
+  startOfMiddleValues = middlePosition - n / 2 + 1
+  
+  endOfMiddleValues = startOfMiddleValues + n -1
+  
+  data[ startOfMiddleValues:endOfMiddleValues ]
+  
+}
+
+middle.values( c(40,30,20,10), 2)   # 30  20 
+
+middle.values( c(40,30,20,10))      # 40  30  20  10
+
+middle.values( c(40,30,20,10), 1)   # 30
+
+middle.values( c(40,30,20,10), 3)   # 40  30  20
+
+middle.values( c(2,9,3,8,4,7,5), 4) # 9  3  8  4
+
+middle.values( c(2,9,3,8,4,7,5), 2) # 3  8 
+```
+:::
+
+---
+
+
+### QUESTION 71 b. TOPICS: user defined functions, vectors
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION
+# 71 b. 
+# TOPICS: user defined functions, vectors
+#
+# Modify the middle.values function from the previous question so that it takes 
+# an additional argument named "percent". "percent" specifies the percent of
+# values that should be returned as the middle values. The value of "percent" 
+# should only be used if "n" is not specified. If both "n" and "percent" are
+# specified then the value of "n" should be used. If neither "n" nor "percent"
+# are specified then return all of the values.
+#
+# ARTUMENTS/PARAMETERS:
+#    n       - the number of middle values to be returned
+#    percent = a number between 0 and 1 (ie. 1 is 100 percent)
+#
+# EXAMPLES:
+#   > # return the middle 40% of the values
+#   > middle.values( c(100,90,80,70,60,50,40,30,20,10),  percent=0.4)
+#   70 60 50 40
+#
+#   > # return the middle 6 values
+#   > middle.values( c(100,90,80,70,60,50,40,30,20,10),  n=6)
+#   80 70 60 50 40 30
+#
+#   > # both n and percent are specified, so use "n" and NOT "percent"
+#   > middle.values( c(100,90,80,70,60,50,40,30,20,10),  n=6, percent=0.4)
+#   80 70 60 50 40 30
+#
+#   > # neither n nor percent are specified, so return ALL of the values.
+#   > middle.values( c(100,90,80,70,60,50,40,30,20,10),  n=6, percent=0.4)
+#   100 90 80 70 60 50 40 30 20 10 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+middle.values <- function ( data , n = NA, percent = NA) {
+   # TODO - finish this
+}
+```
+:::
+
+---
+
+### QUESTION 71c. TOPICS: user defined functions, vectors, if_elseif_else
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 71c.
+#
+# Modify the middle.value function from the previous question that that it takes 
+# an additional argument named "sort".
+#
+# If the value of "sort" is specified as  "asc" then the middle values that
+# are returned should be sorted in "ascending" order (e.g. 1,2,3,...)
+# 
+# If the value of "sort" is specified as  "desc" then the middle values that
+# are returned should be sorted in "descending" order (e.g. 10,9,8,,...)
+#
+# If the value of "sort" is specified as  "none" (or as any other value) 
+# then the middle values should be returned in the same order in which they 
+# appear in the original vector.
+# 
+# EXAMPLES:
+#     > middle.values(c(10,1,9,2,8,3), 4,  sort = "asc" )
+#     1  2  8  9
+#
+#     > middle.values(c(10,1,9,2,8,3), 4,  sort = "desc" )
+#     9  8  1  2
+#
+#     > middle.values(c(10,1,9,2,8,3), 4,  sort = "none" )
+#     1  9  2  8
+#
+#     > middle.values(c(10,1,9,2,8,3), 4 )   # default is sort = "none"
+#     1  9  2  8
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+middle.values <- function ( data , n = NA, percent = NA, sort="none") {
+  # TODO - finish this  
+}
+```
+:::
+
+---
+
+### QUESTION 71. d. TOPICS: user defined functions
+
+
+```{r}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION
+# 71. d.
+# TOPICS: user defined functions
+#
+# Modify the middle.values function from the previous question so that the "data"
+# argument may be a vector, a dataframe or a generic list that contains several vectors. 
+#
+# If data is a vector then this function should work exactly the same way as
+# described in the previous question.
+#
+# If data is a dataframe then the function should return a dataframe that contains 
+# the middle values (as specified) for each column of the dataframe. 
+#
+# If data is a generic list, thet contains several vectors, then the function should
+# return a list that contains several vectors. Each vector in the returned list 
+# should contain the middle values from the corresponding vector in the original
+# list.
+# 
+# EXAMPLES:
+#     You should be able to understand the question from the description above,
+#     but I'll try to post some examples later.
+#
+# HINTS:  
+#    - create two functions, the first function should do what the previous
+#      question required. The 2nd function should be the function described here.
+#      This 2nd function (i.e. the one that you need to write for THIS question) 
+#      should "apply" the first function to the columns of a dataframe or the elements
+#      of a generic list as necessary by using one of the "apply" functions.
+#    - the is.data.frame() function can be used to determine if a variable contains a dataframe.
+#    - mode() can be used to determine if a variable contains a list. Note that a "dataframe"
+#      is also technically a "list".
+#    - use if/else if/else    as necessary
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+middle.values <- function ( data , n = NA, percent = NA, sort="none") {
+  # TODO - finish this
+}
+```
+:::
+
+---
+
+
+### QUESTION 71e. TOPICS: user defined functions
+
+```{r}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 71e.
+# TOPICS: user defined functions
+#
+# Write a function that returns a vector of the means of different increasing
+# amounts of "middle values" from a vector. If the number of values in the original
+# vector are even, then the means returned should start with the means of the 2 
+# middle values. If the number of values in the original vector are odd, then the
+# means should start with the means of the 1 middle value. For example, 
+# 
+#    > # even number of values in vector
+#    > get.middle.means( c(5,4,1,2,3,6) )   # means of  1,2    4,1,2,3  and  5,4,1,2,3,6
+#    1.5  2.5  5.25    
+#
+#    > # odd number of values in vector
+#    > get.middle.means( c(5,4,1,2,3,6,7) ) # means of  2   1,2,3   4,1,2,3,6  and  5,4,1,2,3,6,7
+#    2   2   3.2   4    
+#
+# HINTS: 
+#  - use the middle.values function that you created above to get the middle values
+#  - use a loop   (either a for loop or a while loop)  to keep getting different 
+#    numbers of middle.values and getting the mean of those middle values.
+#  - you "answer" can start as an "empty vector" by using the code:   answer <- vector()
+#    Then add a new number to the answer vector each time your loop finds a new mean.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+get.middle.means = function( vec ) {
+  # TODO - finish this  
+}
+```
+:::
+
+---
+
+### QUESTION 72a.   TOPICS: loops
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 72a.   TOPICS: loops
+# Write a function, numPairs, that takes a single argument, nums that is
+# expected to be a numeric vector.  The function should return the number of
+# pairs of numbers in nums that add up to a multiple of 60.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+numPairs <- function(nums){
+  answer <- list()
+  for(pos1 in 1:(length(nums)-1)){
+    n1 <- nums[pos1]
+    
+    for(pos2 in (pos1+1):length(nums)){
+      n2 <- nums[pos2]
+      if( (n1+n2) %% 60 == 0 ){
+        answer[[length(answer)+1]] <- c(n1,n2)
+      }
+    }
+  }
+  length(answer)
+}
+
+# check to see it works
+amounts <- c(70,5,50,20,40,10,100)
+x <- numPairs(amounts)
+x
+```
+:::
+
+---
+
+### QUESTION 72b. TOPICS: loops
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 72b. TOPICS: loops
+#
+# Modify the function, numPairs, so that it takes a 2nd argument, sumAmount.
+# The default value of sumAmount should be 60. The function should return the
+#  number of pairs of numbers in nums that add up to a multiple of sumAmount.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+numPairs <- function(nums, sumAmount=60){
+  answer <- list()
+  for(pos1 in 1:(length(nums)-1)){
+    n1 <- nums[pos1]
+    
+    for(pos2 in (pos1+1):length(nums)){
+      n2 <- nums[pos2]
+      if( (n1+n2) %% sumAmount == 0 ){
+        answer[[length(answer)+1]] <- c(n1,n2)
+      }
+    }
+  }
+  length(answer)
+}
+
+# check to see it works
+amounts <- c(70,5,50,20,40,10,100)
+x <- numPairs(amounts)
+x
+```
+:::
+
+---
+
+### QUESTION 72c.  TOPICS: loops
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 72c.  TOPICS: loops
+#
+# Write a function, getPairs, that takes a single argument, nums that is
+# expected to be a numeric vector. The function should return a list that
+# contains the pairs of numbers in nums that add up to a multiple of 60.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+numPairs <- function(nums){
+  answer <- list()
+  for(pos1 in 1:(length(nums)-1)){
+    n1 <- nums[pos1]
+    
+    for(pos2 in (pos1+1):length(nums)){
+      n2 <- nums[pos2]
+      if( (n1+n2) %% 60 == 0 ){
+        answer[[length(answer)+1]] <- c(n1,n2)
+      }
+    }
+  }
+  answer
+}
+
+# check to see it works
+amounts <- c(70,5,50,20,40,10,100)
+x <- numPairs(amounts)
+x
+```
+:::
+
+---
+
+### QUESTION 72d. TOPICS: loops
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 72d. TOPICS: loops
+#
+# Write a function, getPairs, that takes a single argument, nums that is 
+# expected to be a numeric vector. The function should return a dataframe that
+# contains the pairs of numbers in nums that add up to a multiple of 60.
+# Each pair should be in a new column on the dataframe. The names of the columns
+# should be pair1, pair2, pair3, etc.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+numPairs <- function(nums){
+  answer <- list()
+  for(pos1 in 1:(length(nums)-1)){
+    n1 <- nums[pos1]
+    
+    for(pos2 in (pos1+1):length(nums)){
+      n2 <- nums[pos2]
+      if( (n1+n2) %% 60 == 0 ){
+        answer[[length(answer)+1]] <- c(n1,n2)
+      }
+    }
+  }
+  answer = data.frame(answer)
+  colnames(answer) = paste0("pair", 1:ncol(answer))
+  answer
+}
+
+# check to see it works
+amounts <- c(70,5,50,20,40,10,100)
+x <- numPairs(amounts)
+x
+```
+:::
+
+---
+
+### QUESTION 72e. TOPICS: loops
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 72e. TOPICS: loops
+#
+# Write a function, getPairs, that takes a single argument, nums that is
+# expected to be a numeric vector. The function should return a matrix that
+# is 2 rows by n columns where n is the number of pairs of numbers from nums
+# that add up to 60. Each column of the matrix should contain a pair of numbers.
+# The names of the columns should be pair1, pair2, pair3, etc
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+numPairs <- function(nums){
+  answer <- numeric(0)
+  for(pos1 in 1:(length(nums)-1)){
+    n1 <- nums[pos1]
+    
+    for(pos2 in (pos1+1):length(nums)){
+      n2 <- nums[pos2]
+      if( (n1+n2) %% 60 == 0 ){
+        answer[length(answer)+c(1,2)] <- c(n1,n2)
+      }
+    }
+  }
+  answer = matrix(answer, nrow=2, ncol=length(answer)/2)
+  colnames(answer) = paste0("pair", 1:ncol(answer))
+  answer
+}
+
+# check to see it works
+amounts <- c(70,5,50,20,40,10,100)
+x <- numPairs(amounts)
+x
+```
+:::
+
+---
+
+### QUESTION 72f. TOPICS: loops
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 72f. TOPICS: loops
+#
+# Write a function, getPairs, that takes a single argument, nums that is
+# expected to be a numeric vector. The function should return a matrix that
+# is n rows by 2 columns where n is the number of pairs of numbers from nums
+# that add up to 60. Each row of the matrix should contain a pair of numbers.
+# The names of the rows should be pair1, pair2, pair3, etc
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+numPairs <- function(nums){
+  answer <- numeric(0)
+  for(pos1 in 1:(length(nums)-1)){
+    n1 <- nums[pos1]
+    
+    for(pos2 in (pos1+1):length(nums)){
+      n2 <- nums[pos2]
+      if( (n1+n2) %% 60 == 0 ){
+        answer[length(answer)+c(1,2)] <- c(n1,n2)
+      }
+    }
+  }
+  answer = matrix(answer, nrow=length(answer)/2, ncol=2, byrow = TRUE)
+  rownames(answer) = paste0("pair", 1:nrow(answer))
+  answer
+}
+
+# check to see it works
+amounts <- c(70,5,50,20,40,10,100)
+x <- numPairs(amounts)
+x
+```
+:::

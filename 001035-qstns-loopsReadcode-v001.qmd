@@ -1,0 +1,615 @@
+# Practice Questions - TOPICS: cat, loops (reading code)
+
+We went over many of these questions in our final review class (Fall 2023).
+In order to be able to answer these questions effectively it is imperative
+that you keep track the values of arguments and variables on a piece of 
+paper as you mentally step through the code. Below are links to the videos
+from those review classes as well as PDFs of the notes
+that I took to keep track of the variables during those review classes.
+
+
+
+-Prof. Rosenthal
+
+**Beren Review Class**
+
+* Notes: click <a target="_blank" href="001035-qstns-loopsReadcode-v001-berenReview.pdf">here</a> 
+
+* Video: click <a target="_blank" href="https://yeshiva-university.zoom.us/rec/play/mnVXc4dVAhs12v6tsGpUsSlnofDVvilpPRLBSa_2Rm7oskahlp6J-YO40mKtFysW6f6v4LhUcwTaJUOz.UHsu1LpXlEFYPiv8">here</a>
+
+
+**Wilf Review Class**
+
+* Notes: click <a target="_blank" href="001035-qstns-loopsReadcode-v001-wilfReview.pdf">here</a> 
+
+* Video: click <a target="_blank" href="https://yeshiva-university.zoom.us/rec/play/2b6kmUAlt4nFqXE0vLk4enURdAETms016A5dwZCAFfDBtvTAa9BJ5VWdIePwOSJiaWWrYG6SsqGdjPX1.HIsL91QM4SJU7nOP">here</a>
+
+
+
+## TOPICS: return vs cat
+
+### QUESTION 1 - Topics: return value of a function
+
+What is displayed by the following code?
+
+```{r}
+f = function(n){
+  return(n*2)
+}
+
+# What does this display?
+#f(3) + 100
+
+# What does this display?
+#x = f(3)
+
+# What does this display?
+#3
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+```{r}
+# What does this display?
+f(3) + 100
+```
+
+```{r}
+# What does this display?
+x = f(3)
+```
+
+```{r}
+# What does this display?
+x
+```
+:::
+
+
+### QUESTION 2 - Topics: cat
+
+```{r}
+# What is displayed by the following code?
+#cat(3)
+
+# What is displayed by the following code?
+#cat(3) * 2
+
+# What is displayed by the following code?
+#x = cat(3)
+
+# What is displayed by the following code?
+#x
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+
+The job of the cat function is simply to display information to the screen.
+You cannot capture the output of cat and use it. Similarly you cannot
+multiply the value that is displayed by cat or use the output of cat in 
+any similar "larger context". 
+
+This is very different from other functions, eg. seq. 
+With most other functions you can capture the
+output in a variable or use the function in a larger context. The following 
+examples show how the output of seq can be used in a larger context. 
+You cannot do any of that with cat. The reason that you can use the output
+of most other functions in a larger context is that these other
+functions "return" values.
+
+```{r}
+#######################################################################.
+# Demonstrating the return value of seq being used in a larger context
+#######################################################################.
+
+# We can use the function by itself and the return value will be displayed to
+# the screen.
+seq(1,3)         
+```
+
+```{r}
+############################################################################.
+# The following commands use the value that is returned by seq in a
+# larger context
+############################################################################.
+```
+
+```{r}
+sum(seq(1,3))    # sum the values
+seq(1,3) * 100   # multiply the values
+x = seq(1,3)     # save the values in a variable
+x                # now the variable has the value
+```
+
+```{r}
+###########################################################.
+# cat is different - it's return value is NULL
+###########################################################.
+
+# As we said, cat displays values to the screen but does not "return" those
+# values. That means that you cannot use those values in a "larger context".
+#
+# The actual return value of cat is the special value NULL. NULL basically
+# means "there is NOTHING being returned" (NA is different than NULL in that
+# NA stands for a value that technically exists, we just don't know the actual
+# value). One last source of confusion is that you don't normally see 
+# the value NULL when you run cat since the NULL is returned as an 
+# "invisible" value (see ?invisible).
+#
+# The following shows what happens when you try to use cat in a larger
+# context. 
+```
+
+```{r}
+# What is displayed by the following code?
+#
+# ANSWER: the info is displayed on the screen.
+cat(3) 
+```
+
+```{r}
+# What is displayed by the following code?
+#
+# ANSWER: 
+#   Step 1 - cat displays 3 on the screen.
+#   Step 2 - cat returns NULL
+#   Step 3 - NULL * 2 results in numeric(0). Basically, the idea is that you 
+#            cannot use the output of cat in a meaningful way.
+
+cat(3) * 2
+```
+
+```{r}
+# What is displayed by the following code?
+#
+# ANSWER: 
+#   Step 1 - cat displays 3 on the screen.
+#   Step 2 - the NULL that is "returned" from cat is captured
+#            in the variable x
+x = cat(3)
+```
+
+```{r}
+# What is displayed by the following code?
+#
+# ANSWER: 
+#   The value NULL that was assigned to x is displayed.
+x
+```
+:::
+
+
+### QUESTION 3 - Topics: return vs cat
+
+What is displayed by the following code?
+
+```{r}
+f = function(n){
+  cat(n*2)
+  return(0)
+}
+```
+
+```{r}
+# What does this display?
+#f(3) + 100
+```
+
+```{r}
+# What does this display?
+#x = f(3)
+```
+
+```{r}
+# What does this display?
+#x
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+
+There is a big difference between cat and return. Values that are returned
+can be used in a larger context when calling a function.
+
+Values that are displayed with cat appear on the screen, but they are
+NOT returned. This means that you cannot capture the values that are displayed
+with cat in a variable. Similarly the values that are displayed with 
+cat CANNOT be used in a larger context.
+
+The return value of f is 0. It is this 0 that is used in a
+larger context. The call to cat in the function simply displays info to 
+the screen but that info cannot be used in any larger context.
+
+```{r}
+# What does this display?
+#
+# ANSWER: 
+#   step 1 - n*2 is calculated to be 6
+#   step 2 - cat displays 6 on the screen
+#   step 3 - the function f "returns" 0
+#   step 4 - 0 + 100 is calculated to be 100 and is displayed to the screen.
+
+f(3) + 100
+```
+
+```{r}
+# What does this display?
+#
+# ANSWER: 
+#   step 1 - n*2 is calculated to be 6
+#   step 2 - cat displays 6 on the screen
+#   step 3 - the function f "returns" 0
+#   step 4 - x is assigned the return value of 0
+x = f(3)
+```
+
+```{r}
+# What does this display?
+#
+# ANSWER:
+#   The value 0 that was assigned to x is displayed
+
+x
+```
+:::
+
+
+### QUESTION 4 - Topics: return vs cat
+
+What is displayed by the following code?
+
+```{r}
+f = function(n){
+  cat(n*2)
+}
+
+# What does this display?
+#f(3) + 100
+
+# What does this display?
+#x = f(3)
+
+# What does this display?
+#x
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+
+There is a big difference between cat and return. Values that are returned
+can be used in a larger context when calling a function.
+
+Values that are displayed with cat appear on the screen, but they are
+NOT returned. The actual "return value" of cat is NULL. 
+Since cat is the last thing to be executed in the function, the return
+value of the function is also NULL.
+
+
+```{r}
+# What does this display?
+#
+# ANSWER: 
+#   step 1 - n*2 is calculated to be 6
+#   step 2 - cat displays 6 on the screen
+#   step 3 - cat "returns" NULL
+#   step 4 - since cat is the last thing to be executed in the function,
+#            the function, f, returns NULL.
+#   step 5 - NULL + 100 results in numeric(0) and that is displayed
+
+f(3) + 100
+
+# What does this display?
+#
+# ANSWER: 
+#   step 1 - n*2 is calculated to be 6
+#   step 2 - cat displays 6 on the screen
+#   step 3 - cat "returns" NULL
+#   step 4 - since cat is the last thing to be executed in the function,
+#            the function, f, returns NULL.
+#   step 5 - x is assigned the value NULL
+
+x = f(3)
+
+# What does this display?
+#
+# ANSWER: 
+#   step 1 - The value NULL that was assigned to x is displayed to the screen
+x
+```
+:::
+
+---
+
+## TOPICS: loops (for and while)
+
+### QUESTION 5 - Topics: for loops
+
+What is displayed by the following code?
+
+```{r}
+
+f = function(n){
+  
+  for (x in 1:n){
+    cat(x * x, " ")
+  }
+  
+  cat("\n")
+  
+  return(c(x, n))
+
+}
+
+# What does this display?
+#result = f(4)
+
+# What does this display?
+#result
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+```{r}
+# What does this display?
+result = f(4)
+
+# What does this display?
+result
+```
+:::
+
+### QUESTION 6 - Topics: while loops, cat vs return
+
+What is displayed by the following code?
+
+```{r}
+
+f = function(n){
+  
+  x = 1
+  while  (n >= 1){
+    cat(x, " ")
+    x = x * 2
+    n = n - 1
+  }
+  
+  cat("\n")
+  
+  return(c(x, n))
+
+}
+
+# What does this display?
+#x = f(4)
+
+# What does this display?
+#x
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+```{r}
+# What does this display?
+x = f(4)
+
+# What does this display?
+x
+```
+:::
+
+
+
+### QUESTION 7 - Topics: for loops
+
+What is displayed by the following code?
+
+```{r}
+f = function(n){
+  
+  for (x in 1:n){
+    cat("*** starting outer for loop again***\n")
+    for (y in x:n){
+      cat("x is ", x, "    ")
+      cat("y is ", y, "\n")
+    }
+  }
+  
+  return( c(x,y) )
+}
+
+# What does this display?
+#result = f(4)
+
+# What does this display?
+#result
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+```{r}
+# What does this display?
+result = f(4)
+
+# What does this display?
+result
+```
+:::
+
+
+
+
+### QUESTION 8 - Topics: for loops, nested loops, if
+
+What is displayed by the following code?
+
+```{r}
+
+drawSomething = function(size){
+  
+  if (!is.numeric(size) || trunc(size) != size || size < 0){
+    stop("size must be a non-negative whole number")
+  }
+  
+  for (row in 1:size){
+    
+    for (col in 1:size){
+      
+      if (col == row || col == size - row + 1){
+        cat("@")
+      } else {
+        cat(".")
+      }
+        
+    }
+    
+    cat("\n")
+  }
+  
+  cat("\nHope you like the picture! :)\n")
+    
+
+}
+
+# What do these display?
+#drawSomething(3)
+#drawSomething(5)
+#drawSomething(1)
+#drawSomething(0)  # be careful! This is tricky. Probably not what you'd expect.
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+```{r}
+# What do these display?
+drawSomething(3)
+drawSomething(5)
+drawSomething(1)
+drawSomething(0)  # be careful! This is tricky. Probably not what you'd expect.
+```
+:::
+
+
+
+
+### QUESTION 9 - Topics: for loops, nested loops, if
+
+The only thing that changed are the lines that are highlighted 
+in the code with "# THIS CHANGED".  
+What will be displayed now?
+
+
+```{r}
+drawSomething = function(size){
+  
+  if (!is.numeric(size) || trunc(size) != size || size < 0){
+    stop("size must be a non-negative whole number")
+  }
+  
+  for (row in 1:size){
+    
+    for (col in 1:size){
+      
+      if (col == row || col == size - row + 1){  # THIS CHANGED
+                                                 # THIS CHANGED
+        if ( row %% 2 == 0)                      # THIS CHANGED
+          cat("0")                               # THIS CHANGED
+        else                                     # THIS CHANGED
+          cat("X")                               # THIS CHANGED
+                                                 # THIS CHANGED
+      } else {
+        cat(".")
+        
+      }
+        
+    }
+    
+    cat("\n")
+  }
+  
+  cat("\nHope you like the picture! :)\n")
+    
+
+}
+
+# What does this display?
+#drawSomething(5)
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+```{r}
+# What does this display?
+drawSomething(5)
+```
+:::
+
+
+
+
+### QUESTION 10 - Topics: for loops, nested loops, if
+
+What is displayed by the following code?
+
+```{r}
+drawSomething = function(size){
+  
+  if (!is.numeric(size) || trunc(size) != size || size < 0){
+    stop("size must be a non-negative whole number")
+  }
+  
+  for(row in 1:size){
+
+    if( row == 1 || row == size ){
+      for (x in 1:size){
+        cat("-")
+      }
+      cat("\n")
+      
+    } else {
+      for (col in 1:size) {
+        if( row == 1 || row == size ){
+          for (x in 1:size){
+            cat("-")
+          }
+          cat("\n")
+          
+        } else {
+          if (col == 1){
+            cat("|")
+          } else if (col == size){
+            cat("|\n")
+          } else if (row == col) {
+            cat("x")
+          } else {
+            cat(".")
+          }
+        }
+      }
+    }
+
+  }
+}
+
+# What does this display?
+#drawSomething(5)
+
+# What does this display?
+#drawSomething(10)
+```
+
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+```{r}
+# What does this display?
+drawSomething(5)
+
+# What does this display?
+drawSomething(10)
+```
+:::
+
+
+
+

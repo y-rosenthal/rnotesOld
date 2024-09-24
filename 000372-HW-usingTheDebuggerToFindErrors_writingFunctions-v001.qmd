@@ -1,0 +1,212 @@
+# THIS FILE IS IN PROGRESS
+# SO FAR THERE ARE TWO QUESTIONS IN THE WORKS.
+# FIRST IS TO USE THE DEBUGGER TO FIND THE BUG.
+# 2nd IS TO WRITE A FUNCTION WITH COMPLEX CALCULATIONS.
+
+# YR - NOTE TO MYSELF
+# 
+# THE FOLLOWING SCRATCH WORK IS FOR HELPING TO UNDERSTAND THE 
+# DETAILS OF THE QUESTOIN BELOW _ YOU CAN DELETE THIS ...
+
+5+4+4 = 13
+5+4+4 = 13
+4+4+4 = 12
+
+5+5   = 10
+4+4+4 = 12
+4+4+4 = 12
+4+    =  4
+
+5+5+4 = 14
+5+4+4 = 13
+4+4+4 = 12
+4    =  4
+
+5+5   = 10
+5+4+4 = 13
+4+4+4 = 12
+4    =  4
+
+# A furniture company mass-produces bookcases. The bookcases come 
+# with different sized shelves. Some shelves are three feet long and 
+# some are five feet long. The furniture company gets shipments of very long 
+# boards (called "planks") from which they cut the different sized shelves.
+# Depending on the supplier, the planks could be of various 
+# different lengths (e.g. some suppliers ship 14 foot planks, some
+# ship 15 foot planks, some 16 foot planks, etc).
+# 
+# The furniture company often needs a specific number of five foot shelves
+# and a specific number of three foot shelves. They need to know how many
+# planks they will need in order to cut the necessary shelves. 
+# The system in the factory is that first all of the longer shelves are cut.
+# Once that is finished the machinery is then reconfigured to cut the shorter
+# shelves. If the leftover pieces of the planks after cutting the five foot 
+# shelves are long enough, some three foot shelves could be cut from those
+# leftover pieces. 
+#
+# For example, suppose the company gets a shipment of planks that are 
+# 19 feet long. if the company needs 7 five foot shelves and 12 three
+# foot shelves they will need a total of 6 planks. 
+# This is figured out in the following way:
+#
+#   EXAMPLE 1
+#     Each plank is 19 feet.
+#     Need 7 five foot shelves.
+#     Need 20 three foot shelves.
+#
+#     CUTTING THE FIVE FOOT SHELVES
+#     plank1: 3 five foot shelves (with 4 feet left over)
+#     plank2: 3 five foot shelves (with 4 feet left over)
+#     plank3: 1 five foot shelf (with 14 feet left over)
+#     For a total of 7 five foot shelves.
+#
+#     Now the machinery is reconfigured to cut the three foot shelves. 
+#     The leftover pieces from the planks are used to cut some of 
+#     the three foot shelves. For the rest of the three foot shelves
+#     we will have to use additional planks.
+#
+#     CUTTING THE THREE FOOT SHELVES (need a total of 20)
+#     leftover from plank1 (4 feet): 1 three foot shelf
+#     leftover from plank2 (4 feet): 1 three foot shelf
+#     leftover from plank3 (11 feet): 3 three foot shelf
+#     Now you still need another 15  three foot shelves.
+#     plank4: 6 three foot shelves (with 1 foot left over)
+#     plank5: 6 three foot shelves (with 1 foot left over)
+#     plank6: 3 three foot shelves (with 10 feet left over)
+#
+#     Therefore, based on the way this factory works, in order 
+#     to cut 7 five foot shelves and 20 three foot shelves,
+#     they will need a total of six 19 foot planks.
+#     (If the planks were of a different size, then the answer would be 
+#     different.)
+#
+# 
+#   EXAMPLE 2
+#     Each plank is 20 feet.
+#     Need 8 five foot shelves.
+#     Need 4 three foot shelves.
+#
+#     CUTTING THE FIVE FOOT SHELVES
+#     plank1: 4 five foot shelves (with 0 feet left over)
+#     plank2: 4 five foot shelves (with 0 feet left over)
+#     For a total of 8 five foot shelves.
+#
+#     Now the machinery is reconfigured to cut the three foot shelves. 
+#     There are no leftover pieces from the planks that were used so far.
+#
+#     CUTTING THE THREE FOOT SHELVES (need a total of 5)
+#     plank3: 4 three foot shelves (with 8 feet left over)
+#
+#     Therefore, based on the way this factory works, in order 
+#     to cut 8 five foot shelves and 4 three foot shelves,
+#     they will need a total of three 20 foot planks.
+#     (If the planks were of a different size, then the answer would be 
+#     different.)
+#
+# 
+
+#
+# The furniture company tried to write the following R function to figure
+# out how many planks they will need in order to cut a specified number
+# of five foot and three foot shelves. The function is not coming up with 
+# the right answers. Use the debugger to try to help you find the mistakes
+# in the code. The #comments in the code explain what each line of code
+# is intended to do. These comments are logically correct - the problem is 
+# that the code doesn't work the way it's supposed to.
+#
+# Find the mistakes in the code. 
+# Use the R debugger to step through each line of code. 
+# Check to see that the output of each line is correct. If it isn't,
+# try to figure out what the problem is.
+# Rewrite each line of code so that it does what the comment says it should
+# do. 
+
+planksNeeded = function(plankLength, numLonger, numShorter){
+  
+  ################################################################.
+  # The following calculations figure out the number of
+  # planks needed to cut the longer shelves. T
+  #
+  # We also figure out
+  # the amount of wood leftover from each plank after cutting the longer
+  # shelves. This will be necessary when we figure out how we are 
+  # going to cut the shorter shelves.
+  ################################################################.
+  
+  # maximum number of longer shelves that can be cut from a single plank
+  max.longer.shelves.from.single.plank = plankLength %/% 5
+  
+  # The last plank from which longer boards are cut might have fewer
+  # boards than the earlier planks.
+  # In general, the first few planks will have as many of the longer boards
+  # cut from it as possible. Referring to the example above, if each plank
+  # is 19 feet long, and we need a total of 7 five foot planks, then the
+  # first 2 planks each had 3 five foot boards cut from it. 
+  number.of.longer.shelves.from.last.plank = 
+    numLonger %% max.longer.shelves.from.single.plank
+  
+  # leftover from last plank
+  # The length of the leftover wood from the last plank that was cut
+  # Keep in mind that the last plank might not have had as much cut off
+  # as the other planks did. 
+  #
+  # For example if a plank is 14 feet long it can have two 5 foot shelves 
+  # cut from it with 4 feet left over. If we need to cut a total of seven
+  # 5 foot shelves, then from the first 3 planks will cut 2 shelves each
+  # with 4 feet left over from each plank. However, the 4th plank will have
+  # only 5 feet cut off (for one shelf) with 9 feet left over.
+  # This variable represents the amount of wood left over on the last plank.
+  leftoverLastPlank = plankLength - (numLonger %/% numLongerPerPlank) * 5
+  
+  # the length of the leftover wood from a single plank after 
+  # cutting as many of the longer shelves as possible from that plank
+  leftover = plankLength %% 5
+  
+  # If there is 
+  # will be 0 or 1
+  planksThatHaveMoreLeftover = numLonger %% numLongerPerPlank   
+  
+  # number of planks needed to accommodate for the all of the longer shelves
+  planksForLonger = numLonger %/% numLongerPerPlank
+  
+  # The length of the leftover wood from the last plank that was cut
+  # Keep in mind that the last plank might not have had as much cut off
+  # as the other planks did.
+  leftoverLastPlank = plankLength - (numLonger %/% numLongerPerPlank) * 5
+  
+  
+  # number of shorter shelves that can be cut from what is leftover
+  # after cutting as many longer shelves as possible from a single plank
+  shorterPerLeftover = leftover %/% 4
+  
+  # number of shorter shelves that can be cut from one plank
+  shorterPerPlank = plankLength %/% 4
+  
+  
+  
+}
+
+
+
+
+
+
+# ANOTHER QUESTOINS
+#
+# A tile layer has a unique process
+# 
+# square tiles
+#
+# don't break tiles that don't fit
+#
+# edges of room that can't be tiled are filled in with
+# ground up tiles in a paste. The whole tiles are centered
+# and then the edges of the room are filled in with the paste.
+# A ground up tile in the paste covers twice the surface
+# area as a whole tile
+#
+# Write function to figure out how many tiles are needed
+
+tilesNeeded = function(roomWidth, roomLength, tileSideLength){
+}
+}

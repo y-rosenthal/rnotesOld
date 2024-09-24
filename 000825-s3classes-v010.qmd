@@ -1,0 +1,443 @@
+# S3 Classes
+
+```{r}
+#####################################################################
+#####################################################################
+##
+## R's "S3 classes" - Generic functions  and   methods
+##
+##   Many R functions work differently depending on the class of 
+##   the data you call them with. These functions are known as generic functions.
+##   Some generic functions include:
+##     summary, plot, sum, mean, seq, rep, ... many many others
+##
+##   Generic functions work by calling different versions of the function
+##   for different classes of data. The different versions of the function
+##   are known as "methods" of the generic function. You can find out
+##   which methods exists for a particular generic function by running
+##   methods(SOME_GENERIC_FUNCTION), e.g. methods(summary). 
+##   See below for more info.
+##
+##
+## "S3 classes", "S4 classes" AND SOME HISTORY
+##
+##   R is derived from another language called "S". You can read about the
+##   history of "R" and "S" here:
+##   https://bookdown.org/rdpeng/rprogdatascience/history-and-overview-of-r.html
+##   The concept of generic functions, classes and methods
+##   was adapted into R based on version 3 of the "S" language. 
+##   Hence, collectively these concepts in R are known as "S3 classes".
+##   Note that, version 4 of the "S" language introduced a much more complex
+##   system for working with classes that is more similar to 
+##   classes found in other "object oriented languages" such as C++ and Java.
+##   R also has ways of using "S4 Classes" but these are beyond the scope of
+##   what we are discussing. 
+##
+##
+## See below for more info ...
+#####################################################################
+#####################################################################
+
+
+#-------------------------------------------------------------------
+# What is a "generic function"? What is a "method"?
+#-------------------------------------------------------------------
+# A GENERIC FUNCTION is a function that does different things for different
+# classes of data. R contains different versions of the function and
+# determines which version to use based on the class of the data. 
+#
+# For example, the summary function provides a summary of the data it is given
+# (see examples below). However, the summary of a numeric vector looks nothing
+# like the summary of a factor which looks nothing like the summary of a matrix.
+# This is because there are actually different summary functions.
+#
+#   summary.factor  is the version of the summary function that is used on factors
+#
+#   summary.matrix  is the version of the summary function that is used on matrices
+#
+# When you call summary(SOME_VARIABLE), R figures out which of the 
+# summary.xxxxx functions to call based on the value of class(SOME_VARIABLE). 
+#
+#   If class(SOME_VARIABLE) is "factor", R actually calls summary.factor(SOME_VARIABLE)
+#
+#   If class(SOME_VARIABLE) is "matrix", R actually calls summary.matrix(SOME_VARIABLE)
+#
+# Each version of a generic function is known as a METHOD of the generic function.
+# You can see all the methods of a generic function by typing
+# methods(SOME_GENERIC_FUNCTION). For example:
+
+methods(summary)  
+
+#    > methods(summary)
+#    [1]  "summary.aov"        "summary.aovlist"    "summary.aspell" "summary.check_packages_in_dir"
+#    [5]  "summary.connection" "summary.data.frame" "summary.Date"   "summary.default"
+#    [9]  "summary.ecdf"       "summary.factor"     "summary.glm"    "summary.infl"
+#    [13] "summary.lm"         "summary.loess"      "summary.manova" "summary.matrix"   
+#    ... numerous others ...
+# 
+# Notice that the 10th method is summary.factor and the 16th method is summary.matrix.
+# These are actually different functions and get called automatically when you call
+# summary(SOME_VARIABLE) based on the class the of the variable.
+#
+# Notice that there is no summary.numeric method listed above. If a method doesn't
+# exist for a particular class, then R calls the "summary.default" method
+# (which is the 8th method listed above).
+#
+# TERMINOLOGY
+# R calls a "generic method" generic since it has a "generic name"
+# e.g. summary, that can be use to automatically call the appropriate
+# function, e.g. summary.factor (i.e. the appropriate "method" of
+# the "generic function").
+#-------------------------------------------------------------------
+
+# A "GENERIC FUNCTION" will run differently for different "classes" of data
+#
+# summary and plot are both generic functions
+# see examples below
+
+#.....................................................................
+# EXAMPLE: using summary and plot with character data
+#.....................................................................
+
+rm(list=ls())# start over
+
+person   = c("joe",   "sue",   "bob",   "alan",  "anne",  "pearl")
+
+favcolor = factor(c("red","blue","red","red","blue","yellow"))
+
+year = factor(c("fr","so","fr","so","fr","se"), ordered = TRUE, levels = c("fr","so","ju","se"))
+
+test1 = c(70,80,90,75,85,95)
+
+# Survey question: How may years of schooling do you have?
+# 1=some high school, 2=hs graduate, 3=some college, 4=college grad ,5=advanced degree
+education <- factor(c( 2, 4, 4, 1, 5, 4), 
+                    ordered=TRUE,
+                    levels=1:5)
+
+
+# summary is a "generic" function.
+# The summary function does nothing more than call the appropriate
+# version of the summary function for the class of data provided.
+# To see all of the different versions of the summary function you 
+# can type "methods(summary)". There is no summary.character function
+# so instead, when you provide a character vector, the summary function
+# will in turn call the "summary.default" function (see below)
+
+summary(person) #   Length     Class      Mode 
+                #   6 character character 
+
+# You never actually need to call "summary.default" (instead, just call summary)
+# but explicitly calling summary.default is helpful to understand what's going on.
+# The following will do the EXACT SAME THING as calling
+# summary(person) since summary(person) simply calls the correct method
+# for the person variable. since class(person) is "character" the summary
+# function looks for a function named summary.character. However, since
+# there is no function named summary.character, the summary function
+# instead calls summary.default(person).
+#
+# In order to prove that this is actually the same thing as calling
+# summary(person) we can call summary.default(person) explicitly ourselves.
+# However, you never really need to do this ... just call summary(person).
+
+summary.default(person) # same as summary(person)
+
+plot(person)    # ERROR - doesn't make sense to plot character data
+
+
+#.....................................................................
+# EXAMPLE: using summary and plot with factor data
+#.....................................................................
+class(favcolor)    # "factor"
+
+favcolor           # [1] red    blue   red    red    blue   yellow
+                   # Levels: blue red yellow
+
+
+
+# summary(favcolor) will automatically call summary.factor(favcolor)
+# since class(favcolor) is "factor"
+
+summary(favcolor)  # blue  red  yellow 
+                   #    2    3       1 
+ 
+# You can call summary.factor(favcolor) explicitly and you'll see 
+# that you get the same results as simply calling summary(favcolor)
+# You never need to actually call summary.factor, but it helps to 
+# understand how R's generic functions and methods work.
+
+summary.factor(favcolor) # same thing
+
+# Plot is also a generic function and will produce different results
+# for different classes of data. plot(SOME_FACTOR) produces
+# a bar-chart for the factor.
+
+plot(favcolor)     # bar chart for factors   
+
+# However, even though plot is a "generic function" and there IS a plot.factor
+# method, you cannot explicitly call plot.factor for an unrelated reason.
+# plot.factor is "hidden" and cannot be called directly.
+# You can see that plot.factor exists since it appears in the 
+# results of methods(plot). However, the * that appears in the output
+# indicates that it cannot be called directly. These reasons why a 
+# function would be "hidden" are beyond the scope of what we are covering
+# here. In any case, you never "need" to call plot.factor - that
+# happens automatically when you call plot(SOME_FACTOR)
+#
+#   > methods(plot)
+#   [1] plot.acf*           plot.data.frame*    plot.decomposed.ts* plot.default
+#   [5] plot.dendrogram*    plot.density*       plot.ecdf           plot.factor*  
+#   ... etc ... many other methods of plot
+
+plot.factor(favcolor)  # ERROR - plot.factor is a "hidden" method - see comment above
+
+methods(plot)  # notice that plot.factor exists but it has a * next to it - see comment above
+
+
+#.....................................................................
+# MORE EXAMPLES: "ordered" "factor"
+#.....................................................................
+
+class(year)       # "ordered" "factor"
+
+year              # [1] fr so fr so fr se
+                  #     Levels: fr < so < ju < se
+
+summary(year)     # fr so ju se 
+                  #  3  2  0  1 
+
+plot(year)        # bar chart for factors
+
+
+
+#.....................................................................
+# MORE EXAMPLES: numeric
+#.....................................................................
+
+class(test1)      # "numeric"
+
+test1             # 70 80 90 100 95 85
+
+summary(test1)    #   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+                  #  70.00   81.25   87.50   86.67   93.75  100.00 
+
+plot(test1)       # dot plot for numbers
+
+
+
+
+#.....................................................................
+# MORE EXAMPLES: "factor" data that look like numbers
+#.....................................................................
+
+class(education)    # "ordered" "factor"
+
+education           # [1] 2 4 4 1 5 4
+                    # Levels: 1 < 2 < 3 < 4 < 5
+
+summary(education)  # 1 2 3 4 5 
+                    # 1 1 0 3 1 
+
+plot(education)     # bar chart for factors
+
+
+
+#----------------------------------------------------------------------------
+# print( SOME_VALUE )
+#
+# print is a generic method. 
+# If you print a variable you will see on the screen the exact same result as
+# if you had just typed the name of the variable.
+#
+# Without your knowing it, R calls the print function anytime you 
+# type the name of a variable or an expression.
+#----------------------------------------------------------------------------
+
+# Without your knowing it, R will simply call the print function anytime you 
+# type the name of a variable or an expression.
+
+nums = c(10,20,30)
+nums          # R automatically calls print(nums) without telling you
+print(nums)   # same as just typing nums
+
+print(5+2)
+5+2  # looks the same on the screen - R automatically called print(5+2)
+
+
+mat = matrix (c(10,20,30,40,50,60), nrow=2, ncol=3)
+mat
+print(mat)  # same thing
+
+
+favcolor = factor(c("red", "red", "green", "red", "green", "blue"))
+favcolor         
+print(favcolor)  # same thing
+
+#--------------------------------------------------------------------------
+# print is a "generic function". 
+# The different versions of print (i.e. methods of print) can be displayed
+# as follows:
+#--------------------------------------------------------------------------
+methods(print)
+
+favcolor
+print(favcolor)         # same thing
+print.factor(favcolor)  # same thing
+
+
+mat = matrix(c(10,20,30,40,50,60), nrow=2, ncol=3)
+
+mat
+
+print.matrix(mat)   # ERROR - there is acutally no print.mat function - see methods(print)
+
+print.default(mat)  # instead matrices are printed with the print.default function
+
+
+
+#############################################################################
+#############################################################################
+# Creating your own classes
+#
+# To create your own class, simply attach your own class attribute with a name
+# for your class to the underlying data structure you want to use for your class.
+#
+# Then you can create methods, specific to your class,
+# for any existing "generic functions", for example, print.YOUR_CLASS and summary.YOUR_CLASS.
+#############################################################################
+#############################################################################
+
+#----------------------------------------------------------------------------
+# Example - "ticTacToe" class.
+#----------------------------------------------------------------------------
+
+# function to create a new ticTacToe game
+newTicTacToe = function(){
+  mat = matrix(rep(".",9), nrow=3, ncol=3)
+  attr(mat,"class") = "ticTacToe"   # create a new class
+  mat
+}
+
+# function to register a move for x
+move_x = function(ttt, row, col){
+  ttt[row,col] = "x"
+  return(ttt)
+}
+
+# function to register a move for o
+move_o = function(ttt, row, col){
+  ttt[row,col] = "o"
+  return(ttt)
+}
+
+# print method for the ticTacToe class. 
+# This will automatically be called anytime an object (i.e. variable)
+# of class "ticTacToe" is displayed to the screen.
+
+print.ticTacToe = function(ttt){
+  cat("  "," ",     " | " ,  " " ,     " | " ,  " ",     "\n")
+  cat("  ",ttt[1,1]," | " , ttt[1,2] , " | " , ttt[1,3], "\n")
+  cat("  "," ",     " | " ,  " " ,     " | " ,  " ",     "\n")
+  cat("--------------------\n")  
+  cat("  "," ",     " | " ,  " " ,     " | " ,  " ",     "\n")
+  cat("  ",ttt[2,1]," | " , ttt[2,2] , " | " , ttt[2,3], "\n")
+  cat("  "," ",     " | " ,  " " ,     " | " ,  " ",     "\n")
+  cat("--------------------\n")  
+  cat("  "," ",     " | " ,  " " ,     " | " ,  " ",     "\n")
+  cat("  ",ttt[3,1]," | " , ttt[3,2] , " | " , ttt[3,3], "\n")
+  cat("  "," ",     " | " ,  " " ,     " | " ,  " ",     "\n")
+}
+
+# summary method for the ticTacToe class.
+
+summary.ticTacToe = function(ttt){
+  results = character()   # create results as an empty character vector
+  
+  results["numberOfO"] = sum(ttt=="o")
+  
+  results["numberOfX"] = sum(ttt=="x")
+  
+  results["o_wins"] = 
+      # Check the rows
+      ttt[1,1] == "o" & ttt[1,2] =="o" & ttt[1,3] == "o" | # row1 all "o's"
+      ttt[2,1] == "o" & ttt[2,2] =="o" & ttt[2,3] == "o" | # row2 all "o's"
+      ttt[3,1] == "o" & ttt[3,2] =="o" & ttt[3,3] == "o" | # row3 all "o's"
+    
+      # check the columns
+      ttt[1,1] == "o" & ttt[2,1] =="o" & ttt[3,1] == "o" | # col1 all "o's"
+      ttt[1,2] == "o" & ttt[2,2] =="o" & ttt[3,2] == "o" | # col2 all "o's"
+      ttt[1,3] == "o" & ttt[2,3] =="o" & ttt[3,3] == "o" | # col3 all "o's"
+    
+      # check the diagonals
+      ttt[1,1] == "o" & ttt[2,2] =="o" & ttt[3,3] == "o" | # diagonal1 all "o's"
+      ttt[1,3] == "o" & ttt[2,2] =="o" & ttt[3,1] == "o"   # diagonal2 all "o's"  
+    
+  results["x_wins"] = 
+      # Check the rows
+      ttt[1,1] == "x" & ttt[1,2] =="x" & ttt[1,3] == "x" | # row1 all "o's"
+      ttt[2,1] == "x" & ttt[2,2] =="x" & ttt[2,3] == "x" | # row2 all "o's"
+      ttt[3,1] == "x" & ttt[3,2] =="x" & ttt[3,3] == "x" | # row3 all "o's"
+    
+      # check the columns
+      ttt[1,1] == "x" & ttt[2,1] =="x" & ttt[3,1] == "x" | # col1 all "o's"
+      ttt[1,2] == "x" & ttt[2,2] =="x" & ttt[3,2] == "x" | # col2 all "o's"
+      ttt[1,3] == "x" & ttt[2,3] =="x" & ttt[3,3] == "x" | # col3 all "o's"
+    
+      # check the diagonals
+      ttt[1,1] == "x" & ttt[2,2] =="x" & ttt[3,3] == "x" | # diagonal1 all "o's"
+      ttt[1,3] == "x" & ttt[2,2] =="x" & ttt[3,1] == "x"   # diagonal2 all "o's"  
+    
+    
+  results
+}
+
+# Using the ticTacToe class
+game1 = newTicTacToe()
+
+print(game1)
+print.ticTacToe(game1)
+game1  # empty tic tac taoe board - no one moved yet
+class(game1)   # "ticTacToe"
+
+unclass(game1)
+attributes(game1)
+
+game1 = move_x(game1, 1, 1) # Make the first move
+game1                       # show the game board so far.
+
+game1 = move_o(game1, 1, 3) # more moves
+game1 = move_x(game1, 2, 2) # more moves
+game1 = move_o(game1, 3, 3) # more moves
+game1 = move_x(game1, 2, 3) # more moves
+
+game1             # show the board so far
+summary(game1)    # summary of the game so far
+
+# Make a few more moves
+game1 = move_o(game1, 3, 1) # more moves
+game1 = move_x(game1, 1, 2) # more moves
+game1 = move_o(game1, 3, 2) # final move of the game
+
+game1              # show the board
+summary(game1)     # o wins
+
+
+#----------------------------------------------------------------------------
+# S3 class for processing fractions
+#
+# R does not have any built in capability for working with fractions. 
+# 
+# See the file - rFractionClass.R 
+# for an example of a much more useful S3 class, than the ticTacToe example
+# that we built above.
+#
+# The code in the file rFractionClass.R shows how to create a variable that stores
+# a vector of fractions and how to perform basic functions using fractions
+# such as sum, sort, add, subtract, multipy, divide, etc.
+#
+# To understand this code you would need to understand all of the
+# concepts that are covered during this entire semester (including some that we have
+# not covered yet). In any case, if you want to see a real-life example of
+# how S3 classes can be used you can look at the code in this file.
+#----------------------------------------------------------------------------
+```

@@ -1,0 +1,273 @@
+# %in%
+
+## vector1 %in% vector2
+
+```{r}
+################################################################.
+################################################################.
+##
+## vector1 %in% vector2
+##
+## Returns a logical vector that is the same length as vector1.
+## For every value in vector1 TRUE indicates that the value
+## is in vector2 and FALSE indicates that it isn't.
+## See examples below.
+##
+################################################################.
+################################################################.
+
+students <- c("joe", "sue", "al", "anne")
+students
+
+"sue" %in% students    # TRUE
+"amanda" %in% students   # FALSE
+
+c("sue","amanda") %in% students     # TRUE FALSE
+
+c("sue","amanda","felix","al","joaquin","xavier","zeke","anne")  %in% students 
+# ANSWER :  TRUE FALSE FALSE TRUE FALSE FALSE FALSE TRUE
+```
+
+## --- Practice ---
+
+```{r}
+#---------------------------------------------------------------------.
+# QUESTION
+#
+# The variables mathClass and englishClass contain names of students
+# who are in each respective class.
+#
+# The "built-in" intersect function returns the values that are
+# common to two different vectors. ( see ?intersect )
+#
+#   (a) use the intersect function to show those students who are 
+#       in both the math and the english class.
+#
+#   (b) do the same as (a) but do NOT use the intersect function,
+#       rather use the %in% operator to accomplish the same result.
+#
+#   (c) write a function name myintersect that does the same
+#       thing as the built-in intersection function - but do not
+#       call the built-in intersection function in the 
+#       definition of myintersection.
+#---------------------------------------------------------------------.
+
+# ANSWER
+
+# Let's setup some data to work with
+mathClass   = c("alice", "mike", "sue", "bob", "amanda")
+englishClass = c("sue", "joe", "mike", "frank")
+
+#   (a) use the intersect function to show those students who are 
+#       in both the math and the english class.
+
+# Let's look at the R documentation for the intersect function
+?intersect
+
+# Use the function
+intersect(mathClass, englishClass)
+
+
+#   (b) do the same as (a) but do NOT use the intersect function,
+#       rather use the %in% operator to accomplish the same result.
+#
+#       HINT - remember that %in% returns logical values (i.e. TRUE/FALSE values)
+#              Use these TRUE/FALSE values to index into the appropriate vector.
+
+
+
+# step 1 - figure out how to get a logical vector to show TRUE for each student
+#          in the math class that is also in the english class
+
+mathClass %in% englishClass
+
+# step 2 - use the result from step1 to get the names of those students from the math class
+#          who are also in the english class
+
+mathClass [ mathClass %in% englishClass ]
+
+
+# another way ....
+
+englishClass %in% mathClass
+
+englishClass[ englishClass %in% mathClass  ]
+
+
+
+#############################################################################.
+# DON'T DO THE FOLLOWING! IT IS WRONG!
+#############################################################################.
+# The mathClass variable is used outside the brackets while
+# the expression "englishClass %in% mathClass" gives one TRUE/FALSE for 
+# each value in the englishClass variable. 
+# You must make sure that the variable used outside the [brackets] matches up
+# with the TRUE/FALSE values that are generated inside the [brackets].
+#############################################################################.
+
+mathClass[ englishClass %in% mathClass  ]  # THIS IS WRONG!!!
+
+# WHAT'S THE PROBLEM - FIGURE OUT WHAT HAPPENED
+#
+# original:           mathClass[ englishClass %in% mathClass  ]
+#
+# replace variables:  mathClass[c("sue","joe","mike","frank") %in% c("alice","mike","sue","bob","amanada")]
+#
+# %in%:               mathClass[c(TRUE, FALSE, TRUE, FALSE) ]
+#
+# recycle T/F values: mathClass[c(TRUE,FALSE,TRUE,FALSE,TRUE)]      
+#
+# final values:       "alice" "sue" "amanda"
+
+
+
+
+#   (c) write a function name myintersect that does the same
+#       thing as the built-in intersect function - but do not
+#       call the built-in intersect function in the 
+#       definition of myintersect.
+
+myintersect = function(vec1, vec2) {
+  
+  vec1 [ vec1 %in% vec2 ]
+  
+}
+
+
+myintersect( mathClass, englishClass)   # mike sue
+
+myintersect( englishClass, mathClass)  # "sue" "mike"
+
+myintersect( 1:10, 7:1000) # 7 8 9 109
+
+# Other ways ... 
+
+myintersect = function(vec1, vec2) {
+  return ( vec1 [ vec1 %in% vec2 ] )
+}
+
+myintersect = function(vec1, vec2) {
+  tf = vec1 %in% vec2 
+  vec1 [ tf ]
+}
+
+myintersect = function(vec1, vec2) {
+  tf = vec1 %in% vec2 
+  return ( vec1 [ tf ] )
+}
+```
+
+```{r}
+#---------------------------------------------------------------------.
+# QUESTION  ####
+#
+# The variables mathClass and englishClass contain names of students
+# who are in each respective class.
+#
+# Write a command to show the students who are in the math class but
+# are NOT in the english class
+#
+# (a) use the built-in setdiff function (read the documentation)
+#
+# (b) Do the same thing as (a) but WITHOUT using the setdiff function
+#     HINT: use the ! operator and the %in% operator
+#---------------------------------------------------------------------.
+
+mathClass   = c("alice", "mike", "sue", "bob", "amanda")
+englishClass = c("sue", "joe", "mike", "frank")
+
+# ANSWER
+
+# (a) use the built-in setdiff function (read the documentation)
+
+setdiff(mathClass, englishClass)
+
+
+
+# (b) Do the same thing as (a) but WITHOUT using the setdiff function
+#
+#     HINT: use the ! operator and the %in% operator
+#           Remember that ! will flip FALSE to TRUE and TRUE to FALSE.
+#
+#           > ! c(TRUE, FALSE, FALSE)
+#           [1] FALSE TRUE TRUE
+
+mathClass  %in% englishClass    # TRUE if someone is in Math and also in English     FALSE if they are just in math
+
+! ( mathClass  %in% englishClass )  # FALSE if someone is in Math and also in English   TRUE if they are just in math
+
+mathClass [ ! ( mathClass  %in% englishClass )   ]
+```
+
+
+## ! SOME_VECTOR %in% ANOTHER_VECTOR
+
+```{r}
+####################################################################################.
+# Understand the placement of !  ####
+#
+# ! must immediately precede a logical vector (i.e. a vector of TRUE/FALSE values)
+####################################################################################.
+
+# Correct - ! operates on TRUE/FALSE values (AKA logical vectors)
+! c(TRUE, FALSE)
+
+# Correct - parentheses contain TRUE/FALSE values
+#           since %in% results in a logical vector
+! ( mathClass  %in% englishClass ) 
+
+
+# Correct - same as above - %in% has higher precedence
+#           than ! so you don't need (parentheses)
+!   mathClass  %in% englishClass     
+
+
+# Wrong - ! doesn't work with character values
+! c("mike", "sue" )  # ERROR
+```
+
+```{r}
+# Wrong - ! is in wrong place
+mathClass ! %in% englishClass  # ERROR
+```
+
+## --- Practice ---
+
+```{r}
+#---------------------------------------------------------------------.
+# QUESTION
+#
+# The variables mathClass and englishClass contain names of students
+# who are in each respective class.
+#
+# (a) Write a command to show the students who are only in one of the classes.
+#     Do not repeat the same name twice. HINT: use the setdiff function
+#
+# (b) do the same, but this time, do NOT use the setdiff function.
+#---------------------------------------------------------------------.
+
+mathClass   = c("alice", "mike", "sue", "bob", "amanda")
+englishClass = c("sue", "joe", "mike", "frank")
+
+# ANSWER - using the setdiff function and c function
+
+onlyMath = setdiff(mathClass, englishClass)
+onlyEnglish = setdiff(englishClass, mathClass)
+onlyOneClass = c(onlyMath, onlyEnglish)
+
+mathClass
+englishClass
+onlyMath
+onlyEnglish
+onlyOneClass
+
+# all in one line 
+c ( setdiff(mathClass, englishClass) , setdiff(englishClass, mathClass))
+
+# ANSWER - do NOT use the setdiff function - You can split up the code into
+#          different commands to make it easier to read.
+
+onlyMath = mathClass [ ! mathClass %in% englishClass ]
+onlyEnglish = englishClass [ ! englishClass %in% mathClass ]
+c(onlyMath, onlyEnglish)
+```

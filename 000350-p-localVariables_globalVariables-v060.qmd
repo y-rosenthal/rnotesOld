@@ -1,0 +1,448 @@
+# "GLOBAL VARIABLES" vs "LOCAL VARIABLES" 
+
+## "local" variables 
+
+
+```{r}
+# This topic is really not hard but can be a little confusing.
+# Therefore, we're going to take it slowly ...
+
+
+##############################################################################.
+# DEFINTION: local variable
+# 
+# A "local" variable is a variable whose value is assigned inside of a
+# function definition. 
+#
+# The value of a local variable can only be referenced inside of the
+# function in which it is assigned a value.
+##############################################################################.
+
+# Let's start with a simple example.
+# Obviously, if a variable doesn't exist, I cannot refer to it.
+# To demonstrate this I will remove all variables from the computer's memory.
+
+rm(list=ls())
+
+x   # ERROR - the variable x doesn't exist
+
+# That should be obvious. The following may be less obvious.
+#
+# Below we define a function named f in which we assign x=100.
+# x, has the "scope" of the function definition of f,
+# i.e. we can refer to x inside of the function definition for f, 
+# but not outside of the function definition.
+
+f = function(){
+  x = 100       # x is assigned a value inside f() 
+  return (x)    # so we can refer to it here
+}
+
+f()  # 100 
+
+# We cannot refer to x outside of the function.
+# We say that the variable "x" has a "scope" that is "local" to the
+# function definition of f.
+
+x   # ERROR - we can't refer to x here
+
+```
+
+
+## "global" variables
+
+```{r}
+##############################################################################.
+# DEFINTION: global variable
+# 
+# A "global" variable is a variable that is assigned its value outside of
+# all function definitions.
+#
+# A global variable can be used anywhere in the program. 
+# This includes both inside and outside of all function definitions.
+##############################################################################.
+
+# Let's start all over again.
+rm(list=ls())  # remove all variables
+
+# The following variable is a "global" variable.
+# i.e. it is assigned a value outside of all function definitions.
+num = 100
+
+# We can therefore refer to the value of the variable outside of function
+# definitions.
+
+num   # 100
+
+# ALSO, we can refer to the value of the variable inside function definitions.
+
+g = function(){
+  
+  # Since num was given a value outside of all functions 
+  # we can use it inside any function definition.
+  
+  total = num + 10   # This is OK since num is a "global" variable.
+  
+  return (total)
+}
+
+g()   # 110
+
+num # We can refer to num here too since num is a global variable.
+```
+
+## Giving a global variable a value after the function definition
+
+```{r}
+# It doesn't matter whether the code to set the global variable appears
+# above or below the function definition. What matters is that the 
+# code to set the global variable is RUN before the function is CALLED.
+#
+# To demonstrate, let's start all over again ...
+#
+# Below we show the same example from above, however, this time
+# we give a value to the global variable after the function g is
+# already defined.
+
+# start with a "clean slate" - remove all variables and functions
+rm(list=ls()) 
+
+# The following function g, refers to the variable num
+# even though it doesn't have a value yet. This is OK. 
+
+g = function(){
+  
+  # As long as num is given a value before this function is CALLED
+  # everything will be OK. 
+  total = num + 10   
+  return (total)
+}
+
+# If we call g() before giving num a value, then we will get an error.
+g()   # ERROR - num has no value
+
+# Now if we give num a value, the function g() will work.
+num = 100
+
+g()   # 110
+```
+
+## Definition: "scope" of a variable
+
+```{r}
+##############################################################################.
+# *** DEFINITION: scope of a variable ***
+#
+# The "scope" of a variable is the location in the 
+# code where the name of the variable can be used to retrieve its value.
+#
+#
+#
+# *** "GLOBAL SCOPE"  vs "LOCAL SCOPE" ***
+#
+# The "scope" of a local variable is the code of the function definition
+# in which the variable is assigned a value.
+#
+# The "scope" of a "global" variable is the entire program.
+#
+##############################################################################.
+```
+
+## Arguments/Parameters are similar to "local" variables
+
+```{r}
+#----------------------------------------------------------------------.
+# Some terminology
+#
+# GLOBAL VARIABLE:
+#   A variable that is defined outside of any function is known as a "global variable".
+#
+# LOCAL VARIABLE:
+#   A variable that is assigned a value inside of a function is known as a "local variable"
+#
+# ARGUMENTS (AKA PARAMETERS):
+#   Arguments in a function definition are similar to a "local variable"
+#   in that arguments are also "local" to the function in which they appear.
+#----------------------------------------------------------------------.
+
+# GETTING THE TERMINOLOGY RIGHT
+
+x = 5   # "global" variable - its value is assigned outside of any function
+
+f=function(start){ # "start" is an "argument". It's "local" to the function
+  end = 2  # "end" is a "local" variable (it's given a value in the function)
+  return ( start:end )
+}
+
+y = 10   # "global" variable - its value is assigned outside of any function
+
+# EXAMPLES
+
+f( x )  #  5 4 3 2
+
+f(y) # 10 9 8 7 6 5 4 3 2
+
+f(end)   # ERROR - end does not exist in global scope
+
+f(start)  # ERROR - start does not exist in global scope
+```
+
+## A local variable "hides" a global variable with the same name.
+
+```{r}
+#----------------------------------------------------------------------.
+# Confusion sometimes arises when the name of a local variable or argument 
+# is the same as the name of a global variable.
+#
+# It is very important to understand what happens in these situations.
+# See the examples below and read the #comments that explain the examples.
+#----------------------------------------------------------------------.
+
+#.............................................................................
+# EXAMPLE
+# 
+# A local variable "hides" a global variable with the same name.
+#.............................................................................
+
+# start from scratch
+rm(list=ls())
+
+# Define a function that contains local variables.
+# Values that are assigned to the local variables in the function
+# do NOT interfere with global variables that have the same name.
+
+f2 = function () {
+  first = 98     # local variable with same name as a global variable (see below)
+  last = 100     # local variable with same name as a global variable (see below)
+  return (first:last)
+}
+
+# Define some global variables with the same names as the local variables.
+# Even though these global variables have the same names as the local variables
+# in the function, the values of the global variables are not changed by the function.
+
+first = 1   # global variable with same name as a local variable
+last = 10  # global variable with same name as a local variable
+
+
+# Call the function. The function will use the local variables 
+# and NOT the global variables.
+#
+# We say that while a function is executing, the values of
+# local variables in the function "hide" the values of global variables
+# with the same name. 
+
+f2() # 98 99 100
+
+# The global variables still maintain the values they had from before
+# the function ran.
+first # 1   
+last # 10
+
+
+#.............................................................................
+# Order doesn't matter
+#.............................................................................
+
+# It makes no difference if the function is defined first or if the global
+# variables are defined first. The effect is exactly the same as above.
+#
+# This example has the same code as the previous example. The only difference
+# is that in this example, the global variables are defined before the 
+# function. The result is exactly the same.
+
+first = 1   # global variable
+last = 10  # global variable
+
+f2 = function () {
+  first = 98     # local variable
+  last = 100    # local variable
+  return (first:last)
+}
+
+f2() # 98 99 100
+
+first # 1   
+last # 100
+```
+
+## Rules for arguments are the same as for local variables
+
+```{r}
+#.............................................................................
+# The rules for arguments are the same as for local variables
+#.............................................................................
+
+# Arguments that have the same name as global variables are similar to 
+# local variables - they "hide" the global variables while the function is running.
+
+first = 1   # global variable
+last = 10   # global variable
+
+f3 = function (first, last) { # arguments with same names as the global variables
+  
+  # The following code, uses the values of the arguments, not the globals.
+  # 
+  # We say that the global variables are "hidden" by
+  # arguments or local variables with the same name.
+  
+  return (first:last) 
+  
+}
+
+f3(20,23)   # 21 22 23
+
+first # 1   
+last # 100
+```
+
+## --- Practice ---
+
+```{r}
+#############################################################################.
+# QUESTION - see if you can predict what is displayed by the following code.
+#############################################################################.
+
+# See if you understand this example ...
+# There are no new concepts here.
+# It is just a little trickier than before.
+
+
+first = 1   # global variable
+last =  3   # global variable
+
+f = function (first, last) { # arguments hide global variables with same names
+  
+  first = first + 100 # change value of argument (global variable is hidden)
+  last = last + 100   # change value of argument (global variable is hidden)
+  
+  return (first:last)
+}
+
+# The following line is a little tricky.
+#
+# The value of the global variable "last" is 5.
+# The value, 5, is copied to the argument named first.
+# 
+# The value of the global variable "first" is 1
+# The value, 1, is copied to the argument named last.
+# 
+# The function then changes the values of the arguments by 
+# adding 100 to each argument.
+
+f(last, first) # last,first are globals,i.e. f(3,1). f returns 103 102 101
+
+# The global variables were not changed even though they 
+# had the same names as the arguments.
+
+first  # 1
+last   # 5
+```
+
+## BEST PRACRTICES - Do NOT refer to global variables inside a function
+
+```{r}
+#.............................................................................
+# A function can refer to global variables BUT DON'T DO THIS 
+#
+# WARNING!!! - The following example demonstrates the features of how R works
+#              when a function refers to a global variable.
+#              However, it is generally considered a bad practice to refer to
+#              global variables from inside of a function.
+# 
+#                                  *** DO NOT DO IT ***
+#
+#              In general, functions should only refer to their arguments or to 
+#              variables that were assigned values inside the function
+#              (ie. "local" variables).
+#
+#              By using only local variables and arguments in a function
+#              it's possible to understand how the function works by just 
+#              examining the code for the function definition. If the function
+#              definition refers to global variables it can be much harder
+#              for programmers to understand the code. 
+#              Sometimes, in rare situations, it may be considered 
+#              appropriate to refer to global variables from the code inside a
+#              function. However, new programmers should avoid this until they
+#              have become more adept at programming and can better weigh the
+#              pros and cons of each situation.
+#.............................................................................
+
+
+# start from scratch
+rm(list=ls())
+
+f1 = function( ) {
+  # num was never given a value inside this function, f1.
+  # Therefore num on the following line must refer to a global variable.
+  2 * num  
+}
+
+# The following line results in an error since num was never given a value.
+f1()    
+
+# If we give a value to a global variable named num, the function will
+# refer to that value.
+num = 3
+f1()  #  6
+
+# If we change the value of num then the call to f() returns a different value.
+num = 5
+f1()  #  10
+
+# As you can see the results of calling f1() are different based on the 
+# values that are assigned (or are not assigned) to num. 
+#
+#     THIS CAN BE CONFUSING
+#
+# Since f() is a very simple function and since we just wrote it we
+# are intimately familiar with it's code. Therefore we understand, why we
+# get different results each time it's called based on the value of num.
+#
+# Practically speaking most R programs are much larger than this one is.
+# In large programs it can be very confusing if the exact same call to a 
+# function returns different values. It is much better if the same call to a
+# function always returns the same value. Therefore, in general it is 
+# considered very BAD practice for a function definition to refer to 
+# global variables.
+```
+
+
+## --- Practice ---
+
+```{r}
+#########################################################.
+# Question - what will the following program display?
+#########################################################.
+
+# start from a clean slate
+rm(list=ls())
+
+f = function(x, y){ # x is an argument. It "hides" the global variable x.
+  
+  x = x + 100       # This refers to the argument, x, NOT the global variable, x.
+  
+  z = y + g(200, 300) # z is a local variable since its value was assigned here
+  
+  return(z)
+}
+
+g = function(a, b){ # a,b are arguments. b hides the global variable, b.
+  
+  a = a + x    # a is the argument, x is the global variable x
+  
+  b = 1000     # b refers to the argument b, not the global variable b.
+  
+  return( a )
+}
+
+
+x = 10   # global variable
+b = 20   # global variable
+
+# What does the following display? Why?
+
+f(1, b)    # 230 
+x          # 10 - i.e. the global value of x never changed
+b          # 20 - i.e. the global value of b never changed
+```

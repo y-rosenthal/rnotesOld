@@ -1,0 +1,4642 @@
+# Practice Questions - TOPIC: Vectors
+
+## Vectors
+
+### QUESTION 1 *(vectors, rep/seq/:/etc)*
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION:
+#
+# Write an R command that displays all the even numbers between 100 and 1000 (including 100 and 1000) 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+seq(100,1000,by=2)  #<<ANSWER>>
+```
+:::
+
+---
+
+### QUESTION 2 *(vectors , rep/seq/:/etc)*
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION:
+#
+# Write an R command that displays the values:   10, 13, 16, 19, 22, etc. There
+# should be 500 numbers in all.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+seq(10,by=3,length.out=500)  #ANSWER
+```
+:::
+
+---
+
+### QUESTION 3. *(vectors , rep/seq/:/etc)*
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION
+#
+# Write an R command that displays alternating values of positive and
+# negatives of 1,2,3 ie.:  1,2,3,-1,-2,-3,1,2,3,-1,-2,-3,1,2,3 ... etc.
+# There should be a total of 60 numbers in all.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+rep(c(1:3,-1:-3),length.out=60)   # ANSWER
+
+rep(c(1,2,3,-1,-2,-3),length.out=60)   # ANOTHER ANSWER
+```
+:::
+
+---
+
+### QUESTION 4. *(vectors , recycling)*
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 4    TOPICS: vectors , recycling  ####
+# 
+# Write an R command that displays all the powers of 2 from 
+# 2 to the power of minus 20 (i.e. -20) until
+# 2 to the power of positive 20 (i.e. +20)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+-20:20      # this gives the numbers -20 -19 -18 ... -2 -1 0 1 2 ... 18 19 20
+
+2^(-20:20)  # ANSWER
+
+2^-20:20    # NOTE: This is WRONG because order of operations makes this work like (2^-20):20
+```
+:::
+
+---
+
+### QUESTION 5 *(vectors , indexingWithLogicalValues)*
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 
+#
+# Write an R command that displays every entry in the vector x whose value is 10 or more.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- c(3,10,11,2,-5,100,21)  # setup some example data
+x
+x >= 10       # This gives TRUE/FALSE values - there will be one 
+              # TRUE or FALSE for each value in x. Given the data above,
+              # this will be: c(FALSE,TRUE,TRUE,FALSE,FALSE,TRUE,TRUE)
+
+x[x>=10]      # ANSWER - The first "x" outside the [brackets] is the vector
+              #          whose values are going to be displayed. The 
+              #          "x>=10" inside the [brackets] is used to generate
+              #          a logical vector (i.e. TRUE/FALSE values) to indicate
+              #          which values will be displayed. Only those values
+              #          from x whose positions correspond to a TRUE value
+              #          in the logical vector, will be displayed. Given the
+              #          sample data above, the 2nd, 3rd, 5th and 7th values
+              #          will be displayed, i.e. 10,11,100,21
+```
+:::
+
+---
+
+### QUESTION 6    TOPICS: vectors , indexingWithLogicalValues ####
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 6    TOPICS: vectors , indexingWithLogicalValues ####
+#
+# x and y are two numeric vectors whose lengths are equal.
+# Show every value from the vector, x, that is less than the corresponding value in the vector y
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- c(3,10,11,2,-5,100,21)  # setup some example data 
+y <- c(10,1,11,15,5,9,999)   # setup some example data
+length(x)
+length(y)
+x < y         # This gives TRUE/FALSE values - there will be one 
+              # TRUE or FALSE for each value in x. Given the data above,
+              # this will be: c(FALSE,TRUE,TRUE,FALSE,FALSE,TRUE,TRUE)
+
+x[x<y]     # ANSWER
+y[x<y]     # FYI - this wasn't asked but these are the corresponding
+           # values from y that are greater than those in x
+```
+:::
+
+---
+
+### QUESTION 7    TOPICS: vectors , round , runif , RHelpPages  ####
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 7    TOPICS: vectors , round , runif , RHelpPages  ####
+#
+# SOME BACKGROUND - runif function
+#
+#     The runif function returns a numeric vector that contains "random numbers
+#     with a uniform distribution". The R help page for runif shows that the
+#     arguments and default values for those arguments are:
+#         runif(n, min=0, max=1)     
+#     where
+#         n is the number of numbers to generate
+#         min is the smallest value that a number could have
+#         max is the largest value that a number could have. 
+#
+#     EXAMPLES: 
+#  
+#     > # return a vector of 3 random numbers whose values fall between 0 and 10
+#     > runif(3,0,10)   
+#     [1] 3.785233 9.672244 2.857430
+# 
+#     > # return a vector of 10 random numbers whose values fall between -5 and +5
+#     > runif(10,-5,5)
+#     [1] -1.84032071  4.28685602  2.59656498 -1.09880205 -3.90202237 -1.89618831  3.37193245
+#     [8]  0.08757248 -1.10848900 -1.90661883
+# 
+#     > # return a vector of 5 random numbers. The min and max are not specified so 
+#     > # use the default values of min (ie. 0) and max (i.e. 1)
+#     > runif(5)
+#     [1] 0.4098594 0.8771700 0.5610475 0.8928674 0.4863841 
+#
+#   WHAT YOU HAVE TO DO:
+#
+#     Generate 10 random numbers that are between 50 and 51. The numbers should have
+#     2 values after the decimal point. (HINT: use the   runif   and the   round
+#     functions). Note that every time you run this command the actual numbers will
+#     be different.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+runif(10,50,51)                  # generate 10 random numbers between 50 and 51
+
+round(runif(10,50,51),digits=2)  # ANSWER 
+```
+:::
+
+---
+
+### QUESTION 8    TOPICS: vectors , c ####
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 8    TOPICS: vectors , c ####
+#
+# Insert the number 5 in the beginning of the vector named x.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- c(7,8,2,1)  # start with some data for x (this could be ANY data)
+x <- c(5,x)      # ANSWER -  x is now c(5,7,8,2,1)
+x             
+
+x[1] <- 5    # WRONG: This will change the first position to 5
+# given the example data above the 7 will be overwritten with the 5
+# and x will be c(5,8,2,1)
+```
+:::
+
+---
+
+### QUESTION 9   TOPICS: vectors , c , length  ####
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 9   TOPICS: vectors , c , length  ####
+#
+# Insert the number 6 at the end of the vector named x.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# ONE WAY
+x <- c(7,8,2,1)    # setup some example data
+x <- c(x,6)    # ANSWER
+x
+
+
+# ANOTHER WAY
+x <- c(7,8,2,1)    # setup some example data
+x[length(x)+1] = 6   # ANOTHER ANSWER
+x
+```
+:::
+
+---
+
+### QUESTION 10   TOPICS: vectors , c , indexingWithNumbers
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 10   TOPICS: vectors , c , indexingWithNumbers
+#
+# x is a vector that contains 11 or more values.
+# Insert the number 7 between the 10th and 11th values in the vector named x.
+#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- seq(10,100,by=10)    # setup some example data - x is now:
+x <- seq(10,150,by=10)    # setup some example data - x is now:
+#   c(10,20,30,40,50,60,70,80,90,100,110,120,130,140,150)
+x
+x <- c(x[1:10],7,x[11:length(x)])  # ANSWER 
+x
+#   x is now :
+#   c(10,20,30,40,50,60,70,80,90,100,7,110,120,130,140,150)
+#
+#   The "length(x)" is necessary so that this answer
+#   will work no matter how many values the vector, x, contains.
+#   the data above was just and example, but the command should 
+#   now matter what values x contains. 
+
+x
+```
+:::
+
+---
+
+### QUESTION 11   TOPICS: vectors , c , indexingWithNumbers ####
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 11   TOPICS: vectors , c , indexingWithNumbers ####
+#
+# The vector x contains 10 values. Swap the first 5 and 
+#     the last 5 values in x. For example, if x contains the 
+#     values 1,2,3,4,5,6,7,8,9,10  then after your command runs, 
+#     x should contain the values 6,7,8,9,10,1,2,3,4,5
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- seq(10,100,by=10) # setup example data x contains c(10,20,30,40,50,60,70,80,90,100)
+
+x
+x <- c(x[6:10],x[1:5]) # ANSWER -  x now contains c(60,70,80,90,100,10,20,30,40,50)
+x
+```
+:::
+
+---
+
+### QUESTION 12   TOPICS: namedVectors ####
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 12   TOPICS: namedVectors ####
+#
+# Grades is a named vector that contains test scores.
+#     The names of the entries are the names of the students.
+#     Exchange the value of Tom's grade with Joe's grade where
+#     "tom" and "joe" are the names of the values that contain
+#     the grades for Tom and Joe.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+grades <- c(90,80,70,100,85)                        # setup some example data: set the values in the vector
+names(grades) <- c("sue","tom","bill","ann","joe")  # setup some example data: set the names of the values
+names(grades)                                       # this displays just the names: "sue","tom",etc.
+grades                                              # this displays the values:  90,80,70,100,85
+grades[c("tom","joe")]                              # this displays tom's grade and joe's grade: 80  85
+grades[c("joe","tom")]                              # this displays joe's grade and tom's grade: 85  80
+
+grades[c("tom","joe")] <- grades[c("joe","tom")]  # ANSWER: this puts the value of 
+# Joe's grade into the position for Tom's grade and
+# Tom's grade into the position for Joe's grade.
+grades                                              # show the new vector
+```
+:::
+
+---
+
+### QUESTION 13   TOPICS: namedVectors , indexingWithLogicalValues ####
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 13   TOPICS: namedVectors , indexingWithLogicalValues ####
+#
+# Grades is a named vector that contains test scores. The names 
+# of the entries are the names of the students. Change susan's name to sue
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+grades <- c(90,80,70,100,85)
+names(grades) <- c("susan","tom","bill","ann","joe")
+grades
+names(grades)=="susan"   # Shows TRUE/FALSE values
+names(grades) [ names(grades)=="susan" ]  # identify item in the names vector that contains susan
+
+# The following line is the ONLY line that is required for the answer.
+# The code puts the value "sue" into the position of the vector, names(grades)
+# that currently contains the value "susan"
+
+names(grades) [ names(grades)=="susan" ] <- "sue"       # ANSWER 
+
+grades
+```
+:::
+
+---
+
+### QUESTION 14   TOPICS: vectors , indexingWithNumbers , vectorAssignment ####
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 14   TOPICS: vectors , indexingWithNumbers , vectorAssignment ####
+#
+# Exchange the 4th and 7th value in the vector nums.
+#
+#      a.  Do this using 3 different commands. Hint, you may create new variables. 
+#          (Hint, you may create new variables. For example, I'll start you off:
+#              fourth <- x[4]
+#              seventh <- x[7]
+#              # fill in the rest of the R code to answer the question.
+#
+#      b. Do this using only a single R command
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+#14a
+nums <- seq(10,100,by=10)
+x <- nums[7]        # ANSWER (MULTIPLE LINES)
+nums[7] <- nums[4]  # ANSWER (MULTIPLE LINES)
+nums[4] <- x        # ANSWER (MULTIPLE LINES)
+nums
+
+#14b
+nums <- seq(10,100,by=10)
+nums[c(4,7)] <- nums[c(7,4)]   # ANSWER
+nums
+```
+:::
+
+---
+
+### QUESTION 15   TOPICS: vectors , indexingWithNumbers , length
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 15   TOPICS: vectors , indexingWithNumbers , length
+#
+# Display the last value from the vector x.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- c(10,20,30,40,50)
+x[length(x)]    # ANSWER
+```
+:::
+
+---
+
+### QUESTION 16   TOPICS: vectors , indexingWithNumbers , length
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 16   TOPICS: vectors , indexingWithNumbers , length
+#
+# Display the 2nd to last value in x.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- c(10,20,30,40,50)
+x[length(x)-1]          # ANSWER
+```
+:::
+
+---
+
+### QUESTION 17   TOPICS: vectors , indexingWithNumbers , mean , orderOfOperations ####
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 17   TOPICS: vectors , indexingWithNumbers , mean , orderOfOperations ####
+#
+# Display the average of the last 5 values in x.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- c(1,5,2,3,1,20,4,10,6,50)
+mean(x[(length(x)-4):length(x)])   # ANSWER
+
+# Note, in the answer above, notice the parentheses around (length(x)-4).
+# These parentheses are REQUIRED due to order of operations. Without the parentheses
+# the command, length(x)-4:length(x) would actually be interpreted by R as 
+# length(x)-(4:length(x)) which would give the WRONG result. For more information, 
+# see the "recipe" about "order of operations in R" in the "R Cookbook" published by O'Reilly
+```
+:::
+
+---
+
+### QUESTION 18a   TOPICS: vectors , vectorArithmetic 
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 18a
+# TOPICS: vectors, vectorArithmetic, seqColon, indexingWithLogicalValues, length, sciNotation, Inf
+#
+# Inf is used for "Infinity"
+# 
+# R can only work with numbers up to a certain size. Any value that is more
+# than the maximum is returned as Inf (which stands for Infinity).
+#
+# Example:
+#
+# SCIENTIFIC NOTATION
+#
+# By default R displays very large and very small numbers using a mathematical
+# notation called "scientific notation". "Scientific notation" is just a
+# fancy way of writing very large and very small numbers using very little
+# typing.
+#
+# To understand "scientific notation", let's start with a simple example.
+# 1e+3 is the scientific notation way to write the number 1000.
+# 1e+3 can be understood as 1*10^3 (as explained in the next paragraph)
+#
+# People who are not familiar with scientific notation might read
+# "1e+3" as "one e plus 3". However, that is NOT the right way to read it.
+# Instead, whenever you see "e" in scientific notation, read it as though
+# instead of "e" it said "... times 10 to the power of ...", so "1e+3" should
+# be read as "one times 10 to the power of positive 3"
+# i.e., "1e+3" is the same as 1*10^3. 
+# ( By the way, the letter "e" is used because, "e" is short for "exponent". )
+#
+# In a similar way, 2.3e+12 is the scientific notation way of writing the
+# number 2300000000000 which is the same as "2.3 times 10 to the power of 12"
+# i.e. 2.3*10^12
+#
+# To see that R "understands" scientific notation, just type 1e+3 into R.
+# Because 1e+3 is the same as 1000, R just displays 1000. For example:
+#
+#   > 1e+3      # this is scientific notation for 1000.
+#   [1] 1000
+#
+# By default if a number is small enough then R displays it in it's "regular"
+# form (i.e. NOT in scientific notation). However, if a number is very large or
+# extremely small, then R displays the number in scientific notation:
+#
+#   > # "regular numbers" get displayed normally
+#   > 1000      
+#   [1] 1000
+#
+#   > # very large numbers get displayed in scientific notation (with a positive exponent)
+#   > 1000000000000  
+#   [1] 1e+12
+#
+#   > # extremely small numbers get displayed in scientific notation (with a negative exponent)
+#   > 0.0000000000001   
+#   [1] 1e-13
+#
+# -----------------------------------------------------------------------------
+# Write code that answers the following question:
+#
+#    What is the highest power of 4 that is less than one million?
+#
+# Your code should produce the answer 9. 
+#
+# The answer is 9 since 4^9=262,144 which is less than 1 million
+# but 4^10=1,048,576 is more than one million.
+# 
+# Write R code to calculate this answer (i.e. 9) automatically.
+# Your code should work for any base that is between 2 and 1000 (because 1000 is the
+# square root of one million), not only for a base of 4. For example, if instead of
+# the number 4, your code used the variable "n", your code should print the
+# highest power of "n" that is less than one million. You may write the answer
+# using several lines of R code. 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+n <- 4               # ANSWER (MULTIPLE LINES)
+n2 <- n^(1:1000)     # ANSWER (MULTIPLE LINES)
+n2
+n2 < 1000000
+n2 <- n2[n2<1000000] # ANSWER (MULTIPLE LINES)
+n2
+length(n2)           # ANSWER (MULTIPLE LINES) (this will display the number 9)
+```
+:::
+
+---
+
+### QUESTION 18b    TOPICS: vectors
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 18b
+# TOPICS: vectors, vectorArithmetic, seqColon, indexingWithLogicalValues, length
+#
+# Same as previous question, but this time n contains a "base" as before and
+# x contains the maximum value (In the previous question this was one million.
+# In this question it can be any number that is contained in x.) The question
+# now is what is the maximum whole-number power that n can be raised to whose
+# result is less than x.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- 200
+n <- 3               # ANSWER (MULTIPLE LINES)
+n2 <- n^(1:sqrt(x))  # ANSWER (MULTIPLE LINES)
+n2 <- n2[n2<x]       # ANSWER (MULTIPLE LINES)
+length(n2)           # ANSWER (MULTIPLE LINES)
+```
+:::
+
+---
+
+### QUESTION 19    TOPICS: vectors
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 19
+# TOPICS: vectors, seqColon, indexingWithNumbers, vectorArithmetic
+#
+# nums is a vector that contains 100 numbers. 
+#
+# Use nums to create a vector that contains 50 numbers, as described below. 
+# The first value should be the sum of the first two numbers from nums. 
+# The 2nd value should be the sum of the 3rd and 4th values from nums. 
+# For example, if nums contains 1,2,3,4,5,6 ... 99,100, then your answer 
+# should contain 3,7,11 ... 199. 
+#
+# For example, if nums contains
+#     3,6,2,8,1,-2, ... ninety-one-other-numbers ... 8,5,-5,2
+#
+# then your answer should contain
+#     9,10,-1, ... forty-five-other-numbers ... 13,-3. 
+#
+# You may write the answer using several lines of R code.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+nums <- 1:100
+firstThirdFifthEtc <- nums[seq(1,100,by=2)]   # ANSWER (MULTIPLE LINES)
+secondFourthSixthEtc <- nums[seq(2,100,by=2)]     # ANSWER (MULTIPLE LINES)
+answer <- firstThirdFifthEtc + secondFourthSixthEtc  # ANSWER (MULTIPLE LINES)
+length(answer)
+firstThirdFifthEtc
+secondFourthSixthEtc
+answer
+```
+:::
+
+---
+
+### QUESTION 20    TOPICS: vectors
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 20
+# TOPICS: vectors, ==and!=, indexingWithLogicalValues, seqColon
+#
+# x and y are vectors that each contain 5 numbers. 
+#
+# PART A:   Show the values from x whose corresponding values in y are the same.
+# PART B:   Show the position numbers that contain the same values in x and in y.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+#20a
+x <- c(30,50,-20,10,40) # setup some example data
+y <- c(99,50,-20,88,40) # setup some example data
+x == y                  # This generates a vector that contains five TRUE/FALSE values
+
+x[x==y]                 # ANSWER - "x==y" generates a logical vector (i.e. TRUE/FALSE values).
+#          There will be one TRUE or FALSE value for each pair of values
+#          in x and y. The "x" outside of the [brackets] indicates the 
+#          vector whose values will be displayed. The values from x
+#          that occupy the same positions as the TRUE values from "x==y"
+#          will be displayed. The values from x that occupy the same positions
+#          as the FALSE values from "x==y" will NOT be displayed.
+
+
+#20b
+x <- c(30,50,-20,10,40) # setup some example data
+y <- c(99,50,-20,88,40) # setup some example data
+
+(1:length(x))[x==y]     # ANSWER - NOTE: "x==y" generates a logical vector (i.e. TRUE/FALSE values).
+
+#          There will be one TRUE or FALSE value for each pair of values
+#          in x and y.
+# 
+#          The code: "(1:length(x))" that appears outside the [brackets]
+#          generates a vector whose values are:
+# 
+#                   1  2  3  ... etc (up to the length of x).                        # 
+#          Given the data above, x contains 5 values. Therefore 
+#          the value of (1:length(x))will be:    1  2  3  4  5
+# 
+#          The code "[x==y]" is used to specify which of the values from the vector
+#          should be displayed. The values from "(1:length(x))"
+#          that occupy the same positions as the TRUE values from "x==y"
+#          will be displayed. The values from x that occupy the same positions
+#          as the FALSE values from "x==y" will NOT be displayed.
+```
+:::
+  
+---
+
+### QUESTION 21 TOPICS: vectors, sumMean, indexingWithLogicalValues
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 21
+# TOPICS: vectors, sumMean, indexingWithLogicalValues
+#
+# Show all values from the vector x that are greater than the average of the values in x. 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- c(30,50,-20,10,40)
+mean(x)
+x[x > mean(x)]    # ANSWER
+```
+:::
+
+---
+
+### QUESTION 22   TOPICS: vectors, sumMean, roundTruncCeilingFloor
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 22
+# TOPICS: vectors, sumMean, roundTruncCeilingFloor
+#
+# The sd() function returns the standard deviation of a vector.
+#    Show all of the numbers in the vector x that are at least 1.5 standard deviations
+#    away from the mean of x. You can show the numbers in any order you like. They do not
+#    have to be in the same order that they appear in the vector x.
+#
+# HINT:  Standard Deviation is a concept that is covered in statistics. If you didn't take
+# stats yet, I can understand why you're confused.  Bottom line, is that sd(c(3,10,76,32,23,31))
+# will return a SINGLE number that is called the "standard deviation" of the values
+# 3,10,76,32,23,31. sd(c(3,10,76,32,23,31) is 25.67. The mean of those same values
+# is 29.16.  Therefore, numbers that are at least 1.5 standard deviations away from the mean are 
+#    greater than 29.16 + 1.5 * 25.67    = 67.67
+#    or less than 29.16 - 1.5 * 25.67    =  -9.34
+# Therefore, if x contained the numbers shown, then you should only display the number 76 as
+# that is the only number that is outside of the specified range.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- floor(runif(50,1,100))
+x
+sd(x)
+mean(x)
+mean(x) - 1.5 * sd(x)
+mean(x) + 1.5 * sd(x)
+x[x <= mean(x) - 1.5 * sd(x)]
+x[x >= mean(x) + 1.5 * sd(x)]
+c ( x[x <= mean(x) - 1.5 * sd(x)]  ,  x[x >= mean(x) + 1.5 * sd(x)]  )    # ANSWER
+```
+:::
+
+---
+
+### QUESTION 23   TOPICS: vectors, parallelVectors
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 23
+# TOPICS: vectors, parallelVectors
+#
+# The following variables are parallel vectors that contain info
+# about 4 different rectangles.
+#
+#   colors  <- c("red","blue","green","yellow)
+#   lengths <- c(4,5,6,7)
+#   widths  <- c(5,6,2,4)
+#            
+# In other words:
+#   the 1st rectangle is "red",    it's length is 4 and it's width is 5
+#
+#   the 2nd rectangle is "blue",   it's length is 5 and it's width is 6
+#
+#   the 3rd rectangle is "green",  it's length is 6 and it's width is 2
+#
+#   the 4th rectangle is "yellow", it's length is 7 and it's width is 4
+#
+# QUESTIONS:
+#
+#    The actual numbers and colors shown above are just an example.
+#    Your answers must work even if the vectors contain different 
+#    numbers and colors and even if the vectors contains fewer or more values.
+#
+#    a. Show the AREAS of all the rectangles.
+#
+#            Given the example data above, 
+#            your code should evaluate to: 20  30  12 28
+#
+#    b. Show the COLORS of the rectangles whose areas are at least 25.
+# 
+#            Given the example data above, 
+#            your code should evaluate to: "blue"  "yellow"
+#
+#    c. Show the COLORS of the rectangles 
+#       whose length is at least 5
+#       or whose width is at least 5.
+#
+#           Given the example data above,
+#           your code should evaluate to: "red"  blue"  "green" "yellow"
+#
+#    d. Show the COLORS of the rectangles 
+#       whose length and width are both at least 5.
+#
+#           Given the example data above,
+#           your code should evaluate to: "blue"
+# 
+#    e. Show the COLORS of the rectangles whose area is at least 25.
+#
+#           Given the example data above,
+#           your code should evaluate to: "blue"  "yellow"
+# 
+#    f. Show the LENGTHS of the blue rectangles whose area is at least 25
+#
+#           Given the example data above,
+#           your code should evaluate to: 5
+# 
+#    g. Show the LENGTHS of the rectangles whose area is at least 25 
+#       and whose color is any one of blue, green or yellow.
+#
+#           Given the example data above,
+#           your code should evaluate to: 5 7
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# 23a.
+
+# setup some sample data as described in the question
+lengths <- c(4,5,6,7)
+widths <- c(5,6,2,4)
+colors <- c("red","blue","green","yellow")
+
+lengths * widths                          # ANSWER
+
+
+
+# 23b. 
+
+# setup some sample data as described in the question
+lengths <- c(4,5,6,7)
+widths <- c(5,6,2,4)
+colors <- c("red","blue","green","yellow")
+
+colors[(lengths * widths) >= 25]           # ANSWER
+
+
+
+
+# 23c.
+
+# setup some sample data as described in the question
+lengths <- c(4,5,6,7)
+widths <- c(5,6,2,4)
+colors <- c("red","blue","green","yellow")
+
+colors[lengths>=5 | widths>=5]           # ANSWER
+
+
+# 23d.
+
+# setup some sample data as described in the question
+lengths <- c(4,5,6,7)
+widths <- c(5,6,2,4)
+colors <- c("red","blue","green","yellow")
+
+colors[lengths>=5 & widths>=5]           # ANSWER
+
+
+#23e.
+# setup some sample data as described in the question
+lengths <- c(4,5,6,7)
+widths <- c(5,6,2,4)
+colors <- c("red","blue","green","yellow")
+
+colors[lengths*widths>=25]           # ANSWER
+
+
+
+# 23f.
+
+# setup some sample data as described in the question
+lengths <- c(4,5,6,7)
+widths <- c(5,6,2,4)
+colors <- c("red","blue","green","yellow")
+
+lengths[colors=="blue" & lengths*widths>=25]           # ANSWER
+
+
+
+# 23g. Show the lengths of the rectangles whose area is at least 25 and whose color
+#       is any one of blue, green or yellow.
+
+# setup some sample data as described in the question
+lengths <- c(4,5,6,7)
+widths <- c(5,6,2,4)
+colors <- c("red","blue","green","yellow")
+
+# ONE ANSWER: the parentheses are necessary due to the order of operations of & before |
+lengths[lengths*widths>=25 & (colors=="blue" | colors=="green" | colors=="yellow") ]    # ANSWER
+
+# ANOTHER ANSWER: this uses the %in% operator
+lengths[lengths*widths>=25 & colors %in% c("blue","green","yellow") ]    # ANOTHER ANSWER
+```
+:::
+
+---
+
+### QUESTION 24   TOPICS: vectors, parallelVectors
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 24
+# TOPICS: vectors, parallelVectors
+#
+# The vector "roomDimensions" is used to store the lengths, widths and
+# heights of several rooms in the following format:
+# lengthRoom1,widthRoom1,heightRoom1,lengthRoom2,widthRoom2,heightRoom2, etc. 
+#
+# FOR EXAMPLE, the following code :
+#
+#         > roomDimensions <- c(10,4,10,11,5,9,12,5,10.5,8,5,9.5)
+#
+# represents information about four different rooms with the following dimensions. 
+#
+#          first room:  length is 10, width is 4, height is 10
+#          second room: length is 11, width is 5  height is 9
+#          third room: length is 12, width is 5, height is 10.5
+#          fourth room: length is 8,  width is 5, height is 9.5
+#
+# Different numbers may be assigned to roomDimensions, but the structure is as 
+# described above. 
+#
+#    ANSWER PARTS a,b,c,d,e SHOWN BELOW
+#      The answer to (a) should display:   4
+#      The answer to (b) should display:   11  5  9
+#      The answer to (c) should display:   40  55  60  40
+#      The answer to (d) should display:   2  3
+#      The answer to (e) should display:   9  10
+# 
+#      NOTE that your code for (a),(b),(c),(d) and (e)  should work no
+#      matter what values are placed in the variable, roomDimensions
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+---
+
+#### QUESTION 24a (see the intro to question 24 above)   # TOPICS: vectors, length
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 24a (see the intro to question 24 above)
+# TOPICS: vectors, length
+#
+# Write R code to display how many "rooms" are represented in the vector,
+# i.e. 1/3 of the number of values in the vector.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# set the roomDimensions vector to some sample data as described in the question
+#
+#   The first  room is 10ft long, 4ft wide, 10ft tall (ie. the first three numbers in the vector)
+#   The second room is 11ft long, 5ft wide, 12ft tall (ie. the next three numbers in the vector)
+#   The third  room is 10ft long, 4ft wide, 10ft tall (ie. the next three numbers in the vector)
+#   The fourth room is 11ft long, 5ft wide, 12ft tall (ie. the next three numbers in the vector)
+roomDimensions <- c(10,4,10,11,5,9,12,5,10.5,8,5,9.5)
+
+# The number of rooms is 1/3 the number of numbers (since each room is described with 3  numbers)
+length(roomDimensions) / 3   # ANSWER
+```
+:::
+
+---
+
+#### QUESTION 24b (see the intro to question 24 above)   TOPICS: vectors
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 24b (see the intro to question 24 above)
+# TOPICS: vectors
+#
+#    Write R code to display the length, width and height of the nth room 
+#    where n is a variable that contains a number. For example, if "n" contains 
+#    the number 4 then your code should display the 3 numbers that represent the 
+#    length, width and height of the 4th room.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# setup some sample data (see the question above)
+roomDimensions <- c(10,  4,  10,  11,  5,  9,  12,  5,  10.5,  8,  5,  9.5)
+
+n <- 4    # This is the number of the room we want (i.e. 1 for 1st room, 2 for 2nd room, etc)
+
+# Display the dimensions for just the nth room
+#
+# To explain the following answer, it helps to think of a particular example.
+# Suppose we were trying to get the dimensions for the 4th room ...
+# ... keep in mind, that the first number for the 4th room appears right after the last number for the 3rd room.
+# ... since there are 3 numbers for each room there are 9 numbers before the first number for the 4th room.
+# ... i.e. there are 3*3 = 9 numbers for the first 3 rooms so the 4th room starts at position 10.
+# ... to generalize, the first number for the nth room starts at (n-1)*3+1. In the example I just mentioned
+# ... n is 4, so (n-1) is 3, so (n-1)*3 is 9 so the first number for the 4th room starts at position
+# ... (n-1)*3+1 which is position 10.
+
+
+roomDimensions[c(10,11,12)]
+
+n=4
+roomDimensions[c(10,11,n*3)]
+
+
+roomDimensions[ c( (n-1)*3+1 , (n-1)*3+2 , (n-1)*3+3 ) ] # ANSWER
+
+
+# Another way to think of this problem is that the last number for the 4th room is
+# at position 4*3 i.e. the 12th number. Since each room as 3 numbers, the first number
+# for the 4th room is at position 4*3-1 and the second number for the 4th room is at position 4*3-2.
+# Therefore the 3 numbers for the 4th room are at positions 4*3-2 (i.e. 10) , 4*3-1 (i.e. 11) and 4*3 (i.e. 12)
+# To generalize, the 3 numbers for the nth room are at positions n*3-2 , n*3-1 and n*3 
+
+roomDimensions[ c(n*3-2, n*3-1, n*3) ]                   # ANOTHER ANSWER
+```
+:::
+
+---
+
+#### QUESTION 24c (see the intro to question 24 above)  # TOPICS: vectors, parallelVectors
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 24c (see the intro to question 24 above)
+# TOPICS: vectors, parallelVectors
+#
+# Write R code to display the number of square feet of floor space in each room.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# setup some sample data (see the question above)
+roomDimensions <- c(10,4,10,11,5,9,12,5,10.5,8,5,9.5)        
+
+# Get a vector with just the lengths of each room (i.e. 10,11,12,8)
+lengths <- roomDimensions[ seq(1,length(roomDimensions),by=3) ] # ANSWER (MULTIPLE LINES)   10 11 12 8
+lengths
+
+# Get a vector with just the widths of each room (i.e. 4,5,5,5)
+widths <- roomDimensions[ seq(2,length(roomDimensions),by=3)  ] # ANSWER (MULTIPLE LINES) 4 5 5 5
+widths
+
+# multiply the lengths and widths to get the square feet of floor space
+lengths * widths                                                # ANSWER (MULTIPLE LINES) 40 55 60 40
+```
+:::
+
+---
+
+#### QUESTION 24d (see the intro to question 24 above) TOPICS: vectors, parallelVectors
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 24d (see the intro to question 24 above)
+# TOPICS: vectors, parallelVectors
+#
+# Write R code to display the room numbers of those rooms that have 
+# at least 50 square feet of floor space.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# setup some sample data (see the question)
+roomDimensions <- c(10,4,10,11,5,9,12,5,10.5,8,5,9.5)        
+
+# extract just the lengths into a new vector (10 11 9 10.5)
+lengths <- roomDimensions[ seq(1,length(roomDimensions),by=3) ] # ANSWER (MULTIPLE LINES) 10 11 9 10.5
+lengths
+
+# extract just the widths into a new vector (4 5 5 5)
+widths <- roomDimensions[ seq(2,length(roomDimensions),by=3) ]  # ANSWER (MULTIPLE LINES) 4 5 5 5
+widths
+
+# create a vector with the room numbers, i.e. 1 2 3 4
+roomNumbers <- 1:(length(roomDimensions)/3)                     # ANSWER (MULTIPLE LINES) 1 2 3 4
+roomNumbers
+
+# display the room numbers for those rooms whose length*width is at least 50
+roomNumbers[lengths * widths >= 50]                             # ANSWER (MULTIPLE LINES)  2 3
+```
+:::
+
+---
+
+#### QUESTION 24e (see the intro to question 24 above)  TOPICS: vectors, parallelVectors
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 24e (see the intro to question 24 above)
+# TOPICS: vectors, parallelVectors
+#
+# Write R code to display the heights of those rooms that have 
+# at least 50 square feet of floor space.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+######################.
+# ONE POSSIBLE ANSWER
+######################.
+# setup some sample data (see the question)
+roomDimensions <- c(10,4,10,11,5,9,12,5,10.5,8,5,9.5)        
+
+# extract just the lengths into a new vector (10 11 9 10.5)
+lengths <- roomDimensions[ seq(1,length(roomDimensions),by=3) ] # ANSWER (MULTIPLE LINES) 10 11 9 10.5
+lengths
+
+# extract just the widths into a new vector (4 5 5 5)
+widths <- roomDimensions[ seq(2,length(roomDimensions),by=3) ]  # ANSWER (MULTIPLE LINES) 4 5 5 5
+widths
+
+# extract just the heights into a new vector (10 9 10.5 9.5)
+heights <- roomDimensions[ seq(3,length(roomDimensions),by=3) ] # ANSWER (MULTIPLE LINES)
+heights
+
+# get the heights for just the rooms whose area is at least 50 (final answer)
+heights[lengths * widths >= 50]                                # FINAL ANSWER (MULTIPLE LINES)  9 10
+
+
+
+###########################.
+# ANOTHER POSSIBLE ANSWER
+###########################.
+
+# setup some sample data (see the question)
+roomDimensions <- c(10,4,10,11,5,9,12,5,10.5,8,5,9.5)        
+
+# extract just the lengths into a new vector (10 11 9 10.5)
+lengths <- roomDimensions[ seq(1,length(roomDimensions),by=3) ] # ANSWER (MULTIPLE LINES) 10 11 9 10.5
+lengths
+
+# extract just the widths into a new vector (4 5 5 5)
+widths <- roomDimensions[ seq(2,length(roomDimensions),by=3) ]  # ANSWER (MULTIPLE LINES) 4 5 5 5
+widths
+
+# extract just the heights into a new vector (10 9 10.5 9.5)
+heights <- roomDimensions[ seq(3,length(roomDimensions),by=3) ] # ANSWER (MULTIPLE LINES)
+heights
+
+# create a vector with the room numbers, i.e. 1 2 3 4
+roomNumbers <- 1:(length(roomDimensions)/3)                     # ANSWER (MULTIPLE LINES) 1 2 3 4 
+roomNumbers
+
+# find the room numbers for the rooms that have at least 50sq feet of floor space 
+desiredRooms <- roomNumbers[lengths * widths >= 50]             # ANSWER (MULTIPLE LINES)  2 3 
+desiredRooms
+
+# get the heights for just those rooms (final answer)
+heights[desiredRooms]                                           # FINAL ANSWER (MULTIPLE LINES)  9 10
+```
+:::
+
+---
+
+### QUESTION 25  # TOPICS: vectors
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 25
+# TOPICS: vectors
+#
+# Display the sum of the squares of the numbers in the vector nums.
+# For example, if nums contains the values 4 2 and 5 then your command should
+# display the number 45, (i.e. 16 + 4 + 25)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+nums <- c(4,2,5)
+sum(nums^2)        # ANSWER
+```
+:::
+
+---
+
+### QUESTION 26 TOPICS: vectors, indexingWithLogicalValues, vectorAssignment
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 26
+# TOPICS: vectors, indexingWithLogicalValues, vectorAssignment
+#
+# Grades is a vector that contains grades on a test. 
+# Modify the vector, grades, by adding 5 points to all grades that are below 60.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+grades <- c(53,70,49,60,90)
+grades[grades < 60] <- grades[grades < 60] + 5   # ANSWER
+grades
+```
+:::
+
+---
+
+### QUESTION 27 TOPICS: vectors, indexingWithNumbers
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 27
+# TOPICS: vectors, indexingWithNumbers
+#
+#  Reverse the contents of the vector x. DO NOT USE THE rev FUNCTION. 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- seq(10,50,by=10)
+x
+x <- x[length(x):1]     # ANSWER
+x
+```
+:::
+
+---
+
+### QUESTION 28 TOPICS: vectors, mean, length, indexingWithLogicalValues
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 28
+# TOPICS: vectors, mean, length, indexingWithLogicalValues
+#
+# grades is a vector that contains grades on a test. Display the number of students 
+# whose grade is equal to the average grade. For example, if grades contains
+# c(80,85,85,85,90) then the answer should be 3 since the average is 85 and 3 students
+# received exactly and 85. 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+grades <- c(80,85,85,85,90)
+mean(grades)
+length( grades[grades == mean(grades)] )  # ANSWER
+```
+:::
+
+---
+
+### QUESTION 29 TOPICS: vectors, seqOrColon, minMax
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 29
+# TOPICS: vectors, seqOrColon, minMax
+#
+# store in the vector nums a sequence of values from the smallest value in the
+# vector x to the largest value in x. For example if x would contain c(7,8,7,3,5),
+# your code should set the value of nums to the sequence 3 4 5 6 7 8
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- c(7,10,7,3,5)
+min(x)
+max(x)
+nums <- min(x):max(x)   # ANSWER
+nums
+```
+:::
+
+---
+
+### QUESTION 30 TOPICS: vectors, minMax, c
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 30
+# TOPICS: vectors, minMax, c
+#
+# Write a single command that shows the lowest and the highest values from the
+# vector x. For example if x contains c(20,-5,-2,40,25,-2,18), then your answer
+# should display -5 40
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- c(20,-5,-2,40,25,-2,18)    # start with some data for x
+c(min(x),max(x))                # ANSWER
+```
+:::
+
+---
+
+### QUESTION 31 TOPICS: vectors, roundTruncCeilingFloor, sqrt, ==and!= , %/%and%%
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 31
+# TOPICS: vectors, roundTruncCeilingFloor, sqrt, ==and!= , %/%and%%
+#
+# Determine if the number stored in n is a "perfect square". For example 25 is
+# a "perfect square" because 5*5 is 25. Similarly, 49 is a perfect square because
+# 7*7 is 49. However, 50 is NOT a perfect square since its square root is not an integer.
+# Your code should display the value TRUE is n is a perfect square and FALSE if n is
+# not a perfect square. Hint: the sqrt(x) function returns the square root of x.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+n <- 25                   # let's try with a number that IS a perfect square
+trunc(sqrt(n)) == sqrt(n) # ANSWER    (TRUE)
+floor(sqrt(n)) == sqrt(n) # ANOTHER POSSIBLE ANSWER   (TRUE)
+n%%sqrt(n) == 0           # YET ANOTHER POSSIBLE ANSWER   (TRUE)
+
+
+# ------- CHECK -------
+n <- 30                   # now, just to make sure, let's try with a number that is NOT a perfect square
+sqrt(n)
+trunc(sqrt(n))
+trunc(sqrt(n)) == sqrt(n) # ANSWER   (FALSE)
+floor(sqrt(n)) == sqrt(n) # ALTERNATE ANSWER   (FALSE)
+n%%sqrt(n) == 0           # YET ANOTHER POSSIBLE ANSWER   (FALSE)
+```
+:::
+
+---
+
+### QUESTION 32 TOPICS: vectors, roundTruncCeilingFloor, &_|, ==_!=
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 32
+# TOPICS: vectors, roundTruncCeilingFloor, &_|, ==_!=
+#
+# Write a command that shows the numbers in the vector nums that are both even
+# and perfect squares. For example, if nums contains c(81, 6, 36, 10, 4, 25)
+# then your answer should display 36  4
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x[sqrt(x)^2 == floor(x)  &  x%%2 == 0]    # ANSWER
+```
+:::
+
+---
+
+### QUESTION 33 TOPICS: vectors
+
+
+```{r}
+############################################################################################################.
+# NOTE: The sort(x) function will return a vector with the values from the vector x in sorted order. 
+#       The unique(x) function will return a copy of the vector x with all of the duplicate values removed. 
+#       These functions will help you to answer the following questions
+############################################################################################################.
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 33
+# TOPICS: vectors
+#
+# Write a command that displays the 2nd lowest value in the vector x. If the lowest value appears
+# more than once in the vector, then your code should display that value. For example, if x contains
+# the numbers 7 3 3 7 3 5 20, the function should return the number 3. Even though 3 is the lowest
+# value, it appears more than once, so in that sense, it is the 2nd lowest value.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- c(7,3,3,7,3,5,20)
+sort(x)
+sort(x)[2]            # ANSWER
+
+# The following is just another example. It is NOT a new answer. 
+x <- c(7,7,3,5,20) # ANOTHER EXAMPLE
+sort(x)            # 
+sort(x)[2]         # 
+```
+:::
+
+---
+
+### QUESTION 34 TOPICS: vectors
+
+
+```{r}
+############################################################################################################.
+# NOTE: The sort(x) function will return a vector with the values from the vector x in sorted order. 
+#       The unique(x) function will return a copy of the vector x with all of the duplicate values removed. 
+#       These functions will help you to answer the following questions
+############################################################################################################.
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 34
+# TOPICS: vectors
+#
+# Write a command that displays the 2nd lowest value in the vector x. For this question, you
+# should ignore duplicate values. For example, if x contains the numbers 7 3 3 7 3 5 20, the function
+# should return the number 5. Even though 3 appears more than once, 5 is the 2nd lowest value.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# ONE ANSWER
+x <- c(7,3,3,7,3,5,20)
+unique(x)
+sort(x)
+sort(unique(x))
+sort(unique(x))[2]            # ANSWER
+
+# ANOTHER ANSWER
+x <- c(7,3,3,7,3,5,20)
+xWithoutLowestNumber = x[ x != min(x) ]  # ANSWER MULTIPLE LINES
+min(xWithoutLowestNumber)                # ANSWER MULTIPLE LINES
+```
+:::
+
+---
+
+### QUESTION 35 TOPICS: vectors
+
+
+```{r}
+############################################################################################################.
+# NOTE: The sort(x) function will return a vector with the values from the vector x in sorted order. 
+#       The unique(x) function will return a copy of the vector x with all of the duplicate values removed. 
+#       These functions will help you to answer the following questions
+############################################################################################################.
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 35
+# TOPICS: vectors
+#
+# Write a command that displays the n lowest values in the vector x where n is
+# a variable that contains a positive integer. The values should be displayed
+# in increasing order.
+#
+# For example if x contains c(67,2,40,5,2,99) and n contains the number 3 then
+# the command should display the numbers 2 2 and 5
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+n <- 3
+x <- c(67,2,40,5,2,99)
+x
+sort(x)
+sort(x)[1:n]            # ANSWER
+```
+:::
+
+---
+
+### QUESTION 36 TOPICS: vectors
+
+
+```{r}
+############################################################################################################.
+# NOTE: The sort(x) function will return a vector with the values from the vector x in sorted order. 
+#       The unique(x) function will return a copy of the vector x with all of the duplicate values removed. 
+#       These functions will help you to answer the following questions
+############################################################################################################.
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 36
+# TOPICS: vectors
+#
+# Same as previous question, but the numbers should be in decreasing order. 
+# For example, given the values from the previous question, the answer should
+# display 5 2 2. Hint, see the help for the sort command and focus on the
+# "decreasing" argument to sort.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+n <- 3
+x <- c(67,2,40,5,2,99)
+x
+sort(x)
+sort(x)[1:n]
+sort(sort(x)[1:n], decreasing=TRUE)   # ANSWER
+
+# ALTERNATE ANSWER
+
+n <- 3
+x <- c(67,2,40,5,2,99)
+x
+x <- sort(x, decreasing=TRUE)  # ANOTHER ANSWER (MULTIPLE LINES)
+x
+(length(x)-n+1)
+(length(x)-n+1):length(x)
+x[(length(x)-n+1):length(x)]   # ANOTHER ANSWER (MULTIPLE LINES)
+```
+:::
+
+---
+
+### QUESTION 37 TOPICS: vectors
+
+
+```{r}
+############################################################################################################.
+# NOTE: The sort(x) function will return a vector with the values from the vector x in sorted order. 
+#       The unique(x) function will return a copy of the vector x with all of the duplicate values removed. 
+#       These functions will help you to answer the following questions
+############################################################################################################.
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 37
+# TOPICS: vectors
+#
+# Same as previous question, but the numbers should be displayed in the same order
+# as they appear in the original vector x. Given the same values from the previous
+# question, the answer should display the numbers  2  5  2  in that order. 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+n <- 3
+x <- c(67,2,40,5,2,99)
+sort(x)[n]
+x[x <= sort(x)[n]]     # ANSWER
+```
+:::
+
+---
+
+### QUESTION 38 TOPICS: vectors
+
+
+```{r}
+############################################################################################.
+# QUESTION_GROUP:
+#
+# (The next two questions are related to each other. I would have numbered them a,b,etc but 
+#  I thought it would be better for each question to have its own number.)
+##########################################################################################.
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 38
+# TOPICS: vectors
+#
+# x and y each contain a single integer. nums is a vector that contains many numbers. 
+# You are told that the value of x is guaranteed to be less than the value of y.
+# Change the vector nums so that it only contains the values that are in the range
+# between x and y (including x and y). For example, if x contains 3, y contains 7 and
+# nums contains c(10,3,2,11,6,4,1) then your code should change the value of nums to a vector
+# containing 3 6 and 4..
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# ONE POSSIBLE ANSWER
+# The following answer is done in two different steps
+x <- 3 # setup some example data
+y <- 7 # setup some example data
+nums <- c(10,3,2,11,6,4,1) # setup some example data
+
+nums <- nums[nums>=x]      # ANSWER (MULTIPLE LINES) - nums will now contain all the values that
+# are greater than or equal to x. Given the example data above, nums,
+# will now contain c(10,3,11,6,4). The 2 and 1 were eliminated from nums.
+
+nums                       # show the new values in nums
+nums <- nums[nums<=y]      # ANSWER (MULTIPLE LINES) -  nums will now contain only those values 
+# that are less than or equal to y. Given the example data above, nums
+# will now contain c(3,6,4). The 10, and 11 were eliminated from nums.
+
+nums                       # show the final value of nums
+
+
+# ANOTHER POSSIBLE ANSWER  -  this answer is "shorter" and more "to the point". However, this answer
+#                             requires the use of the & operator.
+x <- 3   # setup some example data
+y <- 7   # setup some example data
+nums <- c(10,3,2,11,6,4,1)   # setup some example data
+
+nums >= x      # given the example data above, this is a logical vector that contains TRUE for every value
+# of nums that is >= x. Since nums contains c(10,3,2,11,6,4,1) and x contains the number 3,
+# the logical vector will be c(TRUE,TRUE,FALSE,TRUE,TRUE,TRUE,FALSE)
+
+nums <= y      # given the example data above, this is a logical vector that contains TRUE for every value
+# of nums that is <= y. Since nums contains c(10,3,2,11,6,4,1) and y contains the number 7,
+# the logical vector will be c(FALSE,TRUE,TRUE,FALSE,TRUE,TRUE,TRUE)
+nums>=x & nums <= y   # This will combine the two logical vectors shown above using the & operator.
+# That will result in a vector where there is a TRUE in the positions that had
+# TRUE for both nums>=x and for num<=y (see above). In other words, the resulting
+# logical vector will contain a TRUE in those positions that correspond to values
+# in nums that are BOTH >=x AND <=y.
+# 
+#    as explained above, "nums >= x" is:    c(TRUE ,TRUE ,FALSE,TRUE ,TRUE ,TRUE ,FALSE)
+#    as explained above, "nums <= y" is:    c(FALSE,TRUE ,TRUE ,FALSE,TRUE ,TRUE ,TRUE)
+# 
+# Therefore, "nums>=x & nums <= y" is:      c(FALSE,TRUE ,FALSE,FALSE,TRUE ,TRUE ,FALSE)
+
+nums <- nums[nums>=x & nums <= y]  # ANSWER - "nums <-" simply means that we are going to replace 
+#          the values in "nums" with the result of the code from the 
+#          right hand side of the arrow.
+#     
+#          The code on the "Right Hand Side" (RHS) of the arrow is:
+#          "nums[nums>=x & nums<=y]". The first "nums" on the RHS of 
+#          the arrow indicates that we will be taking values from "nums".
+#          the [brackets] that surround the rest of the code indicate 
+#          that the code inside the [brackets] will be used to identify
+#          which values from nums we will be "taking". As shown above
+#          the code inside the brackets results in a logical vector
+#          that contains a TRUE for each value that we want from nums. 
+#          
+#          Given the example data above, this code therefore becomes the 
+#          equivalent of: 
+#          nums <- nums[c(FALSE,TRUE ,FALSE,FALSE,TRUE ,TRUE ,FALSE)]
+#          
+#          This results in replacing nums with the 2nd 5th and 6th values
+#          from nums (i.e. those positions that contains TRUE). Therefore
+#          since "nums" originally contained c(10,3,2,11,6,4,1), the 
+#          new value of "nums" will be c(3,6,4)
+```
+:::
+
+---
+
+### QUESTION 39 TOPICS: vectors
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 39
+# TOPICS: vectors
+#
+# Same as previous question, except for this question the value in x may be less than,
+# greater than or equal to y. Hint: use the sort() function to isolate the smaller
+# of x and y and the larger of x and y. Then proceed similarly to the way you answered
+# the previous question. 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# ONE ANSWER:
+#
+# To understand the answer to this question, you must first understand the answer to the 
+# previous question. Please first review the answer to the previous question before continuing.
+#
+# The difference between this question and the previous question is that in the previous 
+# question, you were told that the value of the variable "x" is a number that is LESS THAN
+# the value in the variable "y". For example, in the previous question, it would be possible
+# for x to be 3 and y to be 7 or x to b 2 and y to b 5, but it would NOT be possible for x
+# to be 7 and y to be 3. HOWEVER, in this version of the question, x could be ANY number
+# and y could be ANY number. 
+#
+# Therefore when you write the code to find the values in "nums" that are between x and y 
+# you know that the numbers that you desire are all greater than x and less than y. Therefore
+# in the previous question, you knew that nums>=x needed to be TRUE and nums<=y needed to be TRUE.
+#
+# However, in this question you DON'T know which number is less, x or y. Therefore
+# if x is less than y then the code from the previous question would work. For example,
+# if x is 3 and y is 7 then the expression   5>=3 & 5<=7   would result in a TRUE value.
+#
+# However, if y were less then x (e.g. x is 7 and y is 3) then "nums>=x & nums<=y" would
+# result in a FALSE value for EVERY number. For example the number 5 is obviously between
+# x=7 and y=3. However, the expression    5>=7 & 5<=3 would be FALSE.
+#
+# One approach to answer this question is given the values in x and y, to have your code
+# "figure out" which value is higher and which is lower. You can store the lower value in a
+# variable named "lower" and the higher value in a variable named "higher". Then you can simply use "lower"
+# value as you used "x" in the previous question and use "higher" as you used "y" in the 
+# previous question. This is exactly what is done by the code below …
+
+
+x <- 7   # setup some example data
+y <- 3   # setup some example data
+nums <- c(10,3,2,11,6,4,1)   # setup some example data
+
+sort(c(x,y))                # "c(x,y)" is a vector that contains the values of x and y. Given the
+# example data above, since x is 7 and y is 3, c(x,y) is c(7,3). 
+#
+# The "sort" function takes a vector and sorts its contents. So
+# sort(c(7,3)) results in the vector c(3,7)
+
+lower <- sort(c(x,y))[1]  # As described above, given the example data above, the code:
+# "sort(c(x,y))" will result in the vector c(3,7). The "[1]" that
+# appears after "sort(c(x,y))" extracts the first value from the 
+# sorted vector. Given the data above, the first value of c(3,7) is 3.
+# This number, 3, is then assigned to the variable "lower".
+lower
+higher<- sort(c(x,y))[2]  # In a similar way, this code assigns the 2nd value from the sorted vector
+# to the variable "higher". Specifically, given the example data, the value
+# 7 will be assigned to the variable "higher".
+# 
+# Note that if the values in x and y were initially 3 and 7 instead of 7 and 3,
+# we would still get the 3 being assigned to lower and 7 being assigned to higher.
+# Now that we have variables "lower" and "higher", the answer is exactly
+# the same as the answer to the previous question, except that instead of using
+# x and y in the answer we will use "lower" and "higher".
+higher
+nums <- nums[nums>=lower]       # ANSWER (MULTIPLE LINES)
+nums
+nums <- nums[nums<=higher]      # ANSWER (MULTIPLE LINES)
+nums
+
+# ANOTHER POSSIBLE ANSWER  -  this answer is "shorter" and more "to the point". However, this answer
+#                             requires the use of the & operator. See the explanation of the answer 
+#                             to the previous question for more detail.
+x <- 7
+y <- 3
+lower <- sort(c(x,y))[1]
+higher<- sort(c(x,y))[2]
+nums <- c(10,3,2,11,6,4,1)
+nums <- nums[nums>=lower & nums <= higher]      # ANSWER
+```
+:::
+
+---
+
+### QUESTION 40 TOPICS: vectors
+
+
+```{r}
+############################################################################################.
+# QUESTION_GROUP:
+#
+# The next few questions are related to each other.
+# I would have numbered them a,b,etc but I thought it would be better
+# for each question to have its own number.
+############################################################################################.
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 40
+# TOPICS: vectors
+#
+# nums is a vector that contains several numbers. n contains a single positive integer.
+# Write code that "shifts" the values in nums over to the right "n" times. For example,
+# if nums contains 10 20 30 40 50 60 70 80 90 100 and n is 2 then your command should
+# reset nums to 90 100 10 20 30 40 50 60 70 80. If n were 3, your command should
+# reset nums to 80 90 100 10 20 30 40 50 60 70
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# The following breaks up the answer into several lines so that it is easier to understand.
+# The general idea of the solution below is to figure out which values from the original vector
+# will be moved to the beginning of the vector. 
+
+nums <- seq(10,100,by=10)   # setup some example data
+nums
+n <- 3                      # setup some example data
+positionOfLastNumber <- length(nums)-n                     #ANSWER (MULTIPLE LINES) - This is the position
+#   of the value from the original vector that 
+#   will be in the last position of the answer.
+#   For example if nums is:
+#        c(10,20,30,40,50,60,70,80,90,100)
+#   and n is 3 then the final answer will be
+#        c(80,90,100, 10,20,30,40,50,60,70)
+#   Therefore the 70 which is the last number 
+#   in the answer, is in the 7th position in nums.
+
+positionOfLastNumber
+nums[positionOfLastNumber]
+firstPiece <- nums[ (positionOfLastNumber+1):length(nums)] #ANSWER (MULTIPLE LINES) - this code captures
+#   the first few numbers in the answer, which
+#   are the last few numbers in nums. These numbers
+#   start at the position after the position we 
+#   calculated above and extend until the end of
+#   the nums vector. 
+# 
+#   For example if nums is:
+#        c(10,20,30,40,50,60,70,80,90,100)
+#   and n is 3 then the final answer will be
+#        c(80,90,100, 10,20,30,40,50,60,70)
+#   Therefore the 70 which is the last number 
+#   in the answer, is in the 7th position in nums.
+#   However, the 80 (which is in the 7th+1 postion,
+#   (i.e. the 8th position) in nums will be in the 
+#   first position in the final answer. The rest
+#   of the numbers in nums from the 80 through 100
+#   will be in the first few positions of the answer.
+# 
+#   We use the variable "firstPiece" to capture
+#   those numbers that will be in the first few 
+#   positions in the answer.
+firstPiece
+lastPiece <- nums[1:(positionOfLastNumber)]                #ANSWER (MULTIPLE LINES) -  the last few numbers
+#   in the answer will start from the first positon
+#   in "nums" and extend until the postion that we
+#   calculated above. We store those numbers
+#   in the variable, "lastPiece".
+lastPiece
+nums <- c(firstPiece, lastPiece)                           #ANSWER (MULTIPLE LINES) - at this point we have
+#   the first few numbers for the answer stored in 
+#   the variable "firstPiece" and the last few
+#   numbers from the answer stored in the variable
+#   "lastPiece". All that remains to be done is 
+#   to create a new vector with the numbers in that
+#   order and assign the result back to the variable
+#   "nums".
+nums          
+
+
+# Alternatively, you could write the answer in one line
+nums <- seq(10,100,by=10)
+nums
+n <- 3
+nums <- c(nums[ (length(nums)-n+1):length(nums)] , nums[1:(length(nums)-n)] )   # ALTERNATIVE ANSWER
+nums          
+```
+:::
+
+---
+
+### QUESTION 41 TOPICS: vectors
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 41
+# TOPICS: vectors
+#
+# Same as previous question, but the numbers at the end of nums should be
+# removed and the beginning of nums should be filled in with "n" zeros. For example,
+# if nums contains 10 20 30 40 50 60 70 80 90 100 and n is 2 then your command should
+# reset nums to 0 0 10 20 30 40 50 60 70 80. If n were 3, your command should
+# reset nums to 0 0 0 10 20 30 40 50 60 70
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+nums <- seq(10,100,by=10)
+nums
+n <- 3
+nums <- c(rep(0,n) , nums[1:(length(nums)-n)] )  # ANSWER
+nums          
+```
+:::
+
+---
+
+### QUESTION 42 TOPICS: vectors
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 42
+# TOPICS: vectors
+#
+# Same as above, but replace the numbers at the beginning of nums with 1,2,3,etc.
+# For example, if nums contains 10 20 30 40 50 60 70 80 90 100 and n is 2 then your
+# command should reset nums to 1 2 10 20 30 40 50 60 70 80. If n were 3, your command
+# should reset nums to 1 2 3 10 20 30 40 50 60 70
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+nums <- seq(10,100,by=10)
+nums
+n <- 3
+nums <- c(1:n , nums[1:(length(nums)-n)] )   # ANSWER
+nums          
+```
+:::
+
+---
+
+### QUESTION 43 TOPICS: vectors
+
+
+```{r}
+############################################################################################.
+# QUESTION_GROUP: 
+# (The next few questions are related to each other. I would have numbered them a,b,etc but 
+#  I thought it would be better for each question to have its own number.)
+############################################################################################.
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 43
+# TOPICS: vectors
+#
+# The vector nums contains several numbers. Display the values of nums without the
+# smallest numbers. For example, if nums contains c(30,5,20,5,30,15) then your command
+# should display 30 20 30 15(none of the 5's are displayed since 5 is the smallest number).
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+nums <- c(30,5,20,5,30,15) 
+min(nums)
+nums != min(nums)
+nums[nums != min(nums)]    # ANSWER
+nums[nums > min(nums)]     # ALTERNATIVE ANSWER
+```
+:::
+
+---
+
+### QUESTION 44 TOPICS: vectors
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 44
+# TOPICS: vectors
+#
+# Same as the previous question, but do not display any of the smallest or the
+# largest numbers. For example, if nums contains c(30,5,20,5,30,15) then your command
+# should display 20 15 (none of the 5's are displayed since 5 is the smallest number and
+# none of the 30's are displayed since 30 is the largest number).
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##############################################################################################.
+# END_OF_QUESTION_GROUP
+##############################################################################################.
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# The best way to do this is with the "&" operator. If you haven't learned the "&" operator yet
+# There are alternatives below
+nums <- c(30,5,20,5,30,15) 
+nums[nums != min(nums) & nums != max(nums)]   # ANSWER
+nums[nums > min(nums) & nums < max(nums)]     # ALTERNATIVE ANSWER
+
+# This version of the answer does NOT use the & operator, but requires two lines of code.
+# These alternatives use the != (i.e. "not equal to") operator
+nums <- c(30,5,20,5,30,15) 
+temp <- nums[nums != min(nums)]  #ANSWER (MULTIPLE LINES)
+temp[temp != max(nums)]          #ANSWER (MULTIPLE LINES)
+
+# This version of the answer does NOT use the & operator, but requires two lines of code.
+# These alternatives use the > and < operators instead of the != operator
+nums <- c(30,5,20,5,30,15) 
+temp <- nums[nums > min(nums)]  #ALTERNATIVE ANSWER (MULTIPLE LINES)
+temp[temp < max(nums)]          #ALTERNATIVE ANSWER (MULTIPLE LINES)
+```
+:::
+
+---
+
+### QUESTION 45 TOPICS: vectors
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 45
+# TOPICS: vectors
+#
+# x and y are two vectors whose lengths are the same. Merge the contents of
+# vector y into vector x in the following way. If x1,x2,x3,x4,... represent the
+# initial values in x and y1,y2,y3,y4,... represent the values in y, then after
+# your commands run, the values in x should be x1,y1,x2,y2,x3,y3,x4,y4,...
+#
+# For example, if x contains the values 1 2 3 4 and y contains the values 11 22 33 44 
+# then after your code runs the values in x should be 1 11 2 22 3 33 4 44. 
+# (You may use more than one command to accomplish this result).
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x <- c(1,2,3,4)
+x
+y <- c(11,22,33,44)
+y
+seq(1,2*length(x),by=2)
+
+
+x[seq(1,2*length(x),by=2)] <- x    # ANSWER (MULTIPLE LINES)
+
+x
+seq(2,2*length(y),by=2)
+
+
+x[seq(2,2*length(y),by=2)] <- y    # ANSWER (MULTIPLE LINES)
+x
+```
+:::
+
+## Dataframes
+
+
+```{r}
+##############################################################################################.
+##############################################################################################.
+##
+##            TOPIC:  DATAFRAMES
+##
+##############################################################################################.
+##############################################################################################.
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 46
+# TOPICS: dataframes
+#
+# Write R code that creates a dataframe that has 2 columns.
+#
+# The first column should contain the even numbers 
+# from 2 through 1000, ie. 2,4,6 ... 1000.
+#
+# The 2nd column should contain the odd numbers
+# from 999 counting down to 1, i.e. 999, 997, 995, ... 1
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+##############.
+# ANSWER 1
+##############.
+
+# This answer creates the data.frame in one command.
+# NOTE: strinsAsFactors=FALSE is not necessary here since there are no character vectors in this dataframe.
+numbers <- data.frame(evens=seq(2,1000,by=2), odds = seq(999,1,by=-2))   # ANSWER
+
+# show the first 3 and last 3 rows of numbers (this is not part of the answer)
+head(numbers,3)   # show the first 3 rows
+tail(numbers,3)   # show the last 3 rows
+
+##############.
+# ANSWER 2 
+##############.
+
+# This answer creates variables for the vectors first.
+# The column names will be the same as the variable names of the vectors.
+evens <- seq(2,1000,by=2)              # ANSWER (MULTIPLE LINES)
+odds <- seq(999,1, by=-2)              # ANSWER (MULTIPLE LINES)
+numbers <- data.frame(evens,odds)      # ANSWER (MULTIPLE LINES)
+
+# show the first 3 and last 3 rows of numbers (this is not part of the answer)
+head(numbers,3)   # show the first 3 rows
+tail(numbers,3)   # show the last 3 rows
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 47
+# TOPICS: dataframes
+#
+# Write R code that creates a dataframe that contains the following information:
+#  
+# The name of the 1st column should be: "department"
+# The values in this column should be: produce, bakery, produce, produce, bakery. 
+#
+# The name of the 2nd column should be: "product"
+# The values in this column should be: apple, chocolate cake, orange, pear, rye bread. 
+#
+# The name of the 3rd column should be: "price"
+# The values in this column should be: 1.99 , 1.59, 0.99, 1.99, 4.99.
+#
+# Store the dataframe in a variable named "prices".
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+###########################################################.
+# ANSWER 1 - create the data.frame with a single command
+###########################################################.
+
+prices <- data.frame(department=c("produce","bakery","produce","produce","bakery"),   # ANSWER (MULTIPLE LINES)
+                     product=c("apple","chocolate cake","orange","pear","rye bread"), # ANSWER (MULTIPLE LINES)
+                     price=c(1.99 , 1.59, 0.99, 1.99, 4.99),                          # ANSWER (MULTIPLE LINES)
+                     stringsAsFactors=FALSE)                                          # ANSWER (MULTIPLE LINES)
+
+# check our answer (this is NOT part of the answer)
+prices
+
+###########################################################.
+# ANSWER 2 - create variables for the columns first
+###########################################################.
+
+department <- c("produce","bakery","produce","produce","bakery")        # ANSWER (MULTIPLE LINES)
+product <- c("apple","chocolate cake","orange","pear","rye bread")      # ANSWER (MULTIPLE LINES)
+price <- c(1.99 , 1.59, 0.99, 1.99, 4.99)                               # ANSWER (MULTIPLE LINES)
+prices <- data.frame(department,product,price,stringsAsFactors = FALSE) # ANSWER (MULTIPLE LINES)
+
+# check our answer (this is NOT part of the answer)
+prices
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 48
+# TOPICS: dataframes
+#
+# Write a command that changes the names of the columns in the dataframe
+# from the previous question. The first column should now be named itemName and
+# the 2nd column should be named pricePerLb. Hint: use the colnames function.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+###############.
+# ANSWER 1
+###############.
+colnames(prices)[c(2,3)] <- c("itemName","pricePerLb")  # ANSWER
+# check ...
+prices
+
+################.
+# ANSWER 2
+################.
+colnames(prices)[2] <- "itemName"     # ANSWER (MULTIPLE LINES)
+colnames(prices)[3] <- "pricePerLb"   # ANSWER (MULTIPLE LINES)
+# check ...
+prices
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 49
+# TOPICS: dataframes
+#
+# Challenge: Write a command that changes the names of the rows in the
+# "prices" dataframe from the previous question. The new names of the rows
+# should be item1, item2 , etc. Write the code so that no matter how many rows
+# the dataframe would contain the names of the rows would follow the same pattern.
+# For example, if the dataframe happened to contain 1000 rows, then after your
+# command executed, they would be named: item1,item2,item3,item4,... item1000
+#
+# Hint: As part of your answer, you will need to use the paste function
+# with sep="" (nothing between the quotes). Note that we did not cover the paste
+# function in class. You should look at the help for the paste function and try a
+# few examples of your own. You can also type the R command example(paste) to
+# automatically run the examples that appear at the end of the help page for the
+# paste function.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the prices dataframe.
+
+#############################.
+# sample answer:
+#############################.
+
+# To generate the new rownames you can use the following command:
+paste("item", 1:length(rownames(prices)), sep="")
+
+# or the following command
+paste("item", 1:nrow(prices), sep="")
+
+# now just assign the result of one of these commands to the rownames:
+rownames(prices) <- paste("item", 1:nrow(prices), sep="")    # ANSWER  (THIS IS THE ONLY LINE YOU NEED)
+
+# check:
+prices
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 50 (a)
+# TOPICS: dataframes
+#
+# Write a command that modifies the dataframe from the previous question.
+# The command should change the word "apple" to "mcintosh apple".
+#
+# a. Do this assuming that the dataframe was created with the option stringsAsFactors=FALSE.
+#     For this simple answer, you may refer to the row and column number if you like.
+#
+# b. Do this again, but this time DO NOT refer to the actual row number or column number in your answer. Your answer should work successfully, no matter what row contains "apple". 
+#     (NOTE: This is an important technique that will be used later in the course to create our own functions).
+#
+# c. Do this assuming that the dataframe was created with the option stringsAsFactors=TRUE.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+# ANSWER - part a
+prices[1,2] <- "mcintosh apple"    # ANSWER
+
+# ANSWER - part b
+prices[prices$itemName == "apple" , "itemName"] <- "mcintosh apple"    # ANSWER
+prices
+
+# ANSWER - part c
+
+################.
+# ANSWER 1
+################.
+
+# Note that based on the above commands, the first two columns in the dataframe
+# are FACTORS. We can see the "levels" of the 2nd column with the following command:
+levels(prices[[2]])
+# since "mcintosh apple" is NOT a valid level in the 2nd column, the following
+# command will generate an error and will replace the word "apple" NOT with 
+# "mcintosh apple", but rather with "NA"
+#
+#      prices[1,2] <- "mcintosh apple"
+#
+# To avoid this problem, we can add "mcintosh apple" to the levels of the 2nd
+# columnn and only then change the value of "apple" to "mcintosh apple".
+levels(prices[[2]]) <- c(levels(prices[[2]]),"mcintosh apple")   # ANSWER (MULTIPLE LINES)
+levels(prices[[2]])
+prices[1,2] <- "mcintosh apple"                                  # ANSWER (MULTIPLE LINES)
+#check the answer
+prices
+
+################.
+# ANSWER 2  (read ANSWER 1 first)
+################.
+
+# Another way to avoid the problem is to convert the 2nd column from a factor
+# into a vector of characters 
+prices[[2]] <- as.character(prices[[2]])      # ANSWER (MULTIPLE LINES)
+# check - this will now be a vector
+prices[[2]]
+# now we can change "apple" to "mcintosh apple" without worrying about levels
+prices[1,2] <- "mcintosh apple"               # ANSWER (MULTIPLE LINES)
+prices
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 51
+# TOPICS: dataframes
+#
+# Write a command that modifies the dataframe from the previous question.
+# The command should increase the pricePerLb of oranges by 10%. Round the increased
+# price to the nearest penny.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the prices dataframe.
+
+###############################.
+# ANSWER 1 
+#    - using $ notation  
+#    - answer the question using two commands (may be easier to understand than a single command)
+###############################.
+# first let's identify which row contains oranges:
+rows <- prices$itemName == "orange"                                      # ANSWER (MULTIPLE LINES)
+rows
+
+# now lets change the price for that row. Note that we are rounding the new price to the nearest penny.
+prices[rows,"pricePerLb"] <- round( prices[rows,"pricePerLb"] * 1.1, 2)  # ANSWER (MULTIPLE LINES)
+
+# check our answer
+prices
+
+
+#########################################.
+# ANSWER 2
+#    - using [[double-bracket]] notation
+#    - answer the question using two commands (may be easier to understand than a single command)
+#########################################.
+# first let's identify which row contains oranges:
+rows <- prices[["itemName"]] == "orange"                                 # ANSWER (MULTIPLE LINES)
+rows
+
+# now lets change the price for that row. Note that we are rounding the new price to the nearest penny.
+prices[rows,"pricePerLb"] <- round( prices[rows,"pricePerLb"] * 1.1, 2)  # ANSWER (MULTIPLE LINES)
+
+# check our answer
+prices
+
+
+
+#########################################.
+# ANSWER 3
+#    - using $ notation  
+#    - answer using ONE command (avoids the need to create new variables that are otherwise unnecessary)
+#########################################.
+
+# we can avoid the need to create a new variable using the following approach to 
+# answer the question using a single command (for readability, the command is typed on two lines)
+prices[prices$itemName=="orange","pricePerLb"] <-                    # ANSWER (MULTIPLE LINES)
+  round(prices[prices$itemName=="orange","pricePerLb"]*1.1, 2) # ANSWER (MULTIPLE LINES)
+
+# check our answer
+prices
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 52
+# TOPICS: dataframes
+#
+# Write a command that modifies the "prices" dataframe from the previous question.
+# The command should increase the price of all items by 10%. Round the increased prices
+# to the nearest penny.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the prices dataframe.
+
+##############################.
+# ANSWER 1 - using $ notation
+##############################.
+
+prices$pricePerLb <- round( prices$pricePerLb * 1.1 , 2 )              # ANSWER
+
+# check
+prices
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+prices[["pricePerLb"]] <- round ( prices[["pricePerLb"]] * 1.1 , 2)   # ANSWER
+
+# check
+prices
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 53
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question. Write a command that adds
+# a new column named salePrice. The new column should contain the values from
+# the price column reduced by 25%. Round the prices in the new column to the nearest penny.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the prices dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+prices$salePrice <- round ( prices$pricePerLb * 0.75 , 2)     # ANSWER
+
+# check 
+prices
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+
+prices[["salePrice"]] <- round ( prices[["pricePerLb"]] * 0.75 , 2)   # ANSWER
+
+# check 
+prices
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 54
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question.
+# Write a command that displays the itemName and price of all items from the
+# produce department. Write the code so that it will continue work even if the
+# specific data in the dataframe changes.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the prices dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices$department == "produce"
+rows
+
+# now get the data for those rows from the specified columns:
+prices[rows,c("itemName","pricePerLb")]
+#
+# Alternatively, we can do all this in one line:
+prices[     prices$department == "produce"    ,c("itemName","pricePerLb")]
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices[["department"]] == "produce"
+rows
+
+# now get the data for those rows from the specified columns:
+prices[rows,c("itemName","pricePerLb")]
+
+# Alternatively, we can do all this in one line:
+prices[     prices[["department"]] == "produce"    ,c("itemName","pricePerLb")]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 55
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question.
+# Write a command that displays the itemName and price of all items whose price
+# is 2.00 or more. Write the code so that it will continue work even if the
+# specific data in the dataframe changes.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices$pricePerLb >= 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[rows,c("itemName","pricePerLb")]
+
+# Alternatively, we can do all this in one line:
+prices[     prices$pricePerLb >= 2    ,c("itemName","pricePerLb")]
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices[["pricePerLb"]] >= 2
+rows
+# now get the data for those rows from the specified columns:
+prices[rows,c("itemName","pricePerLb")]
+#
+# Alternatively, we can do all this in one line:
+prices[     prices[["pricePerLb"]] >= 2    ,c("itemName","pricePerLb")]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 56
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question.
+# Write a command that displays all of the columns for all items whose
+# price is 2.00 or more. Write the code so that it will continue work
+# even if the specific data in the dataframe changes.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices$pricePerLb >= 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[rows,]
+
+# Alternatively, we can do all this in one line:
+prices[     prices$pricePerLb >= 2  ,   ]
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices[["pricePerLb"]] >= 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[rows,]
+
+# Alternatively, we can do all this in one line:
+prices[     prices[["pricePerLb"]] >= 2  ,   ]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 57
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question. 
+# Write a command that calculates the average pricePerLb of all
+# items in the produce department.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+# First identify the rows we want:
+rows <- prices$department == "produce"
+rows
+
+# now get the data for those rows from the specified columns:
+mean( prices[rows,"pricePerLb"] )
+
+# Alternatively, we can do all this in one line:
+mean( prices[   prices$department == "produce"   ,"pricePerLb"] )
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+# First identify the rows we want:
+rows <- prices[["department"]] == "produce"
+rows
+
+# now get the data for those rows from the specified columns:
+mean( prices[rows,"pricePerLb"] )
+
+# Alternatively, we can do all this in one line:
+mean( prices[   prices[["department"]] == "produce"   ,"pricePerLb"] )
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 58
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question. 
+# Write a command that displays all of the data from just the odd numbered rows.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+##########.
+# ANSWER 
+##########.
+
+# First identify the rows we want:
+rows <- seq(1,nrow(prices),by=2)
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , ]
+
+# Alternatively, we can do all this in one line:
+prices[  seq(1,nrow(prices),by=2)   ,  ]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 59
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question.
+# Write a command that displays just the name of the items whose
+# pricePerLb is at least 1.00 but not more than 2.00.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices$pricePerLb >= 1 & prices$pricePerLb <= 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[    prices$pricePerLb >= 1 & prices$pricePerLb <= 2    , "itemName"]
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+# First identify the rows we want:
+rows <- prices[["pricePerLb"]] >= 1 & prices[["pricePerLb"]] <= 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[    prices[["pricePerLb"]] >= 1 & prices[["pricePerLb"]] <= 2    , "itemName"]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 60
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question.
+# Write a command that displays just the name of the items whose
+# pricePerLb is either less than 1.00 or more than 2.00.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices$pricePerLb < 1 | prices$pricePerLb > 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[    prices$pricePerLb < 1 | prices$pricePerLb > 2    , "itemName"]
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices[["pricePerLb"]] < 1 | prices[["pricePerLb"]] > 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[    prices[["pricePerLb"]] < 1 | prices[["pricePerLb"]] > 2    , "itemName"]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 61
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question.
+# Write a command that displays just the name of the produce whose pricePerLb is at
+# least 1.00 but not more than 2.00.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices$department == "produce" & prices$pricePerLb >= 1 & prices$pricePerLb <= 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[prices$department == "produce" & prices$pricePerLb >= 1 & prices$pricePerLb <= 2      , "itemName"]
+
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices[["department"]] == "produce" & prices[["pricePerLb"]] >= 1 & prices[["pricePerLb"]] <= 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[prices[["department"]]=="produce" & prices[["pricePerLb"]]>=1 & prices[["pricePerLb"]]<=2  , "itemName"]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 62
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question.
+# Write a single command that displays 
+#      the name of the produce whose pricePerLb is less than 1.00 and also 
+#      the produce whose pricePerLb is greater than 2.00
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+# First identify the rows we want (notice the parentheses - they ARE necessary)
+rows <- prices$department == "produce" & ( prices$pricePerLb < 1 | prices$pricePerLb > 2 )
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[prices$department=="produce" & (prices$pricePerLb<1 | prices$pricePerLb>2 ) , "itemName"]
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+# First identify the rows we want (notice the parentheses - they ARE necessary)
+rows<-prices[["department"]]=="produce" & (prices[["pricePerLb"]]<1 | prices[["pricePerLb"]]>2)
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[prices[["department"]]=="produce" & (prices[["pricePerLb"]]<1 | prices[["pricePerLb"]]>2 ) , "itemName"]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 63
+# TOPICS: dataframes
+#
+# Write a command that displays all of the data for a "randomly chosen" row
+# from the dataframe. Your answer should work even if the data in the dataframe changes.
+#
+# Hint: as part of your answer, use the nrow function to determine the number of rows
+# that are in the dataframe.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############.
+# Answer:
+###############.
+
+# First identify a random row number (between 1 and the one more than the
+# max # of rows in the dataframe). The "+1" is because we will be "truncating" this
+# number in the next step.
+row <- runif(1,1,nrow(prices) + 1)
+row
+
+# now "truncate" that result to get an integer
+row <- trunc(row)
+row
+
+# now display the data for the randomly chosen row:
+prices[ row , ]
+
+# Alternatively, we can do all this in one line:
+prices[   trunc(runif(1,1,nrow(prices) + 1))   ,   ]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 64
+# TOPICS: dataframes
+#
+# Write a command that displays the average pricePerLb of those items
+# whose pricePerLb is at least 1.50
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+# First identify the rows we want
+rows <- prices$pricePerLb >= 1.5
+rows
+
+# now get the data for those rows from the specified columns:
+mean( prices[ rows , "pricePerLb"] )
+
+# Alternatively, we can do all this in one line:
+mean( prices[ prices$pricePerLb >= 1.5 , "pricePerLb"] )
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+# First identify the rows we want
+rows <- prices[["pricePerLb"]] >= 1.5
+rows
+
+# now get the data for those rows from the specified columns:
+mean( prices[ rows , "pricePerLb"] )
+
+# Alternatively, we can do all this in one line:
+mean( prices[ prices[["pricePerLb"]] >= 1.5 , "pricePerLb"] )
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 65
+# TOPICS: dataframes
+#
+# Write a command that displays the number of items that are listed in
+# the "produce" department.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+#########.
+# ANSWER 
+#########.
+
+# First identify the rows we want as a logical vector
+rows <- prices$department == "produce"
+rows
+
+# Now sum the logical vector to get the total number of TRUEs
+sum(rows)
+
+# Alternatively, we can do all this in one line:
+sum(  prices$department == "produce"  )
+```
+:::
+
+---
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 66
+# TOPICS: dataframes
+#
+# Write a command that displays the number of items that are listed
+# in the "produce" department whose pricePerLb is at least 1.50.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+#########.
+# ANSWER 
+#########.
+
+# First identify the rows we want as a logical vector
+rows <- prices$department == "produce"  &  prices$pricePerLb >= 1.5
+rows
+
+# Now sum the logical vector to get the total number of TRUEs
+sum(rows)
+
+# Alternatively, we can do all this in one line:
+sum(     prices$department == "produce"  &  prices$pricePerLb >= 1.5    )
+```
+:::
+
+## User Defined Functions
+
+### QUESTION 67 TOPICS: user defined functions
+
+
+```{r}
+##############################################################.
+##############################################################.
+##
+##   TOPIC: USER DEFINED FUNCTIONS  (i.e. creating your own functions
+##     For each of the following questions, write a function that
+##     matches the description in the comment and that 
+##     has the "signature" shown below the comment.
+##
+##############################################################.
+##############################################################.
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 67
+# TOPICS: user defined functions
+#
+# getGpa calculates a student's Grade Point Average (GPA)
+# as a "weighted average" of the grades for the courses
+# the student has taken, weighted by the number of credits
+# for each course. 
+#
+# The grades argument is expected to be a vector that 
+# contains one numeric grade for each course. The expected 
+# numeric values are 4,3,2,1 or 0 for grades of A,B,C,D or F 
+# respectively. 
+# 
+# The credits argument is expected to be a vector the same 
+# length as the grades argument. The values in the credits
+# vector represent the credits for each course from the 
+# corresponding grades vector.
+# 
+# The function should return a single number that represents
+# the GPA.
+#
+# Example: The following function call is used to calculate
+# the GPA of a student who took 3 classes. The grades in the
+# three classes were A,B,B (i.e. 4,3,3) and the credits for
+# the classes were 2, 4 and 3 credits respectively.
+# This is calculated as (4*2 + 3*4 + 3*3)/9  to get 3.222222
+#
+#    > getGpa(c(4,3,3), c(2,4,3))
+#    3.222222
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+getGpa <- function(grades , credits) {
+  sum(grades * credits) / sum(credits) 
+}
+```
+:::
+
+---
+
+### QUESTION 68a. TOPICS: user defined functions
+
+
+```{r}
+############################################################################################.
+# QUESTION_GROUP: 68
+# TOPICS: user defined functions
+#
+# The next few questions are related to each other.
+#
+# For each part below, create the function as described
+############################################################################################.
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 68a.
+# TOPICS: user defined functions
+#
+# ARGUMENTS/PARAMETERS 
+#
+#   vec - a vector that contains 2 or more values
+#
+# Returns a vector that contains the two largest
+# values from the vector,vec . The values should 
+# be returned IN INCREASING ORDER regardless
+# of the order in the original vector. For example:
+#     > getTopTwoValues(c(1,4,2,5,3))
+#     4  5
+#     > getTopTwoValues(c(1,5,2,4,3))
+#     4  5
+# If the largest value in vec appears more than once
+# then the return value should include that value twice.
+# For example:
+#     > getTopTwoValues(c(1,4,2,4,3,4))
+#     4  4
+#
+# Hints: You can write the function in many different ways. 
+# Some functions that might help are: sort, head, tail 
+#
+# Signature:    getTopTwoValues <- function(vec) 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+getTopTwoValues <- function(vec) {
+  sorted <- sort(vec)
+  sorted[ c ( length(vec)-1 , length(vec) ) ]
+}
+```
+:::
+
+---
+
+### QUESTION 68b. TOPICS: user defined functions
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 68b.
+# TOPICS: user defined functions
+#
+# Same as previous question but this function takes a parameter
+# named "n" that indicates how many values to return. "n" has a default
+# value of 2. Also vec, may contain 1 or more values instead of 2 or more values.
+# If there are fewer values in vec than "n" then the function should
+# return all of the values from vec.
+#
+# ARGUMENTS/PARAMETERS 
+#
+#   vec - any vector
+#
+#   n - the number of largest values to return
+#
+# Returns a vector that contains the "n" largest
+# values from the vector. If "n" is larger than the number of 
+# values in vec then the function should return all of the 
+# values in vec.
+#
+# Examples:
+#     > getTopValues(c(1,9,2,5,3),3)
+#     3  5  9
+#     > getTopValues(c(1,5,2,9,3))
+#     5  9
+#     > getTopValues(c(1,99,55,2,99),3)
+#     55  99  99
+#     > getTopValues(c(1,99),3)
+#     1  99
+#
+# SIGNATURE:  getTopValues <- function(vec, n=2)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# ONE ANSWER
+getTopValues <- function(vec, n=2) {
+  n = min( n , length(vec) )  # ensure n is not longer than length(vec)
+  sorted <- sort(vec)
+  position <- length(vec)-(n-1)
+  sorted[ position : length(vec) ]
+}
+
+# Test the answer
+getTopValues(c(1,9,2,5,3),3)   #     3  5  9
+getTopValues(c(1,5,2,9,3))     #     5  9
+getTopValues(c(1,99,55,2,99),3)#     55  99  99
+getTopValues(c(1,99),3)        #     1  99
+
+
+
+# ANOTHER ANSWER
+getTopValues <- function(vec, n=2) {
+  sorted <- sort(vec)
+  position <- length(vec)-(n-1)
+  if (position < 1) {
+    position <- 1
+  }
+  sorted[ position : length(vec) ]
+}
+
+# Test the answer
+getTopValues(c(1,9,2,5,3),3)   #     3  5  9
+getTopValues(c(1,5,2,9,3))     #     5  9
+getTopValues(c(1,99,55,2,99),3)#     55  99  99
+getTopValues(c(1,99),3)        #     1  99
+```
+:::
+
+---
+
+### QUESTION 68c TOPICS: user defined functions
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 68c
+# TOPICS: user defined functions
+#
+# same as previous question except the values that are 
+# returned should NOT be the same, unless, the vector contains 
+# too few unique values
+#
+# For example:
+#     > getTopValues(c(1,9,3,9), 2)
+#     3  9
+#     > getTopValues(c(9,9,9,9), 2)
+#     9  9
+#     > getTopValues(c(9,1,9,2), 3)
+#     1  2  9
+#
+# Hints: You can write the function in many different ways. 
+# The following are some functions that might help. If you are
+# not familiar with any of these functions, search the R help
+# pages: unique, sort, head, tail
+#
+# FUNCTION SIGNATURE: getTopValues <- function(vec, n=2)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+getTopValues <- function(vec, n=2) {
+  sortedUnique <- sort(unique(vec))
+  numValues <- min(n,length(sortedUnique))
+  sortedUnique[ (length(sortedUnique)-(numValues-1)) : length(sortedUnique) ]
+}
+```
+:::
+
+---
+
+### QUESTION 68d TOPICS: user defined functions
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 68d
+# TOPICS: user defined functions
+#
+# The following is similar to part (a) above, 
+# with the following change: "The largest values should
+# appear IN THE SAME ORDER AS THOSE VALUES APPEAR IN vec."
+# See the description below for more info:
+#
+# ARGUMENTS/PARAMETERS 
+#
+#   vec - a vector that contains 2 or more values
+#
+# Returns a vector that contains the two largest
+# values from the vector,vec . The largest values
+# should appear IN THE SAME ORDER AS THOSE VALUES
+# APPEAR IN vec. For example:
+#     > getTopTwoValues(c(1,9,2,5,3))
+#     9  5
+#     > getTopTwoValues(c(1,5,2,9,3))
+#     5  9
+# If the largest value in vec appears more than once
+# then the return value should include that value twice.
+# For example:
+#     > getTopTwoValues(c(1,9,2,9,3,9,9))
+#     9  9
+#
+# FUNCTION SIGNATURE: getTopTwoValues <- function(vec)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+################.
+#  68d - ANSWER
+################.
+
+# The following solution works in the following way to make sure
+# that the 2 values that are returned are in the same order
+# as in the original list:
+#
+# "Psuedo-code" for the answer:
+#
+#     First find the POSITION number of the highest value. 
+#     
+#     Copy the vector,x , into another variable, y.
+#
+#     In the new copy of the vector, REPLACE the highest
+#     value with the min of the vector.
+#
+#     Then get the POSITION number of the next highest value
+#     in the same way.
+#
+#     Now you know the position numbers of the two highest
+#     values. You should be able to get just the values from
+#     those two positions in the original vector.
+
+getTopTwoValues <- function(x) {
+  positions <- 1:length(x)
+  positionOfTopValue <- positions[ x == max(x) ][1]
+  y <- x       # save a copy of x in y
+  y[positionOfTopValue] <- min(x)
+  positionOf2ndValue <- positions[ y ==  max(y) ][1]
+  x[positions==positionOfTopValue | positions==positionOf2ndValue]
+}
+
+##############################################################################################.
+# END_OF_QUESTION_GROUP: 68
+##############################################################################################.
+```
+:::
+
+---
+
+### QUESTION 69. TOPICS: user defined functions, if_elseif_else
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 69.
+# TOPICS: user defined functions, if_elseif_else
+#
+# For the purposes of the following questions, the following definition of
+# "prime number" is assumed:   "An integer greater than one is called a prime number
+# if its only positive divisors (factors) are one and itself."  Therefore, 1 is not
+# a prime and neither is any negative number.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 69a.
+#
+# ARGUMENTS/PARAMETERS:
+# 
+#    num - a single numerical value
+#
+# Returns TRUE if num is a prime number and returns FALSE if num is not a prime number 
+#
+# Examples:
+#    > is.prime1(-1)
+#    FALSE 
+#    > is.prime1(1)
+#    FALSE 
+#    > is.prime1(2)
+#    TRUE 
+#    > is.prime1(7)
+#    TRUE
+#    > is.prime1(9)
+#    FALSE 
+#
+# FUNCTION SIGNATURE:   is.prime1 <- function( num )
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+is.prime1 <- function( num ) {
+  if (num < 2) {
+    return (FALSE)
+  } else if(num == 2) {
+    return (TRUE)  # the code in the else will not work for 2 (try it to see why)
+  } else {
+    divisors <- 2:(num/2)    # note, the following is more efficient: 2:sqrt(num)    
+    remainders <- num %% divisors
+    numberOfRemaindersThatAreZero <- sum (remainders == 0)
+    return (numberOfRemaindersThatAreZero == 0)
+  }
+}
+```
+:::
+
+---
+
+### QUESTION 69b. TOPICS: user defined functions, sapply_lapply
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 69b.
+# TOPICS: user defined functions, sapply_lapply
+#
+# ARGUMENTS/PARAMETERS:
+# 
+#    vec - a numeric vector 
+#
+# Returns a logical vector that describes if each corresponding
+# number in vec is a prime number. 
+#
+# Examples:
+#    > is.prime(c(1,2,3,4,5,6,7))
+#    FALSE  TRUE  TRUE  FALSE  TRUE  FALSE  TRUE
+#
+#    > is.prime(c(107,109,111,1000))   # note 111 is divisble by 3 (3*37 is 111)
+#    TRUE  TRUE  FALSE  FALSE
+#
+# HINT: You can actually use the sapply and the lapply functions with a vector 
+# (technically a "vector" is known as an "atomic list"). Use the sapply function 
+# and the is.prime1 function from the previous question to generate the answer
+# for this function. (Why did I say to use the sapply and not the lapply function???)
+#
+# FUNCTION SIGNATURE:   is.prime <- function( vec )
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+is.prime <- function(vec) {
+  sapply(vec,is.prime1)
+}
+```
+:::
+
+---
+
+### QUESTION 69c. TOPICS: user defined functions, loops
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 69c.
+# TOPICS: user defined functions, loops
+#
+# ARGUMENTS/PARAMETERS:
+#
+#    n - return all primes that are less than or equal to this value
+#
+# Returns a vector that contains all of the prime numbers that are less than or
+# equal to "n".
+# 
+# EXAMPLES:
+#    > primes.up.to(15)
+#    2  3  5  7  11  13
+#
+# FUNCTION SIGNATURE:   primes.up.to <- function(n = 100)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+#################################################################.
+# ANSWER #1  -  BEST ANSWER
+# The following version is the best. It does not use any loops.
+# However, you should still understand the code for the other
+# answers below.
+#################################################################.
+primes.up.to <- function(n = 100){
+  tfVector <- is.prime(2:n)   # tfVector will be a vector of TRUE/FALSE values
+  return ( (2:n)[tfVector] )  # Return the numbers whose values from tfVector are TRUE. NOTE: the word "return" is optional.
+}
+
+#################################################################.
+# ANSWER #2 
+# The following version uses a "for" loop
+#################################################################.
+primes.up.to <- function(n = 100){
+  primes <- vector()          # start with an empty vector
+  
+  for (num in 2:n) {          # check each number from 2 until n
+    if (is.prime1(num)) {     # if the current value of num is a prime number ...
+      primes <- c(primes,num)   # ... add it to the vector of primes
+    }
+  }
+  
+  return (primes)        # the word "return" is optional. The following will work too:   primes  
+}
+
+
+#################################################################.
+# ANSWER #3
+# The following version uses a "while" loop
+#################################################################.
+primes.up.to <- function(n = 100){
+  primes <- vector()          # start with an empty vector
+  num <- 2                    # set num to the first value to check
+  
+  while  (num <= n) {          # keep checking as long as num is less than n
+    if (is.prime1(num)) {      # if the current value of num is a prime number ...
+      primes <- c(primes,num)  # ... add it to the vector of primes
+    }
+    
+    num <- num + 1  # get the next num to check. Note that this
+    # must be done OUTSIDE of the if since this should be done
+    # whether or not the last number checked turned out to be prime or not.
+  }
+  
+  return (primes)        # the word "return" is optional. The following will work too:   primes  
+}
+```
+:::
+
+---
+
+### QUESTION 69d. TOPICS: user defined functions, loops
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 69d.
+# TOPICS: user defined functions, loops
+#
+# ARGUMENTS/PARAMETERS:
+#
+#    n - the number of prime numbers to return
+#
+# Returns a vector that contains the first "n" prime numbers>
+#
+# FUNCTION SIGNATURE:   first.n.primes <- function(n = 10)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+get.first.n.primes <- function(n) {
+  
+  # The next few lines prepare the variables that will be needed by the while loop below
+  
+  answer <- vector()      # setup an empty vector to contain the primes
+  nextNumberToCheck <- 2  # The first number we will check to see if it is a prime is 2. 
+  # (Yes I know that 2 is a prime, but you have to start somewhere ...)
+  numberPrimesFoundSoFar <- 0  # Before we start the loop, we havent "found" any primes yet.
+  
+  while(numberPrimesFoundSoFar < n) {  # If we haven't "found" n primes yet, keep looping to find another prime.
+    if (is.prime1(nextNumberToCheck)){  # check to see if the "nextNumberToCheck" is a prime number
+      answer <- c(answer,nextNumberToCheck) # If the number is a prime then add it to the "answer" vector.
+      # Note that the line "answer <- vector()" that appears above was
+      # necessary so that this line works the first time it is run. 
+      # If "answer" wasn't set to something at the top of this function 
+      # then the first time we would execute this line we would get
+      # an error since "answer" in "c(answer,nextNumberToCheck)" would not 
+      # have had been defined.
+      numberPrimesFoundSoFar <- numberPrimesFoundSoFar + 1  # If the number was a prime then add one to the
+      # variable "numberPrimesFoundSoFar"
+    }  # end of code for the "if"
+    nextNumberToCheck <- nextNumberToCheck + 1  # Whether or not the last number was a prime, move on to
+    # check the next number by adding one to "nextNumberToCheck"
+  } # end of code for the "while"
+  
+  return (answer)
+}
+```
+:::
+
+---
+
+## Matrices
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 70.   TPICS: user defined functions, matrices
+#   For the following question refer to the following definitions:
+#   A "square matrix" is a matrix that has the same number of rows and columns.
+#
+#   A "diagonal matrix" is a square matrix that has 1's (or another value) on the
+#     "main diagonal" that runs from the upper left hand corner to the lower right
+#     hand corner and zeros everywhere else. Examples:
+#                               1  0  0     3 0 0 0
+#                               0  1  0     0 3 0 0 
+#                               0  0  1     0 0 3 0
+#                                           0 0 0 3
+# An "upper triangular" matrix is a square matrix that has non-zero values on
+#   the main diagonal and in the upper right hand "triangle" of the matrix and
+#   zeros everywhere else. Examples:
+#                               1  1  1     3 3 3 3
+#                               0  1  1     0 3 3 3 
+#                               0  0  1     0 0 3 3
+#                                           0 0 0 3
+# A "lower triangular" matrix is a square matrix that has non-zero values on
+#   the main diagonal and in the upper right hand "triangle" of the matrix and
+#   zeros everywhere else. Examples:
+#                               1  0  0     3 0 3 0
+#                               1  1  0     3 3 0 0 
+#                               1  1  1     3 3 3 0
+#                                           3 3 3 3
+# ARGUMENTS/PARAMETERS:
+#
+#     size - a single number that represents the number of rows (and hence
+#            the number of columns) of a square matrix
+#
+#     shape - expected to be either "diagonal", "upperTriangular" or "lowerTriangular"
+#
+#     fillValue - a value that is used to fill the nonzero entries in the resulting matrix
+#
+# Returns a square matrix of the specified "size" and "shape". The nonzero entries in the
+# matrix should be filled with the value of "fillValue"
+#
+# HINTS: See the R documentation for the row() and col() functions. Try a 
+#        few examples of using the row() and col() functions. Then try to
+#        use those functions to implement the solution to this question. 
+#
+# FUNCTION SIGNATURE: 
+#     makeSquareMatrix <- function (size = 3 , shape = "diagonal" , fillValue = 1)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+makeSquareMatrix <- function (size = 3 , shape = "diagonal" , fillValue = 1) {
+  mat <- matrix ( rep(0,size^2), nrow=size, ncol=size)
+  
+  if (shape == "upperTriangular") {
+    
+    mat[ row(mat) <= col(mat)] <- fillValue
+    
+  } else if (shape == "lowerTriangular") {
+    
+    mat[ row(mat) >= col(mat)] <- fillValue
+    
+  } else {
+    mat [ row(mat) == col(mat) ] <- fillValue
+  }
+  
+  mat
+}
+
+# Examples of using the function:
+makeSquareMatrix(4,"upperTriangular", 99)
+makeSquareMatrix(3,"lowerTriangular", 2)
+makeSquareMatrix(3,"diagonal", 1)
+makeSquareMatrix(3,"bogusValueForShape", 1)  # based on the code above this will create a "diagonal" matrix
+```
+:::
+
+---
+
+
+### QUESTION 71a.   TOPICS: user defined functions, vectors
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 71a.   TOPICS: user defined functions, vectors
+#
+# This function returns the "middle" values from a vector in the same order
+# that they appear in the vector (see the examples below).
+#
+# ARGUMENTS/PARAMETERS:
+#
+#    data - a vector
+#    n   - the number of middle values to return. This defaults 
+#          to the entire vector.
+#
+# Examples: 
+#    > middle.values( c(40,30,20,10), 2)  # return the middle 2 values
+#    30  20 
+#
+#    > middle.values( c(40,30,20,10))   # n wasn't specified so default is entire vector
+#    40  30  20  10
+#
+#    > # If there aren't exactly "n" "middle values" (i.e. if n is odd and length(data) is even
+#    > # or n is even and length(data) is odd) then the function should return
+#    > # one more value from the first half of "data" and one fewer value from
+#    > # the second half of "data". For example in the following, 
+#    > # there isn't just one middle value - there are two, so return the first "middle value".
+#    >
+#    > middle.values( c(40,30,20,10), 1)  
+#    30
+#
+#    > # similarly:
+#    > middle.values( c(40,30,20,10), 3)    # rerurn the 40, but not the 10
+#    40  30  20
+#
+#    > # SOME OTHER EXAMPLES:
+#    > middle.values( c(2,9,3,8,4,7,5), 4)
+#    9  3  8  4
+#    > middle.values( c(2,9,3,8,4,7,5), 2)
+#    3  8 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+middle.values <- function ( data , n = length(data)) {
+ 
+  middlePosition = length(data) %/% 2  
+  
+  startOfMiddleValues = middlePosition - n / 2 + 1
+  
+  endOfMiddleValues = startOfMiddleValues + n -1
+  
+  data[ startOfMiddleValues:endOfMiddleValues ]
+  
+}
+
+middle.values( c(40,30,20,10), 2)   # 30  20 
+
+middle.values( c(40,30,20,10))      # 40  30  20  10
+
+middle.values( c(40,30,20,10), 1)   # 30
+
+middle.values( c(40,30,20,10), 3)   # 40  30  20
+
+middle.values( c(2,9,3,8,4,7,5), 4) # 9  3  8  4
+
+middle.values( c(2,9,3,8,4,7,5), 2) # 3  8 
+```
+:::
+
+---
+
+
+### 71 b. TOPICS: user defined functions, vectors
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION
+# 71 b. 
+# TOPICS: user defined functions, vectors
+#
+# Modify the middle.values function from the previous question so that it takes 
+# an additional argument named "percent". "percent" specifies the percent of
+# values that should be returned as the middle values. The value of "percent" 
+# should only be used if "n" is not specified. If both "n" and "percent" are
+# specified then the value of "n" should be used. If neither "n" nor "percent"
+# are specified then return all of the values.
+#
+# ARTUMENTS/PARAMETERS:
+#    n       - the number of middle values to be returned
+#    percent = a number between 0 and 1 (ie. 1 is 100 percent)
+#
+# EXAMPLES:
+#   > # return the middle 40% of the values
+#   > middle.values( c(100,90,80,70,60,50,40,30,20,10),  percent=0.4)
+#   70 60 50 40
+#
+#   > # return the middle 6 values
+#   > middle.values( c(100,90,80,70,60,50,40,30,20,10),  n=6)
+#   80 70 60 50 40 30
+#
+#   > # both n and percent are specified, so use "n" and NOT "percent"
+#   > middle.values( c(100,90,80,70,60,50,40,30,20,10),  n=6, percent=0.4)
+#   80 70 60 50 40 30
+#
+#   > # neither n nor percent are specified, so return ALL of the values.
+#   > middle.values( c(100,90,80,70,60,50,40,30,20,10),  n=6, percent=0.4)
+#   100 90 80 70 60 50 40 30 20 10 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+middle.values <- function ( data , n = NA, percent = NA)
+# TODO - finish this
+```
+:::
+
+---
+
+### QUESTION 71c.
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 71c.
+#
+# Modify the middle.value function from the previous question that that it takes 
+# an additional argument named "sort".
+#
+# If the value of "sort" is specified as  "asc" then the middle values that
+# are returned should be sorted in "ascending" order (e.g. 1,2,3,...)
+# 
+# If the value of "sort" is specified as  "desc" then the middle values that
+# are returned should be sorted in "descending" order (e.g. 10,9,8,,...)
+#
+# If the value of "sort" is specified as  "none" (or as any other value) 
+# then the middle values should be returned in the same order in which they 
+# appear in the original vector.
+# 
+# EXAMPLES:
+#     > middle.values(c(10,1,9,2,8,3), 4,  sort = "asc" )
+#     1  2  8  9
+#
+#     > middle.values(c(10,1,9,2,8,3), 4,  sort = "desc" )
+#     9  8  1  2
+#
+#     > middle.values(c(10,1,9,2,8,3), 4,  sort = "none" )
+#     1  9  2  8
+#
+#     > middle.values(c(10,1,9,2,8,3), 4 )   # default is sort = "none"
+#     1  9  2  8
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+middle.values <- function ( data , n = NA, percent = NA, sort="none")     
+# TODO - finish this  
+```
+:::
+
+---
+
+### 71. d. TOPICS: user defined functions
+
+
+```{r}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION
+# 71. d.
+# TOPICS: user defined functions
+#
+# Modify the middle.values function from the previous question so that the "data"
+# argument may be a vector, a dataframe or a generic list that contains several vectors. 
+#
+# If data is a vector then this function should work exactly the same way as
+# described in the previous question.
+#
+# If data is a dataframe then the function should return a dataframe that contains 
+# the middle values (as specified) for each column of the dataframe. 
+#
+# If data is a generic list, thet contains several vecotrs, then the function should
+# return a list that contains several vectors. Each vector in the returned list 
+# should contain the middle values from the corresponding vector in the original
+# list.
+# 
+# EXAMPLES:
+#     You should be able to understand the question from the description above,
+#     but I'll try to post some examples later.
+#
+# HINTS:  
+#    - create two functions, the first function should do what the previous
+#      question required. The 2nd function should be the function described here.
+#      This 2nd function (i.e. the one that you need to write for THIS question) 
+#      should "apply" the first function to the columns of a dataframe or the elements
+#      of a generic list as necessary by using one of the "apply" functions.
+#    - the is.data.frame() function can be used to determine if a variable contains a dataframe.
+#    - mode() can be used to determine if a variable contains a list. Note that a "dataframe"
+#      is also technically a "list".
+#    - use if/else if/else    as necessary
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+middle.values <- function ( data , n = NA, percent = NA, sort="none")
+# TODO - finish this
+```
+:::
+
+---
+
+
+### QUESTION 71e. TOPICS: user defined functions
+
+```{r}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 71e.
+# TOPICS: user defined functions
+#
+# Write a function that returns a vector of the means of different increasing
+# amounts of "middle values" from a vector. If the number of values in the original
+# vector are even, then the means returned should start with the means of the 2 
+# middle values. If the number of values in the original vector are odd, then the
+# means should start with the means of the 1 middle value. For example, 
+# 
+#    > # even number of values in vector
+#    > get.middle.means( c(5,4,1,2,3,6) )   # means of  1,2    4,1,2,3  and  5,4,1,2,3,6
+#    1.5  2.5  5.25    
+#
+#    > # odd number of values in vector
+#    > get.middle.means( c(5,4,1,2,3,6,7) ) # means of  2   1,2,3   4,1,2,3,6  and  5,4,1,2,3,6,7
+#    2   2   3.2   4    
+#
+# HINTS: 
+#  - use the middle.values function that you created above to get the middle values
+#  - use a loop   (either a for loop or a while loop)  to keep getting different 
+#    numbers of middle.values and getting the mean of those middle values.
+#  - you "answer" can start as an "empty vector" by using the code:   answer <- vector()
+#    Then add a new number to the answer vector each time your loop finds a new mean.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+get.middle.means = function( vec )
+# TODO - finish this  
+```
+:::
+
+---
+
+## Loops
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 72a.   TOPICS: loops
+# Write a function, numPairs, that takes a single argument, nums that is
+# expected to be a numeric vector.  The function should return the number of
+# pairs of numbers in nums that add up to a multiple of 60.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+numPairs <- function(nums){
+  answer <- list()
+  for(pos1 in 1:(length(nums)-1)){
+    n1 <- nums[pos1]
+    
+    for(pos2 in (pos1+1):length(nums)){
+      n2 <- nums[pos2]
+      if( (n1+n2) %% 60 == 0 ){
+        answer[[length(answer)+1]] <- c(n1,n2)
+      }
+    }
+  }
+  length(answer)
+}
+
+# check to see it works
+amounts <- c(70,5,50,20,40,10,100)
+x <- numPairs(amounts)
+x
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 72b. 
+# Modify the function, numPairs, so that it takes a 2nd argument, sumAmount.
+# The default value of sumAmount should be 60. The function should return the
+#  number of pairs of numbers in nums that add up to a multiple of sumAmount.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+numPairs <- function(nums, sumAmount=60){
+  answer <- list()
+  for(pos1 in 1:(length(nums)-1)){
+    n1 <- nums[pos1]
+    
+    for(pos2 in (pos1+1):length(nums)){
+      n2 <- nums[pos2]
+      if( (n1+n2) %% sumAmount == 0 ){
+        answer[[length(answer)+1]] <- c(n1,n2)
+      }
+    }
+  }
+  length(answer)
+}
+
+# check to see it works
+amounts <- c(70,5,50,20,40,10,100)
+x <- numPairs(amounts)
+x
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 72c. 
+# Write a function, getPairs, that takes a single argument, nums that is
+# expected to be a numeric vector. The function should return a list that
+# contains the pairs of numbers in nums that add up to a multiple of 60.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+numPairs <- function(nums){
+  answer <- list()
+  for(pos1 in 1:(length(nums)-1)){
+    n1 <- nums[pos1]
+    
+    for(pos2 in (pos1+1):length(nums)){
+      n2 <- nums[pos2]
+      if( (n1+n2) %% 60 == 0 ){
+        answer[[length(answer)+1]] <- c(n1,n2)
+      }
+    }
+  }
+  answer
+}
+
+# check to see it works
+amounts <- c(70,5,50,20,40,10,100)
+x <- numPairs(amounts)
+x
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 72d. 
+# Write a function, getPairs, that takes a single argument, nums that is 
+# expected to be a numeric vector. The function should return a dataframe that
+# contains the pairs of numbers in nums that add up to a multiple of 60.
+# Each pair should be in a new column on the dataframe. The names of the columns
+# should be pair1, pair2, pair3, etc.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+numPairs <- function(nums){
+  answer <- list()
+  for(pos1 in 1:(length(nums)-1)){
+    n1 <- nums[pos1]
+    
+    for(pos2 in (pos1+1):length(nums)){
+      n2 <- nums[pos2]
+      if( (n1+n2) %% 60 == 0 ){
+        answer[[length(answer)+1]] <- c(n1,n2)
+      }
+    }
+  }
+  answer = data.frame(answer)
+  colnames(answer) = paste0("pair", 1:ncol(answer))
+  answer
+}
+
+# check to see it works
+amounts <- c(70,5,50,20,40,10,100)
+x <- numPairs(amounts)
+x
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 72e.
+#
+# Write a function, getPairs, that takes a single argument, nums that is
+# expected to be a numeric vector. The function should return a matrix that
+# is 2 rows by n columns where n is the number of pairs of numbers from nums
+# that add up to 60. Each column of the matrix should contain a pair of numbers.
+# The names of the columns should be pair1, pair2, pair3, etc
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+numPairs <- function(nums){
+  answer <- numeric(0)
+  for(pos1 in 1:(length(nums)-1)){
+    n1 <- nums[pos1]
+    
+    for(pos2 in (pos1+1):length(nums)){
+      n2 <- nums[pos2]
+      if( (n1+n2) %% 60 == 0 ){
+        answer[length(answer)+c(1,2)] <- c(n1,n2)
+      }
+    }
+  }
+  answer = matrix(answer, nrow=2, ncol=length(answer)/2)
+  colnames(answer) = paste0("pair", 1:ncol(answer))
+  answer
+}
+
+# check to see it works
+amounts <- c(70,5,50,20,40,10,100)
+x <- numPairs(amounts)
+x
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 72f.
+#
+# Write a function, getPairs, that takes a single argument, nums that is
+# expected to be a numeric vector. The function should return a matrix that
+# is n rows by 2 columns where n is the number of pairs of numbers from nums
+# that add up to 60. Each row of the matrix should contain a pair of numbers.
+# The names of the rows should be pair1, pair2, pair3, etc
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+numPairs <- function(nums){
+  answer <- numeric(0)
+  for(pos1 in 1:(length(nums)-1)){
+    n1 <- nums[pos1]
+    
+    for(pos2 in (pos1+1):length(nums)){
+      n2 <- nums[pos2]
+      if( (n1+n2) %% 60 == 0 ){
+        answer[length(answer)+c(1,2)] <- c(n1,n2)
+      }
+    }
+  }
+  answer = matrix(answer, nrow=length(answer)/2, ncol=2, byrow = TRUE)
+  rownames(answer) = paste0("pair", 1:nrow(answer))
+  answer
+}
+
+# check to see it works
+amounts <- c(70,5,50,20,40,10,100)
+x <- numPairs(amounts)
+x
+```
+:::
+
+---
+
+## Additional Questions - Assorted Topics
+
+### QUESTION 73 TOPIC: vectors
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 73
+# TOPIC: vectors
+# 
+# Show the last 5% of the values in a vector named v.
+# For example 
+# - if there are 100 values in v, show the last 5 values
+# - if there are 200 values in v, show the last 10 values
+# - etc.
+# - if there are 43 values in v, 5% of 43 is 2.15 so round up (use ceiling function)
+#   to show 3 last values
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+v = seq(10,1000,by=10)                                    # test data - 100 values
+v [ (length(v) - ceiling(.05*length(v)) + 1):length(v) ]  # ANSWER
+
+v = seq(10,2000,by=10)                                       # test data - 200 values
+v [ (length(v) - ceiling(.05*length(v)) + 1):length(v) ]     # ANSWER (same as above)
+
+v = seq(10,430,by=10)                                        # test data - 43 values
+v [ (length(v) - ceiling(.05*length(v)) + 1):length(v) ]     # ANSWER (same as above)
+```
+:::
+
+---
+
+
+### QUESTION 74 TOPIC: dataframes
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 74
+# TOPIC: dataframes
+#
+# Show the last 5% of the rows of the data in the dataframe named df.
+# For example 
+# - if there are 100 rows, show the last 5 rows
+# - if there are 200 rows, show the last 10 rows
+# - etc.
+# - if there are 43 rows, 5% of 43 is 2.15 so round up (use ceiling function)
+#   to show 3 last rows
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# TODO
+```
+:::
+
+---
+
+### QUESTION 75 TOPIC: user defined functions
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 75
+# TOPIC: user defined functions (creating your own functions)
+#
+# Write a function with the "signature", evensBetween = function(x,y). 
+# x and y are expected to be numbers (they may be even or odd).
+# The function should return the even numbers between x and y (including x and y)
+# You may assume that the value of x is less than the value of y.
+#
+# For example:
+# > evensBetween(3,9)    
+# [1] 4 6 8
+#
+# > evensBetween(2,10)
+# [1] 2 4 6 8 10
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+evensBetween = function(x,y){
+  numsBetweenXandY = x:y
+  numsBetweenXandY[ numsBetweenXandY %% 2 == 0 ]
+}
+
+# test it:
+evensBetween(3,9)    # 4 6 8
+evensBetween(2,10)   # 2 4 6 8 10
+```
+:::
+
+---
+
+### QUESTION 76 TOPIC: user defined functions
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 76
+# TOPIC: user defined functions
+# SEE ALSO: question 11 for a similar question that doesn't require the creation of a function
+#
+# Create a function with the signature, swapFirstAndLast = function(vec,num).
+# The vector vec is expected to contain at least 2*num values.
+# The function should return a vector that contains the same values as vec except
+# the first "num" values in vec should be last and the last "num" values in vec should be first
+# (see the examples). 
+#
+# Examples:  
+#       > swapFirstAndLast( seq(10,100,by=10), 3)
+#       [1] 80 90 100 40 50 60 70 10 20 30
+#
+#       > swapFirstAndLast( seq(10,100,by=10), 2)
+#       [1] 90 100 30 40 50 60 70 80 10 20
+#
+#       > swapFirstAndLast( c("abe","bob","carla","dana","ed","frank"), 1)
+#       [1] "frank"  "bob"  "carla"  "dana"  "ed"  "abe"
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+swapFirstAndLast = function(vec , num) {
+  firstPositions = 1:num
+  lastPositions = (length(vec)-num+1):length(vec) 
+  middlePositions = (num+1):(length(vec)-num)
+  vec[ c( lastPositions , middlePositions, firstPositions) ]
+}
+
+# Test the answer
+swapFirstAndLast( seq(10,100,by=10), 3)
+swapFirstAndLast( seq(10,100,by=10), 2)
+swapFirstAndLast( c("abe","bob","carla","dana","ed","frank"), 1)
+```
+:::
+
+---
+
+
+### QUESTION  77 TOPIC: user defined functions (creating your own functions)
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION  77
+# TOPIC: user defined functions (creating your own functions)
+# (see question 11 for a similar question that doesn't require the creation of a function)
+#
+# Define a function with the signature:  collapsevector = function( vec )
+# vec is expected to be a vector with an even number of entries.
+#
+# The function should return a vector that contains 
+# the sum of the first two items from vec
+# followed by the sum of the next two items from vec
+# followed by the sum of the next two items from vec
+# etc.
+# 
+# Examples:
+#    > collapseVector( c(10,20,30,40,50,60,70,80) )
+#    [1]  30  70  110  150
+# 
+#    > collapseVector( c(3,4,10,2,100,3))
+#    [1]  7  12  103
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+collapseVector = function( nums ){
+  firstThirdFifthEtc <- nums[seq(1,length(nums),by=2)]   # ANSWER (MULTIPLE LINES)
+  secondFourthSixthEtc <- nums[seq(2,length(nums),by=2)]     # ANSWER (MULTIPLE LINES)
+  answer <- firstThirdFifthEtc + secondFourthSixthEtc  # ANSWER (MULTIPLE LINES)
+  answer
+}
+
+# Test the answer
+collapseVector( c(10,20,30,40,50,60,70,80) )
+collapseVector( c(3,4,10,2,100,3))
+```
+:::
+
+---
+
+
+### QUESTION 78 TOPICS:  user defined functions (creating your own functions)
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 78
+# TOPICS:  user defined functions (creating your own functions)
+#
+# Define a function with the signature:  get2ndLowest = function( vec )
+# that returns the 2nd lowest value in vec.
+#
+# EXAMPLES:
+# > get2ndLowest(c(423,6,234,3,7,1))
+# [1] 3
+#
+# > get2ndLowest(c(3,9,10,-23,-59,200))
+# [1] -23
+#
+# > get2ndLowest( c("grapes", "apple", "plum", "banana", "pear") )
+# [1] "banana" 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+get2ndLowest = function( x ){
+  xWithoutLowestNumber = x[ x != min(x) ]
+  answer = min(xWithoutLowestNumber) 
+  answer
+}
+
+# Test the answer
+get2ndLowest(c(423,6,234,3,7,1))    # 3 
+get2ndLowest(c(3,9,10,-23,-59,200))        # -23
+get2ndLowest( c("grapes", "apple", "plum", "banana", "pear") )  # "banana"
+```
+:::
+
+---
+
+
+### QUESTION 79 TOPICS: vectors
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 79
+# TOPICS: vectors
+#
+# x and y are two vectors of the same length 
+# combine x and y into a new vector named answer that contains the odd position values from x
+# and the even position values of y.
+# EXAMPLES
+#    > x = c(10,20,30,40)
+#    > y = c(100, 200, 300, 400)
+#    > # YOUR CODE GOES HERE (it can be a few lines if you like)
+#    > answer
+#   [1] 10 200 30 400
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x = c(10,20,30,40)
+
+y = c(100, 200, 300, 400)
+
+answer = x                                                     # ANSWER MULTIPLE LINES  - set answer to x
+
+answer[ seq(2,length(y), by=2) ] = y [ seq(2,length(y), by=2)] # ANSWER MULTIPLE LINES - set even positions to the even positions from y
+
+answer # show the result
+```
+:::
+
+---
+
+
+### QUESTION 80   TOPICS: lists, loops, user defined functions
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 80
+# TOPICS: lists, loops, user defined functions
+# SEE ALSO: question 72 for a similar question that doesn't use loops
+# 
+# Write a function with the following "signature":
+#
+# SIGNATURE:  getAllPairs = function (vec)
+#
+# ARGUMENTS/PARAMETERS 
+#
+#   vec - a vector that contains 2 or more values
+#
+# RETURNS: a list that contains a separate vector for each pair of values from vec. 
+#          The values in the vectors should be in increasing order of value.
+#
+# EXAMPLE 1: 
+#
+#   > getAllPairs(c(200, 100, 300))
+#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# TODO
+```
+:::
+
+---
+
+
+### QUESTION 81   TOPICS: user defined functions, vectors
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 81   TOPICS: user defined functions, vectors
+#
+# Write a function with the following "signature":
+#
+# SIGNATURE:  getTopTwoValues = function (vec)
+#
+# ARGUMENTS/PARAMETERS 
+#
+#   vec - a vector that contains 2 or more values
+#
+# Returns a vector that contains the two largest
+# values from the vector,vec . The values should 
+# be returned IN INCREASING ORDER regardless
+# of the order in the original vector. For example:
+#     > getTopTwoValues(c(1,4,2,5,3))
+#     4  5
+#     > getTopTwoValues(c(1,5,2,4,3))
+#     4  5
+# If the largest value in vec appears more than once
+# then the return value should include that value twice.
+# For example:
+#     > getTopTwoValues(c(1,4,2,4,3,4))
+#     4  4
+#
+# Hints: You can write the function in many different ways. 
+# Some functions that might help are: sort, head, tail 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# TODO
+```
+:::
+

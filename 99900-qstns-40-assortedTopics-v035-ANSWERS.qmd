@@ -1,0 +1,518 @@
+# Practice Questions - TOPIC: Assorted Topics
+
+## Additional Questions - Assorted Topics
+
+### QUESTION 73 TOPIC: vectors
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 73
+# TOPIC: vectors
+# 
+# Show the last 5% of the values in a vector named v.
+# For example 
+# - if there are 100 values in v, show the last 5 values
+# - if there are 200 values in v, show the last 10 values
+# - etc.
+# - if there are 43 values in v, 5% of 43 is 2.15 so round up (use ceiling function)
+#   to show 3 last values
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+v = seq(10,1000,by=10)                                    # test data - 100 values
+v [ (length(v) - ceiling(.05*length(v)) + 1):length(v) ]  # ANSWER
+
+v = seq(10,2000,by=10)                                       # test data - 200 values
+v [ (length(v) - ceiling(.05*length(v)) + 1):length(v) ]     # ANSWER (same as above)
+
+v = seq(10,430,by=10)                                        # test data - 43 values
+v [ (length(v) - ceiling(.05*length(v)) + 1):length(v) ]     # ANSWER (same as above)
+```
+:::
+
+---
+
+
+### QUESTION 74 TOPIC: dataframes
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 74
+# TOPIC: dataframes
+#
+# Show the last 5% of the rows of the data in the dataframe named df.
+# For example 
+# - if there are 100 rows, show the last 5 rows
+# - if there are 200 rows, show the last 10 rows
+# - etc.
+# - if there are 43 rows, 5% of 43 is 2.15 so round up (use ceiling function)
+#   to show 3 last rows
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+######################################.
+# Setup some sample data
+######################################.
+df = data.frame(
+  fruit = 
+    c("apple","apricot","avocado","banana","bell pepper",
+      "bilberry","blackberry","blackcurrant","blood orange",
+      "blueberry","boysenberry","breadfruit","canary melon",
+      "cantaloupe","cherimoya","cherry","chili pepper",
+      "clementine","cloudberry","coconut","cranberry","cucumber","currant",
+      "damson","date","dragonfruit","durian","eggplant","elderberry",
+      "feijoa","fig","goji berry","gooseberry","grape","grapefruit",
+      "guava","honeydew","huckleberry","jackfruit","kiwi fruit"
+      ),
+  price = round(runif(n=40, min=0.99, max=6.99), 2)
+)
+
+# show the full dataframe
+df
+
+# Show just the las 5% of the rows
+
+###############.
+# BEST ANSWER
+###############.
+tail(df, .05 * nrow(df))    # BEST ANSWER
+
+##############################################################.
+# Another answer - don't forget the last comma (see below)
+##############################################################.
+rowNumbers = 1:nrow(df)
+df[ rowNumbers > .95*nrow(df) ,  ]
+
+```
+:::
+
+---
+
+### QUESTION 75 TOPIC: user defined functions
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 75
+# TOPIC: user defined functions (creating your own functions)
+#
+# Write a function with the "signature", evensBetween = function(x,y). 
+# x and y are expected to be numbers (they may be even or odd).
+# The function should return the even numbers between x and y (including x and y)
+# You may assume that the value of x is less than the value of y.
+#
+# For example:
+# > evensBetween(3,9)    
+# [1] 4 6 8
+#
+# > evensBetween(2,10)
+# [1] 2 4 6 8 10
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+evensBetween = function(x,y){
+  numsBetweenXandY = x:y
+  numsBetweenXandY[ numsBetweenXandY %% 2 == 0 ]
+}
+
+# test it:
+evensBetween(3,9)    # 4 6 8
+evensBetween(2,10)   # 2 4 6 8 10
+```
+:::
+
+---
+
+### QUESTION 76 TOPIC: user defined functions
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 76
+# TOPIC: user defined functions
+# SEE ALSO: question 11 for a similar question that doesn't require the creation of a function
+#
+# Create a function with the signature, swapFirstAndLast = function(vec,num).
+# The vector vec is expected to contain at least 2*num values.
+# The function should return a vector that contains the same values as vec except
+# the first "num" values in vec should be last and the last "num" values in vec should be first
+# (see the examples). 
+#
+# Examples:  
+#       > swapFirstAndLast( seq(10,100,by=10), 3)
+#       [1] 80 90 100 40 50 60 70 10 20 30
+#
+#       > swapFirstAndLast( seq(10,100,by=10), 2)
+#       [1] 90 100 30 40 50 60 70 80 10 20
+#
+#       > swapFirstAndLast( c("abe","bob","carla","dana","ed","frank"), 1)
+#       [1] "frank"  "bob"  "carla"  "dana"  "ed"  "abe"
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+swapFirstAndLast = function(vec , num) {
+  firstPositions = 1:num
+  lastPositions = (length(vec)-num+1):length(vec) 
+  middlePositions = (num+1):(length(vec)-num)
+  vec[ c( lastPositions , middlePositions, firstPositions) ]
+}
+
+# Test the answer
+swapFirstAndLast( seq(10,100,by=10), 3)
+swapFirstAndLast( seq(10,100,by=10), 2)
+swapFirstAndLast( c("abe","bob","carla","dana","ed","frank"), 1)
+```
+:::
+
+---
+
+
+### QUESTION  77 TOPIC: user defined functions (creating your own functions)
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION  77
+# TOPIC: user defined functions (creating your own functions)
+# (see question 11 for a similar question that doesn't require the creation of a function)
+#
+# Define a function with the signature:  collapsevector = function( vec )
+# vec is expected to be a vector with an even number of entries.
+#
+# The function should return a vector that contains 
+# the sum of the first two items from vec
+# followed by the sum of the next two items from vec
+# followed by the sum of the next two items from vec
+# etc.
+# 
+# Examples:
+#    > collapseVector( c(10,20,30,40,50,60,70,80) )
+#    [1]  30  70  110  150
+# 
+#    > collapseVector( c(3,4,10,2,100,3))
+#    [1]  7  12  103
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+collapseVector = function( nums ){
+  firstThirdFifthEtc <- nums[seq(1,length(nums),by=2)]   # ANSWER (MULTIPLE LINES)
+  secondFourthSixthEtc <- nums[seq(2,length(nums),by=2)]     # ANSWER (MULTIPLE LINES)
+  answer <- firstThirdFifthEtc + secondFourthSixthEtc  # ANSWER (MULTIPLE LINES)
+  answer
+}
+
+# Test the answer
+collapseVector( c(10,20,30,40,50,60,70,80) )
+collapseVector( c(3,4,10,2,100,3))
+```
+:::
+
+---
+
+
+### QUESTION 78 TOPICS:  user defined functions (creating your own functions)
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 78
+# TOPICS:  user defined functions (creating your own functions)
+#
+# Define a function with the signature:  get2ndLowest = function( vec )
+# that returns the 2nd lowest value in vec.
+#
+# EXAMPLES:
+# > get2ndLowest(c(423,6,234,3,7,1))
+# [1] 3
+#
+# > get2ndLowest(c(3,9,10,-23,-59,200))
+# [1] -23
+#
+# > get2ndLowest( c("grapes", "apple", "plum", "banana", "pear") )
+# [1] "banana" 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+get2ndLowest = function( x ){
+  xWithoutLowestNumber = x[ x != min(x) ]
+  answer = min(xWithoutLowestNumber) 
+  answer
+}
+
+# Test the answer
+get2ndLowest(c(423,6,234,3,7,1))    # 3 
+get2ndLowest(c(3,9,10,-23,-59,200))        # -23
+get2ndLowest( c("grapes", "apple", "plum", "banana", "pear") )  # "banana"
+```
+:::
+
+---
+
+
+### QUESTION 79 TOPICS: vectors
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 79
+# TOPICS: vectors
+#
+# x and y are two vectors of the same length 
+# combine x and y into a new vector named answer that contains 
+# the odd position values from x and the even position values of y.
+#
+# EXAMPLES
+#    > x = c(10,20,30,40)
+#    > y = c(100, 200, 300, 400)
+#    > # YOUR CODE GOES HERE (it can be a few lines if you like)
+#    > answer
+#   [1] 10 200 30 400
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+x = c(10,20,30,40)
+
+y = c(100, 200, 300, 400)
+
+answer = x                                                     # ANSWER MULTIPLE LINES  - set answer to x
+
+answer[ seq(2,length(y), by=2) ] = y [ seq(2,length(y), by=2)] # ANSWER MULTIPLE LINES - set even positions to the even positions from y
+
+answer # show the result
+```
+:::
+
+---
+
+
+### QUESTION 80   TOPICS: lists, loops, user defined functions
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 80
+# TOPICS: lists, loops, user defined functions
+# SEE ALSO: question 72 for a similar question that doesn't use loops
+# 
+# Write a function with the following "signature":
+#
+# SIGNATURE:  getAllPairs = function (vec)
+#
+# ARGUMENTS/PARAMETERS 
+#
+#   vec - a vector that contains 2 or more different values
+#         (you may assume that all values are different from each other)
+#
+# RETURNS: 
+#   A list that contains a separate vector for each pair of values
+#   from vec. The list should include separate entries for each order of
+#   the pair of values (see below). Do not insert entries in the 
+#   list for which both values are the same.
+#
+# EXAMPLE 1: 
+#
+#   > getAllPairs(c("apple", "orange"))
+#   [[1]]
+#   [1] "apple"  "orange"
+#   
+#   [[2]]
+#   [1] "orange" "apple" 
+#
+# EXAMPLE 2: 
+#   > getAllPairs(c("apple", "orange", "pear"))
+#   [[1]]
+#   [1] "apple"  "orange"
+#   
+#   [[2]]
+#   [1] "apple" "pear" 
+#  
+#   [[3]]
+#   [1] "orange" "apple" 
+#   
+#   [[4]]
+#   [1] "orange" "pear"  
+#   
+#   [[5]]
+#   [1] "pear"  "apple"
+#   
+#   [[6]]
+#   [1] "pear"   "orange"#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+##########################.
+# ANSWER - with for loops
+##########################.
+
+getAllPairs = function( vec ){
+  answerList = list()
+
+  for (pos1 in 1:(length(vec) ) ){
+    value1 = vec[pos1]
+    for (pos2 in 1:length(vec) ){
+      value2 = vec[pos2]
+      if(value1 != value2){
+        twoValues = c(value1, value2)
+        answerList = c(answerList , list(twoValues) )    
+      }
+    }
+  }
+  
+  answerList
+}
+
+#-----------.
+# Example 1
+#-----------.
+getAllPairs(c("apple", "orange"))
+
+#-----------.
+# Example 2
+#-----------.
+getAllPairs(c("apple", "orange", "pear"))
+
+
+##########################.
+# ANSWER - with while loops
+##########################.
+
+getAllPairs = function( vec ){
+  answerList = list()
+
+  pos1 = 1
+  while (pos1 <= length(vec) ){
+    value1 = vec[pos1]
+    
+    pos2 = 1
+    while (pos2 <= length(vec) ){
+      value2 = vec[pos2]
+      
+      if(value1 != value2){
+        twoValues = c(value1, value2)
+        answerList = c(answerList , list(twoValues) )    
+      }
+      
+      pos2 = pos2 + 1
+    }
+    
+    pos1 = pos1 + 1
+  }
+  
+  answerList
+}
+
+#-----------.
+# Example 1
+#-----------.
+getAllPairs(c("apple", "orange"))
+
+#-----------.
+# Example 2
+#-----------.
+getAllPairs(c("apple", "orange", "pear"))
+
+
+
+
+
+```
+:::
+
+---
+
+
+### QUESTION 81   TOPICS: user defined functions, vectors
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 81   TOPICS: user defined functions, vectors
+#
+# Write a function with the following "signature":
+#
+# SIGNATURE:  getTopTwoValues = function (vec)
+#
+# ARGUMENTS/PARAMETERS 
+#
+#   vec - a vector that contains 2 or more values
+#
+# Returns a vector that contains the two largest
+# values from the vector,vec . The values should 
+# be returned IN INCREASING ORDER regardless
+# of the order in the original vector. For example:
+#     > getTopTwoValues(c(1,4,2,5,3))
+#     4  5
+#     > getTopTwoValues(c(1,5,2,4,3))
+#     4  5
+# If the largest value in vec appears more than once
+# then the return value should include that value twice.
+# For example:
+#     > getTopTwoValues(c(1,4,2,4,3,4))
+#     4  4
+#
+# Hints: You can write the function in many different ways. 
+# Some functions that might help are: sort, head, tail 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+##############.
+# ONE ANSWER
+##############.
+getTopTwoValues = function( vec ) {
+  tail( sort(vec), 2)
+}  
+    
+
+# Try it
+getTopTwoValues(c(1,4,2,5,3))
+getTopTwoValues(c(1,5,2,4,3))
+getTopTwoValues(c(1,4,2,4,3,4))
+
+##################.
+# ANOTHER ANSWER
+##################.
+getTopTwoValues = function( vec ) {
+  positions = (length(vec) - 1):length(vec)
+  sort(vec) [ positions ]
+}
+# Try it
+getTopTwoValues(c(1,4,2,5,3))
+getTopTwoValues(c(1,5,2,4,3))
+getTopTwoValues(c(1,4,2,4,3,4))
+
+```
+:::
+

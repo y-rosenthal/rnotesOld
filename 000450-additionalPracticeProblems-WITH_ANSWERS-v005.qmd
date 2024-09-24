@@ -1,0 +1,1197 @@
+# Practice Questions - TOPICS: Parallel Vectors, &, |, scientific notation, etc.
+
+::: {.content-hidden}
+#####################################################################
+# OVERVIEW
+#
+# *** Make sure that you review all of the class notes and understand ***
+# *** all of the concepts before working on the homework.             ***
+#
+# Since our last homework question set (after class #7) we learned about the following topics
+# (through class #13).
+#
+# For the complete summary of what we covered since the beginning of the semester,
+# look at the class notes and the summaries in the instructions for the previous homeworks.
+# You will potentially need to understand all of these concepts to do the problems below.
+#   
+#   (1) debugonce(FUNCTION_NAME)    and how to use the debugger.
+#       See the notes in the file: 
+#           "000350-userDefinedFunctions_relationalOperators_etc.R"
+#         
+#   (2) local variables are variables that are given a value in a function definition.
+#       You can only use the local variables inside the function definition. The variables
+#       are not able to be accessed from code that is outside of the function. Example
+#
+#         > f = function(x) {
+#             # xPlusOne is a local variable and cannot be referred to outside of the function
+#             xPlusOne = x + 1
+#             return (x * xPlusOne)
+#           }
+#
+#         > f(3)
+#         [1] 12
+#
+#         > xPlusOne
+#         Error: object 'xPlusOne' not found 
+#         
+#       global variables are variables that are given a value outside of any function
+#       definition. After a global variable has been given a value (outside of any function's code)
+#       you can refer to the global variable inside any function definition.
+#
+#       arguments to a function (as x is below) are like local variables in that they
+#       are able to be referenced only in the function in which they are defined.
+#       Example:
+#
+#         > someNumber = 10   # this is a global variable
+#
+#         > f = function(x) {
+#               return ( x + someNumber)  # this is allowed because someNumber is global
+#           }
+#
+#         > f(5)
+#         [1] 15
+#
+#         > x    # this is not legal since x was never defined globally
+#         Error: object 'x' not found 
+#
+#       If a local variable (or an argument in a function) and a global variable 
+#       have the same name, then the local variable (or the argument's) value is
+#       used in the function where they are defined and the global variable's value
+#       is used outside of the function. For example
+#
+#          > x = 10   # this is global
+#          > y = 100  # this is also global
+#          
+#          > f = function(x) {       # x here is a local argument (it is different from the global x)
+#                  y = x+1           # y and x are both local  (y is different from the global y) 
+#                  return ( 2 * y )
+#                }
+#
+#          > f(2)   # the local x will get the value 2 and the local y will get the value 3
+#          [1] 6
+# 
+#          > x   # this now refers to the global x, i.e. 10, since we are not in the function's code
+#          [1] 10
+#
+#          > y   # this now refers to the global y, i.e. 100, since we are not in the function's code
+#          [1] 100
+#
+#       
+#   (3) Working with a set of "parallel vectors" - i.e. a set of vectors that have
+#       the same number of values. Each vector contains a different variable
+#       for a set of "observations". For example the first values of all the vectors
+#       all correspond to the same "observation", the 2nd values of all the vectors
+#       correspond to the same "observation". For example if the following are 
+#       parallel vectors, then joe got a 70 on test1 and a 75 on test1,
+#       sam got an 80 on test1 and and 85 on test2, etc.
+#
+#          student = c("joe", "sam", "sue")
+#          test1   = c(70, 80, 90)
+#          test2   = c(75, 85, 95)
+#
+#   (4) Using the logical operators     ! & |
+#
+#   (5) using the sum function to count values that meet a specified condition
+#       e.g.  sum( test1 >= 80 )
+#
+#   (6) using the mean function to calculate the percentage of values that meet
+#       a certain condition, e.g. mean( test1 >= 80 )
+#
+#   (7) "character" values - including "double quotes" 'single quotes"
+#       backslash characters, i.e. \n for a newline \t for a tab and \\ for a backslash
+#
+#   (8) paste, paste0 functions (including the sep and collapse arguments)
+#
+#   (9) nchar function - returns the number of symbols (i.e. letters, digits,
+#       spaces, tabs, special characters etc.) in each "character" value. 
+#       EXMAPLE:
+#       > nchar(c("!$%", "Hi there."))
+#       [1] 3 9
+#
+#   (10) cat function for displaying information in a "human readable format" instead
+#       of with backslashes
+#
+#   (11) Adding a values to the end of a vector - 3 ways
+#       1. assign to a new position, e.g.
+#           > x=c(100,200)
+#           > x[3] = 300
+#       2. Use the c function to combine vectors
+#       3. Use the append function (similar to the c function)
+#
+#   (12) %in% operator - Example:   
+#        > c(100,200)  %in%  c(50,15,200,500)
+#       [1] FALSE TRUE
+#
+#   (13) intersect and setdiff functions
+#
+#   (14) sort function (including decreasing argument)
+#        sorting character values
+#        sorting character values that look like numbers.
+#
+#   (15) implicit and explicit conversions between char, numeric and logical data types
+#
+#   (16) the mode function for determining the mode (i.e. type) of data
+#        either, "numeric", "character", "logical" or "list"
+#
+#   (17) functions:  is.numeric, is.character, is.logical, is.list
+#
+#   (18) using the na.rm argument for sum and mean functions
+#
+#   (19) creating lists with or without names
+# 
+#   (20) adding names to an unnamed list with the names function, e.g.
+#           names(SOME_LIST) = THE_NAMES
+#    
+#   (21) accessing data in a list with [single-bracket] notation
+#        accessing data in a list with [[double-bracket]] notation
+#        accessing data in a list with $dollar-sign notation
+#
+#        (for more info see the file "410-modeConversions_lists_laplySapply_etc.R")
+#
+#   (22) understanding "scientific notation"
+#        see the file "000390-scieNotation_roundoffError_v0004.R"
+#
+#####################################################################
+:::
+
+```{r}
+#######################################################################
+# Given the following parallel vectors answer the questions below
+#######################################################################
+
+# The following are parallel vectors
+
+students <- c("joe",    "sue",      "al",     "anne",      "esther", "bob",    "larry",    "carla")
+gender   <- c("m",      "f",        "m",      "f",         "f",      "m",      "m",        "f")
+year     <- c("senior", "freshman", "senior", "sophomore", "senior", "senior", "freshman", "sophomore")
+test1    <- c(85,        82,         70,        95,         93,       100,       39,       90)
+test2    <- c(95,        60,         75,        92,         93,       90,        68,       80)
+test3    <- c(100,       69,         79,        81,         93,       80,        89,       82)
+honors   <- c(TRUE,     FALSE,      FALSE,     TRUE,       FALSE,    FALSE,      FALSE,    TRUE)
+homeState<- c("ca",     "nj",       "wa",      "ny",       "ny",     "ca",       "nj",     "wa")
+major    <- c("fin",    NA,         "acc",     NA,         "mar",    "acc",      "acc",    "fin")
+
+#-----------------------------------------------------------------------------------
+# Answer the questions below by writing R commands to calculate the answers.
+# The answers should still be correct even if the actual values in the vectors change.
+# You can assume that there are no NA values in the data EXCEPT for in the vector, major
+# If a student hasn't declared a major yet, the entry in the major vector is NA.
+#-----------------------------------------------------------------------------------
+```
+
+## QUESTION 1  
+
+```{r}
+#-----------------------------------------------------------------------------------
+# QUESTION 1  
+# Show the number of grades on test1 that were below 70
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+sum( test1 < 70 )
+```
+:::
+
+## QUESTION 2
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 2
+# Show the number of grades below 70 on any of the tests
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+sum(c ( test1<70, test2<70, test3<70) )
+```
+:::
+
+## QUESTION 3
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 3
+# Show the percent of seniors who are from NY
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+sum(year == "senior" & homeState == "ny") / sum(year == "senior")
+```
+:::
+
+## QUESTION 4
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 4
+# Show the number of students who have not yet declared a major (i.e. major is NA)
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+sum ( is.na(major) )
+```
+:::
+
+## QUESTION 5
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 5
+# Show the number of students 
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+length (students)   # or length(ANY_OF_THE_VECTORS)
+```
+:::
+
+## QUESTION 6
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 6
+# Show the names of the students who scored at least 5 points above average on test1
+# test1
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+students[ test1 >= mean(test1) + 5]
+```
+:::
+
+## QUESTION 7
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 7
+# Show the names of the students who scored at least 5 points above average on test1
+# and also on test2
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+students[ test1 >= mean(test1) + 5 & test2 >= mean(test2) + 5]
+```
+:::
+
+## QUESTION 8
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 8
+# Show the names of the students who scored at least 5 points above average
+# on either test1 or test2
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+students[ test1 >= mean(test1) + 5 | test2 >= mean(test2) + 5]
+```
+:::
+
+## QUESTION 9
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 9
+# Show the names of the male students 
+# who scored at least 5 points above average on either test1 or on test2
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+students[ gender == "m" & (test1 >= mean(test1) + 5 | test2 >= mean(test2) + 5)]
+```
+:::
+
+## QUESTION 10
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 10
+# Show the number of accounting (acc) majors. 
+#
+# NOTE: Be careful - some of the entries in the majors vector are NA.
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+sum( major == "acc" & !is.na(major))
+```
+:::
+
+## QUESTION 11
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 11
+# Show the number of students who have NOT declared that 
+# they are acc majors (this includes students who have not yet declared a major). 
+#
+# NOTE: Be careful - some of the entries in the majors vector are NA.
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+sum ( major != "acc" | is.na(major))
+```
+:::
+
+## QUESTION 12
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 12
+# Show the percent of the students who have declared that they are acc majors.
+#
+# NOTE: Be careful - some of the entries in the majors vector are NA.
+#-----------------------------------------------------------------------------------
+
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+# ANSWER
+mean( major=="acc" & !is.na(major) )
+
+# ANOTHER ANSWER 
+sum(major == "acc" & !is.na(major)) / length(major)
+```
+:::
+
+## QUESTION 13
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 13
+# Show the percent of the seniors who have declared that they are acc majors.
+# 
+#
+# NOTE: Be careful - some of the entries in the majors vector are NA.
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+sum(major == "acc" & !is.na(major) & year == "senior") / sum(year == "senior")
+```
+:::
+
+## QUESTION 14
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 14
+# Write code to show the names of the students who continually got lower grades.
+# ie test1 was the highest and test3 was the lowest grade
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+students [ test1 > test2 & test2 > test3 ]
+```
+:::
+
+## QUESTION 15
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 15
+# Show the students who got 100 on all three tests
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+
+# Note - When you run the command below using the data above, the 
+# result is "character(0)".  This simply means that R is returning a character vector 
+# that has zero entries. This is because in the data above, no one got 100 on all
+# three tests. R reports this by showing "character(0)" as the result.
+#
+# The code WOULD produce the name of any student who got 100 on all 3 tests. 
+# This is the correct answer since the code should work even if the actual
+# data is different. If you want to check this you can add a new student whose
+# test grades are all 100 or change the test grades for one or more of the students.
+
+students [  test1==100 & test2==100 & test3==100   ]
+```
+:::
+
+## QUESTION 16
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 16
+# Show the students who got the same grade for all three tests
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+students [  test1==test2 & test2==test3 ]
+```
+:::
+
+## QUESTION 17
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 17
+# Show the freshemn and sophomores whose highest grade was on the third test
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+students [  (year=="freshman" | year=="sophomore") & test3 > test1 & test3 > test2 ]
+```
+:::
+
+## QUESTION 18
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 18
+# Show the average grade on test1 of honors students who are also seniors
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+mean( test1[ honors == TRUE & year == "senior"]  )
+```
+:::
+
+## QUESTION 19
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 19
+# Use a single command to create a vector that contains 
+# the average grade on test1 the honors students in the first position and
+# the average grade on test1 for the non honors students in the 2nd position
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+c(mean(test1[honors == TRUE]) , mean(test1[honors==FALSE]))
+```
+:::
+
+## QUESTION 20
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 20
+# Write a command that shows the names of the honors students who are from NY, NJ or CT
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+students [ honors == TRUE & (homeState == "ny" | homeState == "nj" | homeState == "ct") ]
+```
+:::
+
+## QUESTION 21
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 21
+# Answer the previous question without using the | operator. 
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+students [ honors == TRUE & homeState %in% c("ny","nj","ct") ]
+```
+:::
+
+## QUESTION 22
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 22
+# 
+# Create a vector that shows the students name, gender and homeState
+# for all of the female students in the following format:
+#
+#     "sue;f;nj"  "anne;f;ny" "esther;f;ny" "carla;f;wa" 
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+paste(students[gender=="f"], gender[gender=="f"], homeState[gender=="f"], sep=";")
+```
+:::
+
+## QUESTION 23
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 23
+# 
+# Create a single value that has one "m" for each male student and one "f" for
+# each female student. The f's should be first before the m's. The f's and m's should
+# be separated from each other with dashes (see example below).
+# For example, if there would be 5 female and 2 male students your code should show:
+#
+#   "f-f-f-f-f-m-m"
+#
+# Remember that your code should work even if the current data changes. (I don't know
+# what the data that you get will be.)
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+paste(sort(gender), sep="", collapse="-")
+```
+:::
+
+## QUESTION 24
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 24
+# Write a command that displays the names and majors of the studets who are NOT honors students.
+# The output should be in the following format: each student should be on a separate line.
+# There should be a tab between the student's name and their major. See example output below.
+# (NOTE that the results should be correct even if the actual data changes):
+#
+#    sue    NA
+#    al     acc
+#    esther mar
+#    bob    acc
+#    larry  acc
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+cat( paste( students[!honors] , major[!honors], sep="\t", collapse="\n") )
+```
+:::
+
+## QUESTION 25
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 25
+# Write a function named isEven that takes a single argument named nums that is 
+# expected to be a numeric vector.
+# The function should return a logical vector. 
+# Each entry in the logical vector should be TRUE if the corresponding number is even
+# and FALSE if the corresponding number is odd.
+#
+# EXAMPLE: 
+# # DEFINE THE FUNCTION isEven HERE
+# > isEven ( c(2, 13, 23, 14) )
+# [1] TRUE FALSE FALSE TRUE
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+isEven = function(nums){
+  nums %% 2 == 0
+}
+```
+:::
+
+## QUESTION 26
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 26
+# Write a command that uses the function isEven that you created in the 
+# previous question to display those test1 grades that are even.
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+test1[isEven(test1)]
+```
+:::
+
+## QUESTION 27
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 27
+# Use the isEven function that you created above to create a new function named isOdd.
+# isOdd should work similarly to isEvn but isOdd  should return a vector that contains
+# TRUE if a number is odd and FALSE if the number is even.
+#
+# EXAMPLE:
+# # DEFINE THE FUNCTION isEven HERE
+# > isOdd ( c(2, 13, 23, 14) )
+# [1] FALSE TRUE TRUE FALSE
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+isOdd = function(nums){
+  !isEven(nums)
+}
+```
+:::
+
+## QUESTION 28
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 28
+# Use the isOdd function that you described above to display the names
+# of the students who got odd numbered grades on test1. 
+# Show their grades below their names.
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+students [ isOdd(test1) ]
+test1 [ isOdd(test1) ]
+```
+:::
+
+## QUESTION 29
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 29
+# Write a single command to display the following. The 2nd and 3rd lines 
+# should each be indented by one tab. Make sure to get all the 'apostrophes'
+# and "quotes" displayed correctly.
+#
+#    Joe's parrot said:
+#        "I want a cracker.
+#         I want it now."
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+cat("Joe's parrot said:\n\t\"I want a cracker.\n\t I want it now.\"")
+```
+:::
+
+## QUESTION 30
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 30
+# 
+# The following "numbers" were entered using "quotes".
+# What will be the output from the following line of code?
+#
+#   > nums = c("2000", "9", "1", "350", "3" )
+#   > sort(nums)
+#
+# Fill in the blank in the following code so that the numbers 
+# sort in numeric order. Do not change anything else in the code.
+# You answer should work no matter what "numbers" are actually in
+# the code.
+# 
+#   > nums = c("2000", "9", "1", "350", "3" )
+#   > FILL IN YOUR ANSWER HERE SO THAT THE NEXT LINE PRODUCES THE OUTPUT SHOWN BELOW
+#   > sort(nums)
+#   [1] 1 3 9 350 2000
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+nums = c("2000", "9", "1", "350", "3" )
+nums = as.numeric(nums)
+sort(nums)
+```
+:::
+
+## QUESTION 31
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 31
+# 
+# The grades vector shown below shows the grades for a test. 
+# The grades for some students who missed the test were entered as NA.
+# Fill in a command to get the average of the grades - not counting the NA grades.
+#  
+#   > grades = c(NA, 75,  NA, 85, 90, 70 )
+#   > # COMMAND TO GET AVERAGE - IGNORE THE "missing" or NA grades
+#   [1] 
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+# one answer (using na.rm)
+grades = c(NA, 75,  NA, 85, 90, 70 )
+mean( grades, na.rm=TRUE)
+
+# another answer (wihtout na.rm)
+grades = c(NA, 75,  NA, 85, 90, 70 )
+mean( grades[!is.na(grades)] )
+```
+:::
+
+## QUESTION 32
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 32
+# 
+# The grades vector shown below shows the grades for a test. 
+# The numbers were incorrectly entered using "quotes".
+# The grades for some students who missed the test were entered as NA
+# and for others the grades were entered as "missing".
+# Fill in code as shown below so that you generate average.
+# Note that a warning may be shown - that is fine.
+#  
+#   > grades = c(NA, "75",  NA, "85", "90", "missing", "70" )
+#   > # COMMAND TO GET AVERAGE - IGNORE THE "missing" or NA grades
+#   [1] 80
+#   Warning message: ..... (some warning messages may be shown)
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+# one answer
+grades = c("NA", "75",  "NA", "85", "90", "missing", "70" )
+mean( as.numeric(grades), na.rm=TRUE)
+
+
+# another answer
+grades = c("NA", "75",  "NA", "85", "90", "missing", "70" )
+mean( as.numeric(grades)[!is.na(as.numeric(grades))])
+```
+:::
+
+## QUESTION 33
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 33
+# 
+# It is VERY important to understand how to use R's debugger.
+# This question tests your knowledge of how to use R's debugger.
+# You do NOT have to write code to answer this question.
+# Rather your job is to write what you see as the debugger runs
+# as described in the instructions below.
+#
+# Refer to the function, strangeFunction, that appears below these instructions.
+# This function is written with several advanced R concepts that you did not learn
+# about yet. You are not expected to understand all of this code. Keep reading
+# to understand what you ARE supposed to do.
+#
+#
+#     strangeFunction = function(){
+#       yourName = "John Doe"
+#       functionText = paste0(capture.output(strangeFunction),collapse="")
+#       functionText = strsplit(functionText,"")[[1]]
+#       functionText = functionText[ ! ( functionText %in% c("\n","\t"," ","\r")) ]
+#       endOfFunction = max(which (functionText == "}"))
+#       functionText = functionText[ 1:endOfFunction ]
+#       s = sum(sapply(functionText,function(c)as.numeric(charToRaw(c))))
+#       set.seed(s)
+#       x = trunc(runif(1) * 10000)
+#       message = paste0("Don't pay attention to this return value.",
+#                        " What is the value of x as the function runs?",
+#                        " Use the debugger to figure it out.",
+#                        " By the way, if you change the code in the function AT ALL",
+#                        " the answer will be different :). The only way to",
+#                        " get the right answer is to use the debugger.")
+#       return(message)
+#     }
+#
+# strangeFunction, doesn't seem to do anything useful 
+# strangeFunction() will always output the following message:
+#
+#   > strangeFunction()
+#   [1] "Don't pay attention to this return value. 
+#        What is the value of x as the function runs? 
+#        Use the debugger to figure it out. 
+#        By the way, if you change the code in the 
+#        function AT ALL the answer will be different :). 
+#        The only way to get the right answer is to use the debugger."
+#
+# To answer this question do the following:
+# 
+#    1. Change the value of the variable yourName to your actual name.
+#       The function currently has:
+#           yourName = "John Doe"
+#
+#       Change "John Doe" to your actual name, for example:
+#           yourName = "Michael Greenspilzingower"
+#
+#       
+#    2. The following line appears in the function:
+#
+#           x = trunc(runif(1,1,100000))
+#
+#       Use the debugger to find the value of x as the function runs.
+#
+#       Note that everyone should have their own name in the variable yourName.
+#       This function uses some advanced R concepts to ensure that 
+#       changing the code of the function will change the value that is 
+#       assigned to x in unpredictable ways. Therefore since everyone 
+#       changed the code of the function by adding their own name, everyone should
+#       have a different answer to this question.
+#
+#       Your answer should include a copy of your version of the function as well 
+#       as the value of x that you got from the debugger.
+#       For example, Michael Greenspilzingower should report his answer as follows:
+#
+#               For my version of the function, the value of x is : 9281
+#               My version of the function is below.
+#
+#                   strangeFunction = function(){
+#                      yourName = "Michael Greenspilzingower"
+#                      functionText = paste0(capture.output(strangeFunction),collapse="")
+#                      functionText = strsplit(functionText,"")[[1]]
+#                      functionText = functionText[ ! ( functionText %in% c("\n","\t"," ","\r")) ]
+#                      endOfFunction = max(which (functionText == "}"))
+#                      functionText = functionText[ 1:endOfFunction ]
+#                      s = sum(sapply(functionText,function(c)as.numeric(charToRaw(c))))
+#                      set.seed(s)
+#                      x = trunc(runif(1) * 10000)
+#                      message = paste0("Don't pay attention to this return value.",
+#                                       " What is the value of x as the function runs?",
+#                                       " Use the debugger to figure it out.",
+#                                       " By the way, if you change the code in the function AT ALL",
+#                                       " the answer will be different :). The only way to",
+#                                       " get the right answer is to use the debugger.")
+#                      return(message)
+#                   }
+#
+#       NOTE: If you leave the name as John Doe, then the value of x is 7388.
+#       You can use this to check to make sure that you are doing the question
+#       correctly before trying your own name.
+#-----------------------------------------------------------------------------------
+```
+
+## QUESTION 34
+```{r}
+#-----------------------------------------------------------------------------------
+# QUESTION 34
+#
+# create a function named equal values that takes two vectors, v1 and v2,
+# and returns a vector of those values that are equal and in the same
+# positions in the two vectors.
+#
+#  EXAMPLE
+#    > equal( c(100,200,300,400), c(50, 200, 60, 400))
+#    [1] 200 400
+#-----------------------------------------------------------------------------------
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+equal = function( v1, v2) {
+  return ( v1 [ v1 == v2])
+}
+
+equal( c(100,200,300,400), c(50, 200, 60, 400))
+```
+:::
+
+## QUESTION 35
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 35
+#
+# Create a function named mixAndPaste that takes the following arguments and 
+# returns the value described below.
+#
+# Arguments
+#    x   -   a vector
+#    y   -   a vector of the same length as x
+#
+# Return value
+#    A character vector that pastes the values of x and y together. 
+#    The 1st, 3rd, 5th, etc positions of the return value should have the 
+#    x value before the y value.
+#    The 2nd, 4th, 6th, etc positions of the return value should have the
+#    y value before the x value.
+#
+# EXAMPLE1
+#   > mixAndPaste( c("a","b","c","d","e","f"), c("u","v","w","x","y","z"))
+#   [1] "au" "vb" "cw" "xd" "ey" "zf"
+#
+# EXAMPLE2
+#   > mixAndPaste(c("apple", "pear", "lemon", "plum"),c("RED", "GREEN", "YELLOW", "PURPLE"))
+#   [1] "appleRED"    "GREENpear"   "lemonYELLOW" "PURPLEplum" 
+#
+# HINTS
+#   a. You can use more than one line of code in the function definition.
+#   b. You can create new "local" variables in the function definition.
+#   c. Figure out how to create two new local variables in the function.
+#      One of the local variables should contain the first vector to be pasted 
+#         (e.g. using the values from EXAMPLE1 above, this first vector
+#          would contain "a" "v" "c" "x" "e" "z")
+#      and another vector should contain the second vector to be pasted
+#         (e.g. using the values from EXAMPLE1 above, this second vector
+#          would contain "u" "b" "w" "d" y" "f".
+#      Then the function should reutrn the values of those vectors pasted together.
+#   d. To accomplish c. above, remember that you can assign values to specific
+#      locations in a vector, as long as that vector already exists.
+#-----------------------------------------------------------------------------------
+
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+# The following is one possible suggested answer.
+# There can be many other correct answers.
+
+mixAndPaste = function(x,y) {
+  # To explain how this code works let's assume for example that 
+  # the function was called as:
+  #   mixAndPaste(c("apple", "pear", "lemon", "plum"),c("RED", "GREEN", "YELLOW", "PURPLE"))
+  #
+  # Therefore
+  #    x is c("apple", "pear", "lemon", "plum") and
+  #    y is c("RED", "GREEN", "YELLOW", "PURPLE")
+  #
+  # The goal in the code below is to get the vector named left to be 
+  #      c("apple", "GREEN", "lemon", "PURPLE")
+  #
+  # and to get the vector named right to be 
+  #      c("RED", "pear", "YELLOW", "plum")
+  #
+  # Then if we paste together the vectors left and right, we'll get the 
+  # result we want, i.e. 
+  #      c("appleRED", "GREENpear", "YELLOWlemon", "plumPURPLE")
+
+  # set the local variable, left, to x, e.g. left = c("apple", "pear", "lemon", "plum") 
+  left = x   
+  
+  # replace the even positions in left with the even positions from y
+  # e.g. after this line runs, left will be c("apple", "GREEN", "lemon", "PURPLE")
+  left[seq(2,length(x),by=2)] = y[seq(2,length(x),by=2)]   
+  
+  # Now set the local variable, right, to y, eg. right = c("RED", "GREEN", "YELLOW", "PURPLE")
+  right = y
+
+  # replace the even positions in right with the even positions from x
+  # e.g. after this line runs, right will be c("RED", "pear", "YELLOW", "plum")
+  right[seq(2,length(x),by=2)] = x[seq(2,length(x),by=2)]   
+  
+  return(paste0(left,right))
+}
+
+mixAndPaste( c("a","b","c","d","e","f"), c("u","v","w","x","y","z"))
+
+mixAndPaste(c("apple", "pear", "lemon", "plum"),c("RED", "GREEN", "YELLOW", "PURPLE"))
+```
+:::
+
+## QUESTION 36
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 36
+#
+# The built-in function, which, returns the positions in a logical vector that are TRUE.
+# For example
+#
+#    > which ( c(FALSE, TRUE, FALSE, FALSE, TRUE)) # 2 5 because those positions are TRUE
+#    [1] 2 5   
+#
+#    > nums = c(9999,3,950,222,-5)
+#    > which(nums > 100)    # 1 3 4   because the 1st, 3rd and 4th values are greater than 100
+#    [1] 1 3 4
+#
+#    > which ( c(FALSE, FALSE) ) # integer(0) ... this means that no values are TRUE
+#    integer(0)
+#
+# Create a function named, myWhich, that does the same thing as the built-in, "which" function.
+# Your function should takee a single argument named x.
+# Do NOT use the which command in your code.
+#
+#  EXAMPLE1
+#    > myWhich ( c(TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE)) # 1 2 5 because those positions are TRUE
+#    [1] 1 2 5   
+#
+#    > nums = c(10,3,950,222,-5)
+#    > myWhich(nums > 100)    # 3 4   because the 3rd and 4th position values are greater than 100
+#    [1] 3 4
+#
+#    > myWhich ( c(FALSE, FALSE) ) # integer(0) ... this means that no values are TRUE
+#    integer(0)
+#
+# HINTS
+#    - Create a local variable that contains the position numbers from 1 until the last
+#      position in x. Return some of the values from that local variable.
+#-----------------------------------------------------------------------------------
+
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+myWhich = function(x){
+  nums = 1:length(x)
+  return ( nums[x])
+}
+
+myWhich( c(TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE))
+```
+:::
+
+## QUESTION 37
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 37
+#
+# Create a function named nextValue that takes the following arguments:
+#
+# Arguments:
+#      vec   - expected to be a vector
+#      position  - is a position in the vector, expected to be between 1 and length(wordVec)
+#
+# There is obviously a value at the specified position in vec.
+# The function should return the value from vec that is alphabetically (if vec is character)
+# or numerically (if vec is numeric) right after the specified value. See the examples below.
+#
+# HINTS
+#       - you may create local variables in your function to help you 
+#         work through the ideas
+#
+#       - use the sort function to help you
+#
+#       - realize that positions after the last value in a vector are NA
+#      
+#    
+#
+# EXAMPLE1
+#   > # banana is in the 4th position, "car" is alphabetically after "banana"
+#   > nextValue (vec = c("fox", "car", "apple", "banana", "deer", "ball", "elephant"),
+#                position = 4)
+#   [1] "car"
+#
+# EXAMPLE2 (same words as example1)
+#   > # "deer" is in the 5th position, "elephant" is alphabetically after "deer"
+#   > nextValue (vec = c("fox", "car", "apple", "banana", "deer", "ball", "elephant"),
+#                position = 5)
+#   [1] "elephant"
+#
+# EXAMPLE3 (same words as example1)
+#   > # The 1st word is "fox" and it is the last word alphabetically, so return NA
+#   > nextValue (vec = c("fox", "car", "apple", "banana", "deer", "ball", "elephant"),
+#                position = 1)
+#   [1] NA
+#
+# EXAMPLE4 (this time with a numeric vector)
+#   > # In this example, the value in the 2nd position is 425.
+#   > # 690 is the next value numerically after 425.
+#   > nextValue ( c(100, 425, 50, 400, 690, 800, 200), 2 )    # 690
+#   [1] 690
+#-----------------------------------------------------------------------------------
+
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+nextValue = function( vec, position ) {
+  sorted = sort(vec)
+  nums = 1:length(vec)
+  newPosition = nums [ sorted == vec[position] ]
+  return(sorted[newPosition+1])
+}
+
+# EXAMPLE1
+nextValue (vec = c("fox", "car", "apple", "banana", "deer", "ball", "elephant"),
+           position = 4)
+#   [1] "car"
+
+# EXAMPLE2
+nextValue (vec = c("fox", "car", "apple", "banana", "deer", "ball", "elephant"),
+                position = 5)
+#   [1] "elephant"
+
+# EXAMPLE3 (same words as example1)
+nextValue (vec = c("fox", "car", "apple", "banana", "deer", "ball", "elephant"),
+                position = 1)
+#   [1] NA
+
+# EXAMPLE4 (this time with a numeric vector)
+nextValue ( c(100, 425, 50, 400, 690, 800, 200), 2 )    # 690
+#   [1] 690
+```
+:::
+
+## QUESTION 38
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 38
+#
+# Create a function, wordsBetween
+# Arguments:
+#      wordVec   - expected to be a character vector of words (or any other character data)
+#      wordA     - a single word
+#      wordB     - another single word
+#
+# The function should return a vector of the words from wordVec that 
+# appear in wordsBetween that are alphabetically between wordA and wordB.
+#
+#   EXAMPLE
+#     # DEFINE FUNCTION wordsBetween HERE
+#     > words = c("car", "bicycle", "harley", "truck", "boat", "caravan", "minivan", "plane")
+#     > wordsBetween(words, "cat", "monkey")
+#     [1] "harley" "minivan" 
+#-----------------------------------------------------------------------------------
+
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+wordsBetween = function(wordVec, wordA, wordB){
+  wordVec[ wordVec >= wordA & wordVec <= wordB]
+}
+
+words = c("car", "bicycle", "harley", "truck", "boat", "caravan", "minivan", "plane")
+wordsBetween(words, "cat", "monkey")
+```
+:::
+
+## QUESTION 39 
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 39 
+#
+# Write the number 0.00031 in R's version of scientific notation.
+#-----------------------------------------------------------------------------------
+
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+3.1e-4   # run this line to see that this is equal to 0.00031
+```
+:::
+
+## QUESTION 40 
+```{r}  
+#-----------------------------------------------------------------------------------
+# QUESTION 40 
+#
+# After running an R command R responded with 
+#    [1] 1.23e+12
+# Explain what that means. Write that number in a more familiar form? 
+#-----------------------------------------------------------------------------------
+
+```
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+# ANSWER
+#
+# 1.23e+12 is simply a number written using R's version of "scientific notation". 
+# 1.23e+12 means 1.23 times 10^12. 
+#
+# You can read the letter "e" in 1.23e+12 as "times 10 to the power of" to get
+# 1.23 times 10 to the power of +12.
+#
+# R uses "scientific notation" to concisely write numbers that are very very large,
+# and numbers that are very very small.
+# eg. 9870000000000 is equivalent 9.87e+12
+# and 0.000000000987 is equivalent to 9.87e-10
+#
+# You can figure out the value of 1.23e+12 as a more familiar looking number by
+# moving the decimal point from 1.23 to the right 12 times.
+# Moving to the right twice gets 123, but then you need to move to the right 10 more times,
+# so simply add 10 more zeros to get 1230000000000.
+```
+:::

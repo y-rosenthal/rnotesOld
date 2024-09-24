@@ -1,0 +1,264 @@
+# deubugger   (also known as the "browser")
+
+```
+##################################################.
+##################################################.
+#
+# deubugger   (also known as the "browser")
+#
+##################################################.
+##################################################.
+
+# R's "debugger" feature can help you to understand what exactly is happening 
+# as a function is running. Exactly what this means and how this works is 
+# described below. Many programming languages contain a "debugger" feature.
+# R's documentation sometimes refers to R's debugger as a "browser".
+
+# The following function will help us to demonstrate these concepts
+
+longestSeq = function(nums) {
+  lowest = min(nums)
+  highest = max(nums)
+  lowest:highest
+}
+
+# Example of using the function
+longestSeq( c(5, 7, 3, 4) )   # 3 4 5 6 7
+
+###
+### IMPORTANT!!!!
+###
+### READ EACH COMMENT BELOW BEFORE YOU RUN THE CODE!!!
+###
+
+# To "debug" a function, you can run the command "debugonce( SOME_FUNCTION )"
+# This command doesn't initially appear to do anything. However, it tells R
+# that the next time the function SOME_FUNCTION is run, R should start the 
+# "debugger". 
+
+debugonce(longestSeq)
+
+# When we eventually call longestSeq, we will NOT immediately see the results
+# of the function. Rather, because we had previously called debugonce(longestSeq) the 
+# "debugger" (or "browser") will start. You will see the following:
+#
+#    1. In RStudio, a new tab will open in the "source" window pane.
+#       The new tab will contain just the code for the function, longestSeq.
+#       The code for the function will be highlighed in YELLOW.
+#
+#    2. The contents of the "Environment" window pane will change. The variables that
+#       were previously displayed in the "Environment" window will no longer
+#       be visible. Instead, only the arguments to the function will initially be visible.
+#
+#    3. The "prompt" in the console window will change from ">" to "Browse[2]>".
+#       (Don't worry about the number 2 for now).
+#
+#    4. In RStudio, several buttons will be added to the top of the Console window pane.
+#       The first button says "Next" and the last button says "Stop". There are a 
+#       few other buttons but for now we will only focus on "Next" and "Stop".
+#
+#    5. In RStudio a new window-pane entitled "Traceback" will open.
+#       (If you don't see the "Traceback" window pane, you can choose the following
+#       menu choices:  "View | Panes | Show All Panes" )
+#
+# When you are using the debugger, the code that is highlighted in YELLOW line does
+# not actually do anything until you type the "n" command (or equivalently until you
+# press the "next" button that appears at the top of the "console" window).
+# When you type the "n" command ("n" stands for "next"), the debugger will cause
+# only one line of code from the function to run. To execute the next line of code
+# you can type the "n" command again (or press the "Next" button again). You can
+# keep doing this to move through the function's code.
+#
+# As you proceed through the code one line at a time (by using the "n" command),
+# you will see the variables in the "Environment" window
+# change to show the current values of the arguments and the local variables in the 
+# function. You will not see the values of the "global" variables in the 
+# Environment window.
+#
+# While you are running the function one line at a time (by pressing "n" or the "Next" button)
+# you can type any code you like in the Console window pane. You can type code in
+# the Console that refers to local variables and arguments in the function. 
+# This technique is very useful to figure out what is going on inside a function as
+# the function is running. 
+# 
+# If you keep typing the "n" command (or pressing the "Next" button) you will eventually
+# come to the end of the function. At that point, the function will "return" and
+# the debugger will stop.
+#
+# If at any point while using the debugger, you want to exit the debugger you can
+# type the "Q" command to quit the debugger (note that the command is CAPITAL "Q",
+# a lowercase "q" will not work). You can also press the "Stop" button to accomplish
+# the same thing.
+#
+# We will discuss other features and commands of the debugger later in the course.
+
+longestSeq( c(6, 2, 5, 8) ) # this starts the debugger
+
+
+
+# If you run longestSeq again, the debugger will NOT start.
+
+longestSeq( c(100, 98, 103) ) # this will NOT start the debugger
+
+# If you want to start the debugger again, you need to run the 
+# debugonce command again.
+
+debugonce(longestSeq)
+
+longestSeq( c( 8, 5, 7) )   # this DOES run the debugger.
+
+
+# Another option - the "debug" and "undebug" commands:
+# 
+# Note that in addition to the "debugonce" command, there is a "debug" command
+# If you run the command "debug(longestSeq)" then EVERY TIME you call the 
+# longestSeq function the debugger will start. This can become confusing.
+# In order to stop the debugger from starting every time, you can run the 
+# command "undebug(longestSeq)". However, until you get used to using these
+# commands I highly recommend that you only use the debugonce command and do 
+# not use the debug command.
+
+
+
+
+###############################################################################.
+# NOTE - another option is the browser() function.
+###############################################################################.
+# The browswer() function presents another useful technique to help you
+# activate the debugger.
+#
+# We will not cover it now (maybe later). If you're curious, you can search online
+# for a tutorial on using the browser function in R. Section 22.4 of this page
+# addresses it but you might find better explanations online ...
+#
+#     https://adv-r.hadley.nz/debugging.html
+#
+###############################################################################.
+
+
+###############################################################################.
+# Practice using the debugger
+###############################################################################.
+# QUESTION - part a  ####
+# 
+#   On a test, a student was asked to write a function named, swapFirstAndLast, 
+#   that swaps the first value in a vector with the last value in the vector.
+#   For example:
+#     
+#     > swapFirstAndLast(c(10,20,30,40,50))
+#     [1]  50  20  30  40  10
+#
+#   The student tried to write the function but it does NOT work correctly.
+#   Use the debugger to find and fix the problem with the student's code.
+#   To answer this question correctly, you
+#   MUST EXPLAIN WHY the function did not work as written.
+#
+#     swapFirstAndLast = function(vec) {
+#        vec[1] = vec[length(vec)]
+#        vec[length(vec)] = vec[1]
+#        return(vec)
+#     }
+#   
+###############################################################################.
+
+# Fix this function so it works correctly
+# Use the debugger to help you find the problem.
+# 
+# You must ALSO EXPLAIN WHY the function as written didn't work correctly.
+
+swapFirstAndLast = function(vec) {
+  vec[1] = vec[length(vec)]
+  vec[length(vec)] = vec[1]
+  return(vec)
+}
+
+# The following SHOULD return :              50 20 30 40 10
+# However the function as coded now returns: 50 20 30 40 50
+# Use the debugger to help find the bug.
+# Then rewrite the code to fix the bug.
+swapFirstAndLast(c(10,20,30,40,50)) 
+
+###############################################################################.
+# Practice using the debugger 
+###############################################################################.
+# QUESTION  - part b ####
+# 
+# When the student couldn't get the function to work, he took
+# a second, different approach, to writing the function.
+# However, this ALSO didn't work.
+#
+# Use the debugger to find the problem with this version of the function.
+# To answer this question correctly, you
+# MUST EXPLAIN WHY the function did not work as written.
+#############################################################################.
+
+# Fix this function so it works correctly
+# Use the debugger to help you find the problem.
+# 
+# You must ALSO EXPLAIN WHY the function as written didn't work correctly.
+
+swapFirstAndLast = function(vec) {
+  first = vec[1]
+  middle = vec[2:length(vec)-1]
+  last = vec[ length(vec) ]
+  answer = c(last,middle,first)
+  answer
+}
+
+#-------------------------------------------------------------------------.
+# The following are "test cases" that could help you debug your function.
+# Use the debugger to try to figure out why the function is returning 
+# the wrong answer.
+# Then, try to fix the code so that it returns the correct answer.
+# Make as few changes to the current code as possible.
+#-------------------------------------------------------------------------.
+
+# The following SHOULD return :              50 20 30 40 10
+# However the function as coded now returns: 50 10 20 30 40 10
+# Use the debugger to help find the bug.
+swapFirstAndLast(c(10,20,30,40,50)) 
+
+# The following SHOULD return :              80 20 30 40 50 60 70 10
+# However the function as coded now returns: 80 10 20 30 40 50 60 70 10
+# Use the debugger to help find the bug.
+swapFirstAndLast(c(10,20,30,40,50,60,70,80)) 
+
+#----------------------------------------------------------------.
+# Explain WHY the function as written didn't work correctly.
+# What was your fix?
+#----------------------------------------------------------------.
+
+# YOUR ANSWER GOES HERE
+
+
+
+
+#-------------------------------------------------------------------------.
+# The following "test cases" also don't return what they should.
+#
+# By using the debugger, it's not so hard to figure out why they are
+# returning the wrong values. However, fixing the function so that 
+# it works for all of these test cases is a little more difficult.
+# 
+# When you try to fix the function, you can try to use the following 
+# to help you (a) the length function (b) the ifelse() function
+# (c) you can write a new function to help you get this one to work
+# The new function can be called from the swapFirstAndLast function.
+#-------------------------------------------------------------------------.
+
+# The following SHOULD return:                10
+# However, the function as coded now returns: 10 10 10 
+swapFirstAndLast(10)
+
+# The following SHOULD return:                20 10
+# However, the function as coded now returns: 20 10 10 
+swapFirstAndLast(c(10,20))
+
+
+#----------------------------------------------------------------.
+# Explain WHY the function as written didn't work correctly.
+# What was your fix?
+#----------------------------------------------------------------.
+
+# YOUR ANSWER GOES HERE
+```

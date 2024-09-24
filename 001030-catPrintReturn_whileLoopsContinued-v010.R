@@ -1,0 +1,623 @@
+rm(list=ls())
+ 
+#----------------------------------------------------------------
+# invisible return values
+#----------------------------------------------------------------
+
+# SOMETHING THAT OFTEN CONFUSES NEW R PROGRAMMERS
+# is that assignment statements have a value, but that
+# value is "invisible".
+
+someNumber <- 100    # this will not display anything (the value is "invisible")
+someNumber           # this will display 100
+
+# In the following, 
+#   secondNumber will become 25 and 
+#   thirdNumber will become 50
+#   NOTHING will be dipslayed (the values of both assignments are INVISIBLE)
+thirdNumber <- (secondNumber <- 25) * 2   # The assignemnt statement has a value
+
+secondNumber # The assignment on the right worked
+thirdNumber  # So did the assignment on the left
+
+# If you use an assignment as the last line of a function, the value will be 
+# "returned" but will not be displayed.
+# We say that the return value is "invisible"
+thisReturnsAnInvisibleValue <- function( n ){
+  n <- n + 1
+  n <- n * 2    # This assigns to the LOCAL variable, but that is gone when the function is over.
+}
+
+# This will not display anything ...
+thisReturnsAnInvisibleValue(1)  # The return value is "invisible".
+
+# It has a value though and will work if used in a larger context.
+thisReturnsAnInvisibleValue(2) + 100   # expression is not invisible
+
+# It has a value though and will work if used in a larger context.
+x <- thisReturnsAnInvisibleValue(3)    # assignment works
+x
+
+#........................................................
+# You can make any function return an "invisible" value 
+# by using the invisible function for the return value.
+#........................................................
+addOne <- function(x) {
+  return ( x + 1 )
+}
+
+addOneInvisibly <- function (x) {
+  return ( invisible(x + 1) )
+}
+
+addOne(100)                # This displays the return value
+addOneInvisibly(100)       # Return value is INVISIBLE
+addOneInvisibly(100) + 0   # Return value can be used in a larger expression to make it visible
+
+
+
+
+
+
+
+#------------------------------------------------------
+# Another example of a while loop - Fibonacci sequence
+#------------------------------------------------------
+
+# The numbers 0 1 1 2 3 5 8 13 21 34 55 89 144 ...
+# are the first few number in the infinite sequence
+# of "Fibonacci numbers". The first two numbers are 0 and 1
+# Every other number in the sequence is the sum of the
+# two numbers that precede it. 
+#
+# Write a function fib(n)  that returns the first
+# n numbers from the fibonacci sequence. 
+#
+# n is expected to be a single non-negative whole number.
+# The function should stop with an appropriate 
+# error message if it is not.
+#
+# EXAMPLE:
+#    > fib(1)
+#    0
+#
+#    > fib(4)
+#    0 1 1 2
+#
+#    > fib(8)
+#    0 1 1 2 3 5 8 13
+
+fib <- function(n){
+  
+  if (!is.numeric(n) | length(n) != 1 | n <= 0 | trunc(n) != n){
+    stop("n must be a single whole non-negative number")
+  }
+  
+  if (n == 1){
+    return(0)
+  } else if (n == 2) {
+    return(c(0,1))
+  }
+  
+  answer <- c(0,1)
+  while(length(answer) < n){
+    twoPrevious <- answer[length(answer)-1]
+    onePrevious <- answer[length(answer)]
+    answer <- c(answer, onePrevious+twoPrevious )    
+  }
+  
+  return(answer)
+}
+
+fib(0)
+fib(1)
+fib(4)
+fib(8)
+fib(20)
+lapply(1:10, fib)
+
+debugonce(fib)
+
+fib(6)
+
+
+##################################################
+##################################################
+##
+## Remember the difference between stop
+## and return function. 
+##
+## - return gives back a value that is incorporated into the command that called the function
+##
+## - stop will cause the entire command that included the function call to stop with an error
+##
+##################################################
+##################################################
+x <- fib(6)   # The value is returned so no value is displayed since the returned value is assigned to x
+x
+
+
+# In the following fib(6) ends with a return command. Therefore
+# the output of fib(6) is incorporated into the full command. i.e.
+# 
+#   original:                 rep(fib(6) + 100, 2)
+#   becomes ...               rep(c(0,1,1,2,3,5) + 100, 2)
+#   which becomes ...         rep(c(100,101,101,102,103,105),2)
+#   which finally becomes ... 100 101 101 102 103 105 100 101 101 102 103 105
+
+rep ( fib(6) + 100 , 2)    # WORKS CORRECTLY: 100 101 101 102 103 105 100 101 101 102 103 105
+
+
+# In the following, fib(6.5) causes the fib function to stop with an error.
+rep ( fib(6.5) + 100 , 2)    # ERROR 
+
+
+
+rm(list=c("a","b"))  # remove the variables a and b.
+
+a <- rep ( fib(6) + 100 , 2) # NOTHING IS DISPLAYED since the value is assigned to the variable, a
+a                            # 100 101 101 102 103 105 100 101 101 102 103 105
+
+b <- rep ( fib(6.5) + 100 , 2)    # ERROR - since this stops with an error, the whole command stops and nothing is assigned to b
+b                                 # ERROR - b doesn't exist since the whole command stopped with an error.
+
+
+
+################################################################## 
+################################################################## 
+##
+## Different ways of showing output
+##
+## ( Note that NONE of the following ways should
+##   be used to "return" a value from a function. )
+##
+##
+## - stop
+##    o used to stop with an ERROR
+##
+## - cat
+##    o can only be used with vectors
+##    o may use multiple arguments
+##    o \n is displayed as a new-line (i.e. ENTER) character
+##      \t is displayed as a tab character
+##      \' is displayed as an apostrophe
+##      \" is displayed as a quote
+##    o the "value" of cat is NULL
+##
+## - print
+##     o can be used with ANY datatype
+##     o may only use one argument
+##     o escape sequences (i.e. \n, \t, \', \" and \\ ) are displayed with the \
+##     o the value of print is the actual value of the argument
+##
+##
+## - return - this is the only method that can "return" a value
+##            from a function. If you don't explicitly call
+##            the return function, then the last value to be 
+##            calculated in the function is returned.
+################################################################## 
+################################################################## 
+
+# See help pages for official documentation.
+# The "official" help pages may be somewhat hard to understand
+# for people who are new to R programming
+
+?stop
+?cat
+?print
+?return
+
+#----------------------------------------------------------------
+# cat just displays information
+#
+# print returns info as a vector, dataframe or other R object
+#----------------------------------------------------------------
+
+cat("hello there")     # hello there    (just displays info)
+
+print("hello there")   # [1] "hello there"  (returns info as a vector)
+
+
+#----------------------------------------------------------------
+# cat can only be used to display vectors
+#
+# print can be used to display ANY R datatype (e.g. vectors, dataframes, lists, etc)
+#----------------------------------------------------------------
+
+df <- data.frame(student=c("joe","sue"), test1=c(85,95), stringsAsFactors = FALSE)
+
+cat(df)  # ERROR - cat can't display dataframes
+
+print(df)  # shows the dataframe
+df
+#----------------------------------------------------
+# cat   CAN display more than one value
+# print CANNOT display more than one value
+#----------------------------------------------------
+
+cat("apple", "orange")    # apple orange   (displays two vectors)
+
+cat(c("apple","orange"))  # apple orange   (displays one vector also)
+
+print("apple", "orange")  # ERROR - can't display more than one vector
+
+print(c("apple","orange"))  #  [1] "apple" "orange"   (displays one vector)
+
+
+#----------------------------------------------------------------
+# cat displays \n as a newline  (i.e. an ENTER)
+#     displays \t as a tab
+#     displays \' as a '
+#     displays \" as a "
+#     displays \\ as a \
+#
+# print displays \ANYTHING as \ANYTHING
+#----------------------------------------------------------------
+
+cat("hello\tthere\n\tJoe")
+cat("Sam said \"How's it going?\" to Sue.")
+cat("This is a backslash : \\")
+
+print("hello\tthere\n\tJoe")
+print("Sam said \"How's it going?\" to Sue.")
+print("This is a backslash : \\")
+
+#----------------------------------------------------------------
+# cat does NOT automatically add "new line characters"
+#
+# print DOES automatically add "new lines"
+#----------------------------------------------------------------
+
+catFruit <- function(){
+  cat("apple")
+  cat("orange")
+  cat("pear")
+}
+
+printFruit <- function(){
+  print("apple")
+  print("orange")
+  print("pear")
+}
+
+catFruit()   # appleorangepear
+printFruit() # [1] "apple"   [1] "orange"   [1] "pear"
+
+catFruitWithNewLines <- function(){
+  cat("apple","\n")
+  cat("orange\n")
+  cat("pear")
+  cat("\n\n")
+  cat("comquat")
+}
+
+catFruitWithNewLines()
+
+
+catFruitWithTabs <- function(){
+  cat("apple","\t")
+  cat("orange\t")
+  cat("pear")
+  cat("\t\t")
+  cat("comquat")
+}
+
+catFruitWithTabs()
+
+#.........................................................
+# Keep this in mind when writing functions with loops!
+#.........................................................
+
+catAllOneLine <- function(numTimes){
+  howMany <- 1
+  while(howMany <= numTimes){
+    cat(howMany)
+    howMany <- howMany + 1
+  }
+}
+
+catWithNewLines <- function(numTimes){
+  howMany <- 1
+  while(howMany <= numTimes){
+    cat(howMany, "\n")
+    howMany <- howMany + 1
+  }
+}
+
+catAllOneLine(3)
+catAllOneLine(20)
+
+catWithNewLines(3)
+catWithNewLines(5)
+
+#-------------------------------------------------------------
+# return values 
+#
+# cat - returns NULL
+#
+# print - returns the value that is printed
+#-------------------------------------------------------------
+
+x <- cat("hello there")     # return value is NULL (this is NOT usually what you want)
+x
+
+rep("hello", 3)       # "hello" "hello" "hello"
+
+# Do NOT use cat inside a larger command. 
+# The following is just wrong.
+rep(cat("hello"), 3)  # cat first displays "hello" then rep returns NULL
+
+
+y <- print("hello there")  # return value is what you'd expect
+y
+
+#....................................................
+# define some functions. we'll use these below
+#....................................................
+funcWithReturn <- function(){
+  return("red")
+}
+
+funcWithCat <- function(){
+  cat("red")
+  cat("orange")
+  cat("yellow")   # the last value to be executed is "returned"
+}
+
+funcWithPrint <- function() {
+  print("red")
+  print("orange")
+  print("yellow") # the last value to be executed is "returned"
+}
+
+#....................................................
+# use the functions 
+#....................................................
+rm(list=c("x","y","z"))
+
+x <- funcWithReturn() # doesn't display anything
+x                     # x has a value
+
+y <- funcWithCat()    # displays redorangeyellow  (right next to each other)
+y                     # y has the value NULL
+
+z <- funcWithPrint()  # displays differnt VECTORS [1]"red"  [1]"orange" [1]"yellow"
+z                     # z has the value that was returned, i.e. "yellow"
+
+#-------------------------------------------
+# SUMMARY:
+# 
+#   1. Only use return to return a value from a function
+#   2. Use print to display any type other than vectors
+#   3. Use cat to display messages to the user. These values are NOT "returned" from the function.
+#   4. Use stop to end a function with an error. The return value is ignored.
+#   5. Use readline to get information from the user by first displaying a prompt.
+#-------------------------------------------
+
+#########################
+#########################
+##
+## While loop
+##
+#########################
+#########################
+
+factorial <- function(num){
+  if (num <0 | !is.numeric(num) | trunc(num) != num | length(num) != 1) {
+    stop("num must be a single positive whole number")
+  }
+
+  answer = 1
+  while(num > 1) {
+    answer <- answer * num
+    num <- num - 1
+  }
+  
+  return(answer)
+}
+
+is.prime <- function( num ) {
+  if (num < 2){
+    return(FALSE)
+  }
+  
+  divisor <- 2
+  while ( divisor < sqrt(num) ) {
+    if (num %% divisor == 0){
+      return(FALSE)   
+    }
+    divisor <- divisor + 1
+  }
+  return(TRUE)
+}
+
+is.prime(17)     # TRUE
+is.prime(35)    # FALSE
+
+
+divisors <- function(num){
+  if (!is.numeric(num) | trunc(num)!=num | num<1 | length(num)!=1){
+    stop("num must be a single positive whole number")
+  }
+  
+  answer <- c(1,num)                    
+  
+  divisor <- 2
+  while(divisor <= sqrt(num)){          
+    if (num %% divisor == 0){
+      answer <- c(answer, divisor)
+      answer <- c(answer, num/divisor)  
+    }
+    divisor <- divisor + 1
+  }
+  
+  answer <- sort(unique(answer))        
+  return(answer)
+}
+
+divisors(100)
+
+divisors(10)
+
+divisors(101)
+
+#------------------------------------------
+# Write a guessing game function
+#------------------------------------------
+
+guessingGame <- function(low=1, high=100){
+  
+  if (!is.numeric(low) | length(low) != 1 | trunc(low) != low |
+      !is.numeric(high) | length(high) != 1 | trunc(high) != high ) {
+    stop("min and max must each be single whole numbers")
+  }
+  
+  if (low >= high){
+    stop("low must be less than high")
+  }
+  
+  num <- trunc(sample(low:high, 1))
+  
+  numGuesses <- 1
+  guess <- as.numeric( readline("guess: ") )
+  
+  while(guess != num) {
+    if (guess < num){
+      guess <- readline("higher, guess again: ")
+    } else if (guess > num) {
+      guess <- as.numeric( readline("lower, guess again: ") )
+    }
+    
+    numGuesses <- numGuesses + 1
+  } 
+  
+  return(numGuesses)  
+}
+
+guessingGame()   
+guessingGame(1,10)   
+
+
+#----------------------------------
+# Display menu to user
+#  1. play guessing game
+#  2. quit
+#
+# If user chooses 1, ask what lowest and highest numbers are
+# then play the game
+# After the game is over display the menu again.
+# ---------------------------------
+
+debugonce(guessingGame)
+guessingGame(1,10)
+
+playGuessingGames <- function(){
+  cat("1. play guessing game\n")
+  cat("2. quit")
+  choice <- as.numeric(readline( "choice: "))    # convert from character to numeric
+  cat("\n")  # skip a line for readability
+  
+  while(choice != 2){
+    lowest <- as.numeric(readline("lowest number: "))    # convert from character to numeric
+    highest <- as.numeric(readline("highest number: "))  # convert from character to numeric
+    numGuesses <- guessingGame(lowest,highest)
+    cat("\nYou guessed the number in ", numGuesses, "guesses.\n\n")
+    
+    cat("1. play guessing game\n")
+    cat("2. quit")
+    choice <- as.numeric(readline( "choice: "))
+    cat("\n")  # skip a line for readability
+  }
+}
+
+playGuessingGames()
+
+############################################################
+############################################################
+##
+## BEREN STUDENTS
+##
+## We briefly mentioned the following concept at the end of 
+## class but we didn't go into it in detail. I'll try to mention it again next class.
+##
+############################################################
+############################################################
+
+
+#################################################################################
+#################################################################################
+##
+## Be careful with "numbers" that are actually "characters" and not "numeric"
+## 
+## - You cannot do math with "character" values, even if they
+##   look like numbers e.g. "10" "20" (you will get an ERROR)
+##
+## - sorting and comparisons (e.g. greater than, less than) for 
+##   character values works differently than sorting and comparisons
+##   for numeric values.
+##
+#################################################################################
+#################################################################################
+
+#------------------------------------------------------------------
+# Character values that would appear "earlier in a dictionary"
+# are considered "less than" character values that would appear
+# "later in a dictionary". Examples:
+#------------------------------------------------------------------
+
+"a" < "b"   # TRUE
+"a" > "b"   # FALSE
+"b" > "a"   # TRUE
+
+"ape" < "apex"  # TRUE
+"apple" < "cat"  # TRUE
+
+#-----------------------------------------------------------------
+# The way character values work with greater than and less than
+# carries over directly to the way that they are sorted, i.e.
+# character values are sorted alphabetically.
+#-----------------------------------------------------------------
+
+sort(c("berry","ape","cat","a","apex","apple"))   # "a" "ape" "apex" "apple" "berry" "cat"  
+
+sort(c("berry","ape","cat","a","apex","apple"),decreasing=TRUE)   #  "cat"   "berry" "apple" "apex"  "ape"   "a"    
+
+#-----------------------------------------------------------------
+# Character values that "look like numbers" (e.g. "10" "20" etc.)
+# are sorted similarly to the way "words" are sorted. Keep reading ...
+#
+# When you sort something alphabetically you look at the first character
+# of each word. Words that start with letters that appear earlier in the
+# alphabet show up earlier in the sorted list than words that start with 
+# characters that appear later in the alphabet.
+# Example:  "apple" sorts before "cat" becasue "a" is before "c" in the alphabet.
+# This is true even though "apple" is a longer word than "cat" is. 
+#
+# Character values that "look like" numbers sort in a similar way. Any
+# "number" that starts with a "1" will sort earlier than any 
+# "number" that startw with a "2". For example "1000" is technically less than
+# "20" since "1000" starts with a "1" and "20" starts with a "2".
+#-----------------------------------------------------------------
+
+"1000" > "20"    # FALSE  (compare as character values)
+"1000" < "20"    # TRUE   (compare as character values)
+
+1000 > 20        # TRUE   (compare as numeric values)
+1000 < 20        # FALSE  (compare as numeric values)
+
+as.numeric("1000") > as.numeric("20") # TRUE (compare as numeric values)
+as.numeric("1000") < as.numeric("20") # FALSE (compare as numeric values)
+
+
+#..........................................................
+# similarly numbers that are stored as "character" values
+# sort similarly to character values.
+#..........................................................
+
+sort( c("2", "20", "5", "123", "1000") )   #   "1000" "123" "2" "20" "5"
+
+sort( as.numeric( c("2", "20", "5", "123", "1000") ) )   # 2 5 20 123 1000
+
+
+
+

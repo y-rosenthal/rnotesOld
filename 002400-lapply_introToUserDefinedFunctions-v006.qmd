@@ -1,0 +1,733 @@
+
+# The following line will remove all variables. 
+# It is important that you run this line today even if you don't usually do this.
+# The code for today's class assumes that certain variables do not exist.
+# 
+# If you really don't want to remove ALL of your variables, 
+# you should at least remove any variable that you have 
+# called "nums" in order the code in today's lesson to work 
+# as intended (you'll understand why later)
+
+# Therefore PLEASE run ONE of the following two commands
+
+rm (list=ls())  # remove all variables  (or if you don't want to, just run the next line)
+
+rm("nums")      # remove the variable "nums" if it exists
+
+##################################################
+##################################################
+##
+## lapply is used to apply a function to
+##  multiple values in a vector or to
+##  multiple entries in a list.
+##
+## lapply returns a list of results of applying the
+## function to each of the values
+##
+## The "l" in the word "lapply" stands for "list".
+## The idea is that you get back a "list" of the
+## return values from each time the function was 
+## applied (or called).
+##
+##################################################
+##################################################
+
+#------------------------------------------------
+# applying a function to multiple values in a vector
+#------------------------------------------------
+
+perfectSquares <- c(25,100,4,36)
+perfectSquares
+
+sqrt(perfectSquares) # gets all the square roots
+
+# The following will "apply" the sqrt function
+# to each of the values in the vector, perfectSquares.
+# The results of the function calls are put in a list and
+# returned as the return value from lapply.
+lapply(perfectSquares, sqrt)   # returns a list of values ...  5 10 2 6
+
+squareRoots <- lapply(perfectSquares, sqrt)  # you can save the result (as would be expected)
+squareRoots
+
+
+#------------------------------------------------
+# applying a function to multiple values in a list
+#------------------------------------------------
+
+stuff <- list ( fruit = c("apple", "pear", "orange", "plum", "peach", "grapes"),
+                 clothing = c("shirt", "pants", "belt"),
+                 grades = data.frame(
+                   students = c("joe", "sam", "sue", "bill"),
+                   grade = c(90,80,85,75),
+                   stringsAsFactors = FALSE
+                 ))
+stuff
+
+# You can also apply a function to each entry in a list.
+# The following gets the length of each entry in the list, stuff.
+
+lapply(stuff, length)  # a list of the numbers 6, 3 and 2 (i.e. lengths of fruit,clothing,grades)
+
+#------------------------------------------------
+# apply a function to multiple values in a dataframe
+#
+# Since a dataframe is a list of vectors (ie a list of the columns)
+# Therefore you can use lapply to apply a function to every column
+#------------------------------------------------
+
+# note that the names of the students in the following dataframe
+# are not in a column of the dataframe. They are the rownames.
+grades <- data.frame( test1 = c(85,80,92,100,70,60,40,95),
+                      test2 = c(80,90,80,90,90,80,90,80),
+                      test3 = c(87,98,90,70,60,70,92,76),
+                      row.names = c("joe","bob","sue","anne","larry","max","jim","fran"),
+                      stringsAsFactors = FALSE)
+grades   
+
+?data.frame
+lapply(grades, mean)   # list of the means of each column
+lapply(grades, max)   # list of the max values in each column
+lapply(grades, min)  # list of the min values in each column
+
+#####################################################
+#####################################################
+##
+## *** CREATING YOUR OWN "USER DEFINED FUNCTIONS". ***
+##
+## It is often useful to have a function
+## that doesn't exist in R. 
+##
+## A "user defined function" is a function that is
+## defined by the "user" of "R", (e.g. YOU!). First you 
+## need to tell R what your new function will do.
+## Then you can actually use the function. 
+##
+## The code that explains to R what the function does
+## is called a "function definition" (some people 
+## may call it a "function declaration"). 
+##
+#####################################################
+#####################################################
+
+# Suppose we have different vectors. 
+# For each vector, we'd like a way to display only 
+# the values that are in the 90's
+testScores <- c(70,88,59,95,92,100,65,69,72,93,87,79)
+otherTestScores <- c(80,90,100,99)
+temperatures <- c(81.5,91.2,85,88,93.5)
+
+# We can do that for each vector, but it requires writing a bunch of code
+# for each vector. The code would be similar for each different vector and 
+# we would have to type a long command for each vector. For example:
+testScores
+testScores[ testScores<=99 & testScores>=90]
+
+otherTestScores
+otherTestScores[ otherTestScores<=99 & otherTestScores>=90]
+
+temperatures
+temperatures[ temperatures<=99 & temperatures>=90]
+
+
+# Another way to do this is to recognize that each of the lines of code
+# follows a specific pattern. We can save ourselves some typing by 
+# creating our own "function".
+#
+# We'll explain more later, but for now, just watch ...
+#
+# If we type the following, we will have created a brand new function
+# called get90s. This function expects a single argument that is 
+# a numeric vector. The function returns only those numbers that 
+# are "in the 90s". We can then use the function on each of our
+# vectors for which we want to extract the numbers in the 90s. 
+
+# The following is the "FUNCTION DEFINITION" of the 
+# function get90s. This code does not actually display anything.
+# Rather it sets up a new function, get90s, that can be used later.
+#
+# nums is known as a "formal argument" for the function (we'll explain 
+# more about how this works later ... for now, just watch ...)
+
+get90s <- function(nums) {
+  return ( nums[ nums<=99 & nums >=90] )
+}
+
+# After we've run the above code, we have a brand new function, get90s,
+# that we can use.
+#
+# The following shows us calling our new function three different times,
+# each time with different data.
+# For each of the following lines, we "pass" a vector
+# to the function. When we do so, the "formal argument", nums, gets
+# the value of the vector we are passing. Then the code 
+# for the function runs. We get the result that is "returned" from the function.
+
+testScores
+otherTestScores
+temperatures
+
+get90s(testScores)      # 95 92 93   nums gets the values in testScores
+
+get90s(otherTestScores) # 90 99      nums gets the values in otherTestScores
+
+get90s(temperatures)    # 91.2 93.5  nums gets the values in temperatures
+
+#-------------------------------------------
+# Let's explain a little more ...
+#
+# We defined a brand new function, get90s, that can be 
+# used in the same way that we use other functions that are 
+# built into R. 
+#
+# It's important to understand that the "formal arguments" to a function
+# are NOT known anywhere outside of the function declaration. 
+# For example, even though nums was a formal argument in the get90s
+# function, it is not available anywhere outside of that function.
+#-------------------------------------------
+
+# We are going to make sure that the variable nums doesn't exist
+# in order to prove a point.
+
+rm(nums)   # this will remove nums if it exists
+nums       # Error: object 'nums' not found  (this variable doesn't exist)
+
+# We can create a similar function to get the 80s from a vector
+get80s <- function(nums) {
+  return ( nums[ nums<=89 & nums >=80] )
+}
+
+nums    # Error: object 'nums' not found  (still doesn't exist)
+
+get80s(testScores)      # 88 87
+get80s(otherTestScores) # 80
+get80s(temperatures)    # 81.5 85.0 88.0
+
+nums    # Error: object 'nums' not found  (still doesn't exist)
+
+#----------------------------------------------
+# "SCOPE" of variables and formal arguments
+#----------------------------------------------
+
+# In the above example, nums, is available as a formal argument
+# within the function definition of get80s. 
+# 
+# nums is NOT available outside of the function.
+# 
+# We say that the "scope" of the variable nums is 
+# just the function definition for get80s.
+
+
+#--------------------------------------------
+# Using user defined functions with lapply
+#--------------------------------------------
+grades
+# Now that we created some new functions, 
+# we can use our own "user defined" functions with lapply.
+lapply(grades, get90s)  # get a list of the 90s grades from each test
+lapply(grades, get80s)  # get a list of the 80s grades from each test
+
+#######################################################
+# Monday Nov 3, 2020 - WE GOT UP TO HERE 
+#
+# We'll continue with the rest of this after the test.
+#######################################################
+
+
+#---------------------------------------------------------
+# 
+# A "user defined function" with more than one argument.
+#
+#---------------------------------------------------------
+
+# The formal arguments for a function are variables that are 
+# only used inside the function itself. There could be more than 
+# one formal argument. For example, the following function
+# returns the values that are between a low value and a high value.
+# The names of the formal arguments are chosen by YOU. (similar
+# to the way YOU choose the names of variables).
+#
+# The words "nums", "lowest" and "highest" were chosen to hint at
+# what they are being used for. 
+
+getValues <- function(nums, lowest, highest) {
+  return ( nums [ nums>=lowest & nums<=highest] )
+}
+
+# To use this function we must provide 3 arguments.
+testScores # show all of the test scores
+getValues(testScores, 80, 100)  # Get the values that are between 80 and 100
+getValues(testScores, 60, 79)    # Get the values that are between 60 and 79
+getValues(testScores, 0, 59)    # Get the values that are between 0 and 59
+
+# Again, remember that the "formal arguments", nums, lowest and highest
+# from the function are NOT available outside of the function definition.
+nums     # Error object 'nums' not found
+lowest   # Error object 'lowest' not found
+highest  # Error object 'highest' not found
+
+# In general a function declaration has the following format:
+#
+#    NAME_OF_FUNCTION <- function ( FORMAL_ARGUMENT1, FORMAL_ARGUMENT2, etc ) {
+#
+#      THIS PART IS KNOWN AS THE "BODY" OF THE FUNCTION
+#      THE BODY IS SURROUNDED BY CURLY BRACES
+#      THE BODY CONTAINS SOME R CODE THAT CAN REFER TO THE FORMAL_ARGUMENTS
+#      THE BODY COULD BE ONE LINE OF CODE OR IT COULD BE MANY LINES OF CODE
+#
+#      SOMEWHERE IN THE BODY, A VALUE IS "RETURNED" FROM THE FUNCTION.
+#      THE RETURN STATEMENT IS OFTEN THE LAST LINE OF CODE IN 
+#      THE FUNCTION DECLARATION, BUT IT DOESN'T HAVE TO BE THE LAST LINE.
+#
+#      return ( THE_VALUE_THAT_IS_RETURNED)
+#    }
+
+# When a function is called, the values in the arguments of the 
+# function call are assigned (or "passed") to the values of the 
+# formal arguments in the function definition. The body of the 
+# function then runs. When the return statement is reached, the value
+# that is being returned BECOMES THE VALUE OF THE FUNCTION CALL
+# and the processing continues with the statement after the 
+# function call. 
+
+# Another example
+weights <- c(150, 170, 158, 169, 110, 166, 149, 161, 320, 144)
+
+getValues ( weights, 160, 169)     # vector of values in 160s
+
+100 + getValues(weights, 160, 169) # 100 + vector of values in 160s
+
+mean(getValues(weights, 160, 169)) # mean( vector of values in 160s )
+
+getValues(weights, 150, 159)       # vector of values in 150s
+
+# The following line of code make two different calls to the getValues function.
+# c( average of values in 150s , average of values in 160s)
+c(mean(getValues(weights, 150, 159)), mean(getValues(weights, 160, 169)))
+
+# same as above, but then these values are multipled by 2 and then added to 100 
+100 + c(mean(getValues(weights, 150, 159)), mean(getValues(weights, 160, 169))) * 2
+
+#------------------------------------------------------
+# *** LOCAL VARIABLES ***
+#
+# Function definitions may also introduce variables. 
+#
+# Variables that are created inside of a function are
+# known as LOCAL VARIABLES.
+#
+# These variables are NOT avaiable outside of the function definition.
+# We say that the "scope" of the local variables 
+# is inside of the function definition.
+#
+# The variables that are used inside a function definition are known as 
+# "local" variables since they are only known "locally" inside the function 
+# definition.
+#------------------------------------------------------
+
+# The function swapHalves takes a vector, vec, as input.
+#
+# The function returns a new vector with the first of half and last
+# half of the vector it was passed reveresed.
+#
+# The formal argument, vec, is expected to be passed a vector.
+
+#......................................................................
+# To make a point, we will remove the variables firstHalf and lastHalf
+# before defining the function. This is not required but will
+# help me to explain a concept. The point is that these variables
+# will be created only inside the function definition, but they are 
+# not available outside of the function definition.
+#......................................................................
+
+rm(list=c("firstHalf", "lastHalf"))  # remove these variables if they exist
+firstHalf   # Error: object 'firstHalf' not found   (variable doesn't exist)
+lastHalf    # Error: object 'lastHalf' not found   (variable doesn't exist)
+
+swapHalves <- function (vec) {
+  firstHalf <- vec[1:(length(vec)%/%2)]             # firstHalf is a LOCAL variable (created in the function definition)
+  lastHalf <-  vec[(length(vec)%/%2+1):length(vec)] # lastHalf is a LOCAL variable (created in the function definition)
+  return ( c(lastHalf, firstHalf) )
+}
+
+firstHalf # Error ... (variable still doesn't exist outside of the function)
+lastHalf  # Error ... (variable still doesn't exist outside of the function)
+
+# setup some data
+values <- c(10, 20, 30, 111, 222, 333)
+students <- c("al", "bob", "carol", "david", "ed", "fran")
+
+# use the function with different data each time
+values
+swapHalves (values)
+students
+swapHalves(students)
+
+# The local variables still do not exist ouside of the function definition.
+firstHalf # Error ... (variable still doesn't exist outside of the function)
+lastHalf  # Error ... (variable still doesn't exist outside of the function)
+
+
+# The variables firstHalf and lastHalf do not exist outside of the function definition.
+firstHalf   # Error: object 'firstHalf' not found
+lastHalf   # Error: object 'lastHalf' not found
+
+
+#---------------------------------------------------
+#
+# LOCAL VARIABLES
+#
+# A local variable is a variable that is assigned 
+# a value inside of a function definition.
+#
+# Variables that are defined outside the function are "hidden" 
+# within the function definition by "local variables"
+#
+#---------------------------------------------------
+
+# The following is a "global" variable.
+# It is defined outside of the function defintion
+num <- 999
+
+# The function, doSomething, creates a local variable 
+# with the same name, num. The local variable is
+# a TOTALLY DIFFERENT VARIABLE. It does NOT affect
+# the value of the global variable AT ALL.
+doSomething <- function(x){
+  num <- 2
+  return (num * x)
+}
+
+doSomething(10) # 20
+doSomething(50) # 100
+
+# The global variable, num, is unaffected by the fact
+# that the local variable, num, was assigned a different value.
+
+num   # still 999. The value of the "global" variable, num, was not changed at all.
+
+
+#---------------------------------------------------
+#
+# GLOBAL variables
+#
+# A variable that is created outside of all functions is a "global" 
+# variable. 
+#
+# As we just saw above,
+# if the function definition assigns a new value to the variable, then 
+# it is actually creating as new and different, local, variable with 
+# the same name as the global variable. 
+#
+# However, if the function definition doesn't assign a new value
+# then the global variable is "visible" within the function definition
+# and can affect the way the function works. 
+#
+# We say that the "scope" of a GLOBAL variable includes the entire
+# environment, i.e. GLOBAL variables can be referenced both inside and outside
+# of function definitions.
+#
+# *** IN GENERAL, DO NOT USE GLOBAL VARIABLES ***
+# It's important to understand the concept of GLOBAL variables. 
+# However, long programs that use global variables can be hard to understand
+# when something goes wrong. It is considered
+# very bad programming style to rely on global variables. Therefore,
+# in general, do NOT use global variables to write functions.
+#
+#---------------------------------------------------
+
+# The following is a "global" variable.
+# It is defined outside of the function defintion
+multiplier <- 3
+
+# Since the following function, doesn't assign a new value
+# to the multiplier variable, the global variable, multiplier,
+# IS available for use within the function definition.
+multiply <- function(x){
+  return (multiplier * x)
+}
+
+multiply(10) # 30
+multiply(50) # 150
+
+# If we change the value of the global variable, the 
+# function will now work differently.
+multiplier <- 4
+multiply(10) # 40
+multiply(50) # 200
+
+# This is known as a "SIDE EFFECT" of changing the global
+# variable. Side effects like this can make long programs hard
+# to understand. Therefore it is highly recommended that
+# in general, you do NOT use global variables in your progrmaming. 
+
+
+#----------------------------------------------------
+# FUNCTIONS CAN CALL OTHER FUNCTIONS
+#
+# A function definition can use other functions.
+# We defined the function, getValues, earlier.
+# We will use the function, getValues, in the 
+# definition of the function below, getGradeBreakdown
+#----------------------------------------------------
+
+ 
+# The following function returns a named vector
+# with the number of grades in each range
+# of less than 60, 60s, 70, 80, 90s, 100s
+#
+# The formal argument, grades, is expected to be a numeric vector
+# that contains grades in the range of 0 through 100.
+gradeBreakdown <- function(grades) {
+  failing <- getValues(grades, 0, 59)
+  sixties <- getValues(grades, 60, 69)
+  seventies <- getValues(grades, 70, 79)
+  eighties <- getValues(grades, 80, 89)
+  nineties <- getValues(grades, 90, 99)
+  hundreds <- getValues(grades, 100, 100)
+  
+  answer <- c(length(failing), length(sixties), length(seventies),
+              length(eighties), length(nineties), length(hundreds))
+  
+  names(answer) <- c("failing", "sixties", "seventies", "eighties", "nineties", "hundreds")
+  return(answer)
+}
+
+# Use the function
+testScores <- c(70,88,59,95,92,100,65,69,72,93,87,79)
+gradeBreakdown(testScores)
+
+# Use the function with different numbers
+gradeBreakdown(c(55,95,90,91,93,100))
+
+
+#----------------------------------------------------------------------
+# Typing the name of a function without any parentheses after it
+# will display the code for the function.
+#
+# This is not really necessary, but you should be aware of what this does
+# so that you're not surprised if you mistakenly leave out the (parentheses)
+#----------------------------------------------------------------------
+getGradeBreakdown   # show the code 
+getValues           # show the code
+
+
+#----------------------------------------------------------------------
+# A function definition may contain many return statements.
+# 
+# The first one will be executed and the function stops there.
+#
+# This concept will become important later (when we learn about
+# "if" statements)
+#----------------------------------------------------------------------
+
+addValue <- function( n ) {
+  n <- n + 1  # This happens
+  return (n)  # This happens
+  
+  n <- n * 2  # This NEVER HAPPENS
+  return (n)  # This NEVER HAPPENS
+}
+
+addValue(5)    # 6 (not 12)
+addValue(100)  # 101 (not 202)
+
+
+#----------------------------------------------------------------------
+# If a function has NO return statements, then the last statement
+# to be executed in a function is "returned" automatically.
+#----------------------------------------------------------------------
+
+# EXAMPLE
+
+addAndMultiply <- function( n ){
+  n <- n + 1
+  n * 2       # This VALUE is returned. DO NOT DO AN ASSIGNMENT HERE!!!
+}
+
+addAndMultiply(5)
+addAndMultiply(100)
+
+#----------------------------------------------------------------
+# invisible return values
+#----------------------------------------------------------------
+
+# SOMETHING THAT OFTEN CONFUSES NEW R PROGRAMMERS
+# is that assignment statements have a value, but that
+# value is "invisible".
+
+someNumber <- 100    # this will not display anything (the value is "invisible")
+someNumber           # this will display 100
+
+# In the following, 
+#   secondNumber will become 25 and 
+#   thirdNumber will become 50
+#   NOTHING will be dipslayed (the values of both assignments are INVISIBLE)
+thirdNumber <- (secondNumber <- 25) * 2   # The assignemnt statement has a value
+
+secondNumber # The assignment on the right worked
+thirdNumber  # So did the assignment on the left
+
+# If you use an assignment as the last line of a function, the value will be 
+# "returned" but will not be displayed.
+# We say that the return value is "invisible"
+thisReturnsAnInvisibleValue <- function( n ){
+  n <- n + 1
+  n <- n * 2    # This assigns to the LOCAL variable, but that is gone when the function is over.
+}
+
+# This will not display anything ...
+thisReturnsAnInvisibleValue(1)  # The return value is "invisible".
+
+# It has a value though and will work if used in a larger context.
+thisReturnsAnInvisibleValue(2) + 100   # expression is not invisible
+
+# It has a value though and will work if used in a larger context.
+x <- thisReturnsAnInvisibleValue(3)    # assignment works
+x
+
+#........................................................
+# You can make any function return an "invisible" value 
+# by using the invisible function for the return value.
+#........................................................
+addOne <- function(x) {
+  return ( x + 1 )
+}
+
+addOneInvisibly <- function (x) {
+  return ( invisible(x + 1) )
+}
+
+addOne(100)                # This displays the return value
+addOneInvisibly(100)       # Return value is INVISIBLE
+addOneInvisibly(100) + 0   # Return value can be used in a larger expression to make it visible
+
+############################################
+############################################
+##
+## "if" statements
+##
+############################################
+############################################
+
+# Function to return the price of admission to an amusement park.
+#
+# Business rules: admission price depends on age and weekday vs weekend
+# and age of the guest.
+
+admissionPrice <- function (day, age) {
+  
+}
+
+
+
+########################################################
+# END OF THIS CLASS
+# 
+# INFORMATION BELOW CAN BE IGNORED FOR NOW
+########################################################
+
+
+
+#-------------------------------------------
+# A local variable in a function is created
+# when a value is assigned to the local variable.
+# 
+# If a function refers to a "global" variable
+# without assigning a value 
+
+
+
+
+getGPA <- function( grades, credits ){
+  sum(grades * credits) / length(grades)
+}
+
+
+
+
+
+
+# The following function inserts the values of vec2 into 
+# vec1 after the specified location. 
+#
+# It is assumed that 
+#  - vec1 will be passed a vector
+#  - vec2 will be passed a vector
+#  - location will be passed a number between 0 and the length of vec1
+#
+# EXAMPLE: The following are examples of using this function
+# 
+#    > insertAfterLocation(c(10,20,30), c(888,999), 0)
+#    [1] 888 999 10 20 30
+#
+#    > insertAfterLocation(c(10,20,30), c(888,999), 1)
+#    [1] 10 888 999 20 30
+#
+#    > insertAfterLocation(c(10,20,30), c(888,999), 2)
+#    [1] 10 20 888 999 30
+#
+#    > insertAfterLocation(c(10,20,30), c(888,999), 3)
+#    [1] 10 20 30 888 999
+
+insertAtLocation <- function(vec1, vec2, location){
+  firstPartOfVec1 <- vec1[0:location]
+  lastPartOfVec1 <- vec1[(location+1):length(vec1)]
+  
+}
+
+
+#-------------------------------------------
+# Functions that return more than one value
+#-------------------------------------------
+
+# Many functions return more than one value.
+# EXAMPLE: The range function returns the min and max values from a vector
+nums <- c(90,32,86,98,20,85)
+nums
+range(nums)
+
+# ANOTHER EXAMPLE: The rank function shows the "rank" of each value
+rank(c(100,80,90))  # 3 1 2  (100 is the highest rank, 80 is the lowest, 90 the 2nd)
+
+
+# You can apply these functions to the dataframe too.
+lapply(grades, range)
+lapply(grades, rank)
+
+
+
+
+
+sapply(grades, range)
+sapply(grades, rank)
+
+# See the documentation for rank to understand how the function deals with "ties"
+?rank
+
+
+
+# create a function that 
+
+
+##########################################################################
+##########################################################################
+##
+## intro to user defined functions
+##
+##########################################################################
+##########################################################################
+
+# create a function named isEven that takes a single numeric value and
+# returns TRUE if the value is even and false if it is not
+
+# create a function named equal values that takes two vectors, v1 and v2,
+# and returns a vector of those values that are equal between the two 
+# vectors
+
+# create a function that calculates a GPA. The funciton should take
+# a vector named grades whose values are 0,1,2,3 or 4 (0 is F, 1 is D, etc)
+# and a vector named credits whose values are any numbers.
+
+
+

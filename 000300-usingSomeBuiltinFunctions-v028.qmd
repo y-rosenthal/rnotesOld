@@ -1,0 +1,2223 @@
+# Using some built-in functions
+
+::: {.content-hidden}
+##################################.
+##################################.
+## Topics in this file: 
+##################################.
+##################################.
+
+# Terminology
+#   Arguments (AKA "parameters") to a function.   
+#   A particular use of a function is known as a "function call"    
+#   The output of a function is known as the "return value" of the function.   
+#   The max function returns the maximum value of all of its arguments. 
+#   Specifying a value as an argument to a function is known as "passing" that value to the function. 
+#
+
+# Some functions
+#   sqrt(10)       # returns the square root of 10
+#   min(2,10,4)    # min returns the lowest value   
+#   ceiling(3.2)   # ceiling rounds up to next higher number    
+#   floor (3.2)    # floor rounds down to nearest whole number  
+#   sum(2,10,4)    # sum returns the sum of its arguments      
+#   trunc function  
+#   round function  
+
+# The arguments to a function may be expressions, not just  single value. 
+
+# R's "help" system    
+#   ?sqrt       # show the help page for sqrt   
+#   ??max       # The double question mark ?? searches for a particular word in any help page.  
+#   NAMES AND DEFAULT VALUES OF ARGUMENTS ARE SHOWN ON THE HELP PAGES    
+#   Understanding R's help files   
+
+# pi              # display the value of pi   
+
+# Intro to Vectors
+#   A "vector" is a collection of values that can be processed as a group. 
+#   The is.vector function returns TRUE if its argument is a vector 
+#   The simplest vector is just a single value ... 
+#   A variable that contains a vector is a vector   
+#   The c() function is used to combine multiple values into a single vector. 
+#   The range function returns the minimum and maximum values that are in a vector 
+#   seq returns the sequence starting with the 1st argument, ending with the 2nd argument 
+#   The rep function returns a vector   
+#   100,200,300    # ERROR - individual values separated by commas are meaningless to R  
+
+# More about the c function  
+#   You can use the c function to combine values from different functions  
+#   Things that aren't vectors (e.g. dataframes, factors, matrices, etc)  
+
+# Vector arithmetic   
+#   length(vector)  returns the number of values in the vector 
+#   To get an average use the mean function.  
+#   The mean function requires that all values being averaged are passed as a single vector. 
+#   the "trim" argument to mean   
+# 
+# ERRORs vs WARNINGs
+#   When you get an ERROR, the command doesn't have ANY effect. 
+#   When you get a WARNING, the command DOES have an effect. 
+
+# rep function
+#   The length.out argument causes the values in the x argument, i.e. the 1st argument, to be repeated to the specified length.  
+#   The rep_len is just a shorthand for using the length.out argument in the rep function   
+#   The each argument causes each value the x argument to be repeated sequentially the specified number of times   
+
+# sort function
+#   sort( SOME_VECTOR )                    # returns the vector sorted in increasing oder 
+#   sort( SOME_VECTOR, decreasing=TRUE )   # returns the vector sorted in decreasing order  
+#   The decreasing argument may be TRUE or FALSE (default is FALSE) 
+
+# More about the seq function.   
+#   seq( from = .5, to = 3.5)  # 0.5  1.5  2.5  3.5       
+#   The return value of seq always starts with the "from" value and goes no further than the "to" value.  
+#   seq( from = 0.75  ,  to = 3 ) # 0.75  1.75  2.75  - result does NOT include 3.   
+#   The by argument tells seq what number to "count by". (by can be positive or negative)    
+#   length.out argument                 
+#   along.with=SOME_VECTOR               
+# 
+# NESTING functions one inside the other  
+
+# The : operator is a shorthand for a basic usage of the seq function that only uses from and to arguments  
+
+# Order of operations in R    
+#   ?Syntax     #  Operators that appear higher in the list are done first.  
+#   ?`:`   # type this to see the help page for the colon operator (e..g 3:5)   
+#   ?`:`    # You must enclose the colon in `backticks` (also known as `grave accents`) 
+:::
+
+## rm(list=ls())
+
+```{r}
+##################################################################..
+##################################################################.
+##
+##  TOPICS
+##
+## - functions: sqrt abs max min ceiling floor sum mean
+##              trunc round
+##
+## - vector arithmetic and recycling rule
+##
+## - combining vectors with c function
+##
+## - functions:  c  length  sum   rep  seq  range
+##
+## - colon operator (e.g.   3:5   5:-3)
+##
+##################################################################.
+##################################################################.
+
+# We will start most days by removing all variables that we may have stored
+# from the last time we used R. This prevents confusion in case you may have
+# a variable from last time.
+
+rm( list=ls() )    # see notes from last class for an explanation
+```
+
+## sqrt() &nbsp;&nbsp; abs() &nbsp;&nbsp; NaN &nbsp;&nbsp; nesting function calls
+
+```{r}
+############################################################.
+############################################################.
+##
+## Intro to functions
+##
+## Intro to R vectors
+##
+############################################################.
+############################################################.
+
+#-----------------------------------------------------------.
+# sqrt function - eg. sqrt(49)                ####
+#
+# abs function  - eg. abs(-49)                ####
+#
+# NaN is "not a number" - eg. sqrt(-49)       ####
+#
+# nesting function calls - eg. sqrt(abs(-49)) ####
+#----------------------------------------------------------.
+
+# To take the square-root of a number in R, use the sqrt function
+# For example:
+
+sqrt(25)    # get the square root of 25
+
+sqrt(10)    # get the square root of 10
+
+sqrt(-5)    # square roots of negative numbers return NaN (i.e. "not a number")
+
+# sqrt is an example of a "function". 
+# A function takes some information as input (e.g. 25)
+# and returns a value as output, (e.g. 5)
+
+?sqrt       # show the help page for sqrt     ####
+
+# Some R help pages show information for mulitple functions. 
+# The help page for sqrt also show information about function, abs.
+#
+# abs gives you the absolute value of a number (i.e. the positive version of the number)
+abs(2)      # 2
+abs(-2)     # 2 
+
+# We can "nest" one function call inside another function call. 
+# 
+# When we do so the value that is "returned" by the "inner" function call
+# is then "passed" to the "outer" function call.
+sqrt(-49)   # NaN
+sqrt(abs(-49))   # 7
+```
+
+## terminology related to functions 
+
+```{r}
+#----------------------------------------------------------.
+# Terminology: 
+#
+#   function call
+#
+#   return value
+#
+#   arguments (AKA parameters)
+#
+#   "passing" arguments to a function
+#
+#----------------------------------------------------------.
+```
+
+## function call 
+
+```{r}
+#.......................................................................
+# A particular use of a function is known as a "function call"    ####
+#.......................................................................
+
+sqrt(100) # this is a function call of the sqrt function
+
+sqrt(64)  # this is a different function call of the sqrt function
+```
+
+## return value
+
+```{r}
+#.......................................................................
+# The output of a function is known as the "return value" of the function.   ####
+#.......................................................................
+
+sqrt(64)  # The "return value" of this "function call" is 8
+```
+
+## max() min() ceiling() floor() sum()
+
+```{r}
+# Some functions can take more than one argument.
+# However, all functions return exactly one item.
+# (we will describe an exception to this later).
+#
+# max and min functions return the maximum and minimum value of all of their arguments. ####
+# For example:
+
+max(4,10,2,5)   # four arguments, 4,10,2,5 - one return value, i.e. 10
+min(4,10,2,5)   # four arguments, 4,10,2,5 - one return value, i.e. 2
+
+# another example
+joesSalary <- 50
+suesSalary <- 70
+bobsSalary <- 60
+
+# three arguments - joesSalary, suesSalary, bobsSalary
+# one return value, i.e. 70
+
+max(joesSalary, suesSalary, bobsSalary)   
+```
+
+## arguments (AKA parameters)
+
+```{r}
+#.......................................................................
+# The input values to a function are known as the argument(s) or the parameter(s) of 
+# a function. (Some people/books may draw a distinction between the word argument
+# and the word parameter but for our purposes they mean the same thing.)
+#.......................................................................
+
+# In the following code:
+# 36 is an argument (or parameter), i.e. 36 is "passed" to the sqrt function.
+# the return value is 6 
+sqrt(36)   
+```
+
+## "passing values" to a function
+
+```{r}
+#.......................................................................
+# Specifying a value as an argument to a function is known as "passing" that value to the function. ####
+#.......................................................................
+
+sqrt(36)   # 36 is being "passed" to the sqrt function.
+
+
+#.......................................................................
+# The arguments to a function may be expressions, not just  single value. ####
+#.......................................................................
+
+2 * max ( pi ^ 2 , pi * 2)     # 1st argument: pi^2 , 2nd argument: pi*2
+
+
+#------------------------------------.
+# Other functions
+#------------------------------------.
+
+ceiling(3.2)   # ceiling rounds up to next higher number    ####
+ceiling(-3.2)  # ... be careful with negatives    
+
+floor (3.2)    # floor rounds down to nearest whole number   ####
+floor(-3.2)    # ... be careful with negatives
+
+## sum() and R help pages 
+
+sum(2,10,4)    # sum returns the sum of its arguments      ####
+
+# we will speak about averages, or the "mean function" later ...
+```
+
+## R's "help" system &nbsp;&nbsp; ?someFunction &nbsp;&nbsp; ??anyWord
+
+```{r}
+########################################################.
+#
+# R's "help" system    ####
+#
+########################################################.
+
+# To get more information about a particular function, you 
+# use the "help" function. You must put the name of the R function you 
+# want help with in "quotes". The "help page" or "manual page" for 
+# that function (or group of functions) will appear in the "help" 
+# window.
+
+help("sum") # show the R documentation page for the sum function.
+
+help(sum)   # same thing - you don't need the quotes
+
+?sum        # same thing - ? is shorthand for the help function
+
+?help       # you can even get help on the help function
+ 
+??max       # The double question mark ?? searches for a particular word in any help page.  ####
+
+
+
+# Some help pages describe several different R functions in single page
+
+?ceiling   # this describes ceiling, floor and several other functions all in one help page
+
+?floor     # this shows the same thing
+
+# NOTE: 
+#
+# In posit.cloud you press F1 when the cursor is on the name of a function ####
+# (this only works in the "script" window)
+```
+
+## pi
+
+```{r}
+# pi is a built-in variable that contains the first few digits of the value of pi
+
+pi       # value of pi
+
+pi * 2   # pi times 2
+
+pi ^ 2   # pi quared
+```
+
+## trunc()
+
+```{r}
+#-----------------------------------------------------------------------------.
+# trunc function  ####
+# 
+# trunc stands for "truncate" which means to "shorten" or to "chop off"
+# The trunc function "chops off" the values after the deicmal point.
+#-----------------------------------------------------------------------------.
+
+trunc(3.2)    # chops off the decimal points
+trunc(-3.2)   # compare this with "floor and ceiling" ... how are they different? 
+```
+
+## round() function
+
+```{r}
+#-----------------------------------------------------------------------------.
+# round function   ####
+#
+# first arugment - value to round
+# second argument - which position to round
+#-----------------------------------------------------------------------------.
+
+# round a value to a particular number of decimal places
+round(1.129, 2) # 1.13
+round(1.129, 1) # 1.1
+
+pi              # display the value of pi    ####
+round(pi, 2)    # round a value to a particular number of dcimal places
+round(pi, 3)    # round a value to a particular number of dcimal places
+
+# . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+# if 2nd argument is 0, the number is rounded to the closest whole number
+# . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+round(pi, 0)    # round pi to the closest whole number
+
+#..........................................................................
+# You can also supply a negative value for digits
+#..........................................................................
+round(1939, -1)  # negative values are allowed, e.g. round to closest multiple of 10
+round(1939, -2)  # round to closest multiple of 100
+
+
+round(1939.1598, 2)   # 1939.16
+
+round(1939.1598, -2)   # 1900
+
+#.................................................................
+# Default value for the digits argument of the round function
+#.................................................................
+
+# Some arguments for some functions have a "default value". 
+# The default value is used when the argument does not appear in the function call. 
+# For example, 0 is the "default value" for the digits argument of the round function.
+#
+# This is described in the Usage section on the help page for the round function (?round)
+# The usage section includes the following information:
+#
+#     USAGE: 
+#        round(x, digits = 0)
+#
+# "digits = 0"   means that the defualt value of the
+# digits argument (i.e. the 2nd argument) is 0 (zero).
+#
+
+round(pi)       # answer is 3 because 0 is the default number of digits
+round(1.234)    # answer is 1 because 0 is the default number of digits
+
+?round          # view the help page for the round function
+```
+
+## Default values for arguments
+
+```{r}
+#--------------------------------------------------------------------------------.
+# NAMES AND DEFAULT VALUES OF ARGUMENTS ARE SHOWN ON THE HELP PAGES    ####
+#
+# The arguments for each function have "names"
+#
+# Some arguments have "default values". The default value for an argument is 
+# used when the function call does NOT specify a value for that argument.
+# (see examples below).
+#--------------------------------------------------------------------------------.
+
+# Every argument for every function in R has a "name".
+# SOME arguments for SOME functions have a "default value".
+# All of this information is shown in the "Usage" section on the help page 
+# for the function.
+#
+# FOR EXAMPLE
+#   Look at the help page for the round function (i.e. ?round).
+#   The "Usage" section includes the following information:
+#
+#     USAGE: 
+#        round(x, digits = 0)
+#
+#   This means 
+#
+#    - The name of the 1st argument is "x"
+#
+#    - The name of the 2nd argument is "digits".
+#      The default value for the "digits" function is 0.
+#      This is shown in the documentation as "digits = 0".
+#
+#    - Note that the first argument, x, does NOT have a default value.
+#      
+
+?round     # arguments are "x" and "digits", the default value for digits is 0
+```
+
+## specifying arguments in function calls
+
+```{r}
+# You may specify the names of the arguments when calling a function,
+# but you don't have to (see examples below).
+#
+# Specifying the names of the arguments allows you to:
+#
+#   (a) type the arguments out of order (see below) and/or
+#
+#   (b) skip some arguments  (examples of this to be shown later ...)
+
+
+# The following function call will round 12345 to the
+# nearest hundred (i.e. the 2nd argument is -2) to result in 12300.
+#
+# The arguments must be specified in same order as specified on the help page
+# (see ?round). i.e. first the number to be rounded (12345 in this case)
+# and then the position to round it to (-2 in this case).
+
+round( 12345, -2)   # round 12345 to the nearest hundred
+
+
+# You don't have to but you may specify the names of the arguments if you like.
+
+round ( x=12345, digits=-2 )
+
+# If you specify the names of the arguments (see below), then you 
+# may write the arguments out of order.
+#
+# Otherwise, the arguments must be typed in the same order as they appear
+# in the "Usage" section on the help page.
+# 
+# In the following command the arguments are not in the order as specified
+# on the help page. However, that is OK since we specified the names of the
+# arguments.
+
+round( digits = -2, x=12345)   # specify arguments out of order, same result as above
+
+
+# You may omit the names of the first few arguments in a function call.
+# If you do so then the first few arguments, without names in the function call,
+# are assumed to be the first few arguments as specified on the help page. 
+#
+# For example, in the following command the first argument, 12345,
+# does not include a name. Since this is the first argument in the function
+# call, it is assumed to be the "x" argument (which is the first argument
+# specified in the help page (?round)).
+
+round (12345, digits = -2) # you can specify names for some args but not others
+
+# If you want to, you MAY always specify the names of the arguments
+# However, it is not necessary to type the names of the arguments as long as
+# you type the arguments in the expected order (as defined in the help pages).
+#
+# Many R programmers choose to leave out names for the first argument or
+# two and then specify names for the subsequent arguments,
+# e.g. seq(2, 10, by=2) (this returns 2 4 6 8 10 - see ?seq). 
+#
+# The reason for this is that the first argument or two
+# of most functions are obvious as to their meaning. After that, it becomes
+# less clear as to what the additional arguments mean. By specifying the names
+# of these additional arguments it becomes easier to read the code.
+```
+
+
+## --- 2023 BEREN - UP TO HERE - AFTER DAY 2 ####
+
+## What's a vector? &nbsp;&nbsp; The is.vector() function.
+
+```{r}
+###############################################.
+#
+# VECTORS
+#
+###############################################.
+
+#-----------------------------------------------------------------------.
+# A "vector" is a collection of values that can be processed as a group. ####
+#-----------------------------------------------------------------------.
+
+#-----------------------------------------------------------------------.
+# The is.vector function returns TRUE if its argument is a vector ####
+# and FALSE otherwise.
+#-----------------------------------------------------------------------.
+
+#-----------------------------------------------------------------------.
+# The simplest vector is just a single value ... ####
+# (it is technically a collection of just one value).
+#-----------------------------------------------------------------------.
+
+?is.vector
+
+is.vector ( 3 )
+
+is.vector( 99923141.32412431 )
+
+# A variable that contains a vector is a vector   ####
+
+priceOfApple = 1.99
+is.vector(priceOfApple)   # TRUE
+
+# The c() function is used to combine multiple values into a single vector. ####
+#
+# You can think of the "c" as standing for the word "combine".
+# "c" actually stands for the word "concatenate" which 
+# is a technical fancy shmancy word for "combine things together".
+
+# The following is a vector with mutliple values. 
+# The c function combines (i.e. "concatenates") the multiple values into a 
+# single "vector"
+c(100,200,300, 50, -2, 25)
+
+is.vector(c(100,200,300, 50, -2, 25))    # this works
+
+is.vector(100,200,300, 50, -2, 25) # ERROR: use c() to tie together different values
+
+someNumbers = c(100,200,300, 50, -2, 25) # combine (or concatenate) values into one vector
+someNumbers
+is.vector(someNumbers)   # TRUE
+```
+
+## range() function
+
+```{r}
+#-----------------------------------------------------.
+# Other functions can also create vectors.
+#-----------------------------------------------------.
+
+#.............................................................................
+# The range function returns a vector
+#
+# The range function returns the minimum and maximum values that are in a vector ####
+#.............................................................................
+
+
+range(someNumbers)
+
+is.vector(range(someNumbers))
+
+
+# You can also capture the result in  a variable
+lowestAndHighest = range(someNumbers)
+lowestAndHighest   # -2  300
+is.vector(lowestAndHighest)   # TRUE
+```
+
+## seq() function
+
+```{r}
+#.............................................................................
+# The seq function returns a vector. In its simplest use, 
+# seq returns the sequence starting with the 1st argument, ending with the 2nd argument ####
+#
+# NOTE - we will come back to the seq function to learn about 
+#        much more complex ways of using it.
+#.............................................................................
+
+# Example 1
+seq(5,10)                  # 5 6 7 8 9 10
+is.vector( seq(5, 10) )    # TRUE
+
+# Example 2
+seq(10,5)                  # 10 9 8 7 6 5
+is.vector( seq(10,5) )     # TRUE
+
+# Example 3
+seq(0.5, 2.5)              # 0.5   1.5   2.5
+is.vector( seq(0.5, 2.5) ) # TRUE
+
+# We can also capture the results in variables
+example1 = seq(5,10)
+example1               # 5  6  7  8  9  10
+is.vector(example1)    # TRUE
+
+example2 = seq(10,5)   
+example2               # 10  9  8  7  6  5 
+is.vector(example2)    # TRUE
+
+example3 = seq(.5, 2.5)  
+example3               # 0.5  1.5  2.5
+is.vector(example3)    # TRUE
+
+
+seq(0.5, 3)
+```
+
+## rep() function
+
+```{r}
+#.............................................................................
+# The rep function returns a vector   ####
+#
+# In its simplest use, the rep function returns a vector of it's first
+# argument repeated the number of times specified by its 2nd argument.
+#
+# NOTE - we will come back to the rep function to learn about 
+#        more complex ways of using it.
+#.............................................................................
+
+rep(100,3)        # 100  100  100
+
+rep(  seq(1,3)  ,   2)  # 1  2  3  1  2  3
+
+# QUESTION 
+# Create a vector that has the numbers 1 3 1 3 1 3 etc. for a total
+# of 20 numbers. Store the resulting vector into a variable named nums.
+
+nums = rep( c(1,3) , 10)   # ANSWER
+```
+
+## Use c() to combine vectors
+
+```{r}
+#-------------------------------------------------------------------------------------.
+# DO NOT WRITE INDIVIDUAL VALUES WITHOUT COMBINING THEM TOGETHER WITH A FUNCTION CALL!
+#-------------------------------------------------------------------------------------.
+
+100,200,300    # ERROR - individual values separated by commas are meaningless to R  ####
+
+
+# REMEMBER - if no other function call is being used, you can use the
+#            c function to combine individual values
+
+c(100,200,300)    # 100  200 300 (no error)
+
+#-------------------------------------------------------------.
+#
+# More about the c function  ####
+#
+#-------------------------------------------------------------.
+
+#..............................................................................
+# If you "nest" calls to "c", ie. if you combine one vector inside of another
+# vector by using the c function, the result is a single vector
+#..............................................................................
+
+c(100, 200, c(30, 20, 10), 600)   # same as c(100,200,300,400,500,600)
+
+c(100, 200, 30, 20, 10, 600) # same thing
+
+
+#..............................................................................
+# You can use the c function to combine multiple vectors into a single vector.
+#..............................................................................
+
+x <- c(10,20,30)
+y <- c(40, 50)
+z <- c(x, y)      # combine the values from x and y into z
+z
+
+z <- x, y         # ERROR - use the c function to combine vectors into a single vector
+
+
+# QUESTION ####
+# Find the sum of all the values that are in x and y, without using z
+
+# ANSWER
+sum(c(x,y))   # This works
+sum(x,y)      # This works too - sum will allow mulitple vectors to be summed
+
+# QUESTION  ####
+#
+# Find the average (i.e. mean) of all the values that are in x and y,
+# without using z
+
+# ANSWER
+mean(c(x,y))      #This works
+mean(x,y)         # ERROR
+
+# QUESTION
+# Why did we get an error in the last example?
+
+# ANSWER 
+#
+# From the documentation for sum and mean (i.e. ?sum and ?mean) we can 
+# see that the sum function allows multiple vectors that contain the numbers to be
+# to be passed as separate arguments. However, the mean function requires
+# all of the numbers to be averaged to be in a single vector that is passed 
+# to the argument named x. It's true that one might expect these functions
+# to be more similar in how they are called. However, the designers of the 
+# language decided otherwise. The underlying reasons for the difference in
+# the design of these functions is irrelevant - bottom line is you
+# need to know how to call the functions. The place to learn this is 
+# in the documentation for the functions (i.e. ?sum and ?mean)
+#
+# Look at the documentation for sum and for mean (i.e. ?sum and ?mean).
+# The "Usage" section shows the names of the arguments and their default values.
+# The "Arguments" section explains what each argument is expected to contain.
+# The "Value" section explains how the return value for the function is calculated.
+#
+# It takes some time and practice to be proficient at reading R's help pages.
+# However, understanding how to read and interpret R's help pages
+# is a critical skill that allows you to become familiar with R's built in
+# functions.
+#
+# An "ellipsis" (i.e. three periods, ... ) in the help pages
+# stands for the ability to type several values in place of the 
+# ellipsis. For example, the ... in the help page for sum, indicates
+# the ability to type several different values to be summed. This is
+# described in the ARGUMENTS section where it explains that ... stands
+# for "numeric or complex or logical vectors".
+
+?sum    
+
+# USAGE: sum(..., na.rm = FALSE)
+# ARGUMENTS: 
+# ...      numeric or complex or logical vectors
+# na.rm    (see the help page)
+
+
+# However, for the mean function, there is a single argument named x that 
+# is expected to contain the values to be averaged. The ellipsis shown 
+# in the help page for mean is used for a more subtle reason. It shows where
+# additional arguments, not listed on this help page, might be specified 
+# (this is an advanced concept that we'll return to later). 
+
+?mean   
+
+# USAGE: mean(x, trim = 0, na.rm = FALSE, ...)
+# ARGUMENTS: 
+# x        An R object. (i.e. a vector - these are the numbers)
+# trim     (see help page)
+# na.rm    (see help page)
+# ...	     further arguments passed to or from other methods.
+
+
+# You can use the c function to combine values from different functions.
+# Make sure that you match parentheses correctly.
+
+c(   rep(100,3)  ,   seq(-5,-7)  )   # 100 100 100 -5 -6 -7
+
+# DON'T FORGET THE c( ... )
+#rep(100,3), seq(-5,-7)      # ERROR
+
+
+range(   rep(100,3)   , seq(990,1005)  ,  seq(-5,-7)   )   #
+
+range(   c( rep(100,3)   , seq(990,1005)  ,  seq(-5,-7) )   )
+```
+
+## 2023 BEREN, WILF - UP TO HERE - AFTER DAY 03
+
+## --- Practice ---
+
+```{r}
+#----------------------------------------------------.
+# QUESTION
+# Write R code that takes the average of the first
+# 200 even numbers.
+#----------------------------------------------------.
+
+# ANSWER:
+mean(seq(from=2, to=400, by=2))
+```
+
+## non-vectors (later in the course).
+
+```{r}
+#----------------------------------------------------------------------------.
+# Things that aren't vectors (e.g. dataframes, factors, matrices, etc)  ####
+#----------------------------------------------------------------------------.
+
+# A vector is the simplest arrangement of values in R.
+
+# R allows for more complex arrangements of data, which we will learn about
+# later in the course, such as factors, matrices, dataframes, etc.
+
+# These more complex arrangements of data are created from vectors but are 
+# technically not vectors themselves. One example of such an arrangement 
+# of data is a data.frame.
+# We will cover dataframes later in the course.
+# For now, I just want to demonstrate that R has structures that are NOT vectors.
+
+
+
+# A dataframe is made up of vectors, but it itself is NOT a vector.
+example = data.frame(students = c("joe", "sue", "bob"), 
+                      test1 = c(71,85,90),
+                      test2 = c(83, 92, 95), stringsAsFactors = FALSE)
+example
+
+is.vector(example)      # FALSE
+is.data.frame(example)  # TRUE
+```
+
+## Vector arithmetic
+
+```{r}
+#--------------------.
+# Vector arithmetic   ####
+#--------------------.
+
+# When you perform arithmetic with a vector each item in the vector is operated upon
+
+c(100,200,300) + 5    # return a vector that contains c(105, 205, 305)
+
+# vector arithmetic also respects the order of operations
+# In the following example the multiplication is done before the addition
+# to yield the value c(205, 405, 605)
+
+5 + c(100, 200, 300) * 2   # do the multiplication first
+
+# This works as follows
+#
+# original:               5 + c(100, 200, 300) * 2
+#
+# do the *:               5 + c(200, 400, 600)
+#
+# then do the +:          c(205, 405, 605)
+#
+# result is displayed as: 205 405 605
+
+# we can change the order of operations with parentheses
+# This yields a different result. 
+
+(5 + c(100,200,300)) * 2   # pay close attention to the parenthesis!!!
+
+# This works follows
+#
+# original:     (5 + c(100, 200, 300)) * 2
+#
+# do the +:     c(105, 205, 305) * 2
+#
+# then do the *: c(210, 410, 610)
+#
+# result is displayed as: 210 410 610
+
+
+###########################################.
+#
+# You may assign a vector to a variable   
+#
+###########################################.
+
+grades <- c(72,95,79,85)
+
+grades   # show the values
+
+
+# QUESTION:
+#
+# Modify the grades variable by adding 2 points to each grade
+
+# ANSWER  ####
+grades = grades + 2	   # you must assign the answer back to grades
+grades
+```
+
+## length( SOME_VECTOR )
+
+```{r}
+#-----------------------------------------------------------------------.
+#
+# length(vector)  returns the number of values in the vector ####
+# 
+#-----------------------------------------------------------------------.
+
+# Set the value of grades
+grades <- c(72,95,79,85)
+
+# the length function returns the number of values in a vector
+length(grades)          #4
+
+length(c(25, 10))       #2
+
+length(c(100,200,300))  #3
+
+# A single value is a vector - but it doesn't need to be surrounded with c()
+
+length(c(100))   # the length of a vector that contains a single item is 1
+
+length(100)      # ... same thing ... don't use the c - it's not necessary
+
+c(100)  # this is the same as just 100, the "c" is not necessary if you have just one value.
+
+100 # same thing - don't use the c for a single value
+
+grades   # show all grades
+
+grades + 5   # show what the values would be if we added 5 to each grade
+
+grades       # however, grades did NOT actually change
+
+# If you want to change the value of grades, you need to 
+# use the = sign or the <- or the ->. For example:
+grades     # show grades
+grades <- grades + 10   # add 10 to each grade and update grades with the new values
+grades     # grades now has the new values
+
+
+prices = c(1.99, 2.99, 3.99)
+doublePrices = 2 * prices
+doublePrices
+```
+
+## Counting arguments
+
+```{r}
+#############################################################.
+#
+# Arguments (AKA "parameters") to a function.   ####
+#
+# It is important to know how many arguments are being passed 
+# to a function. The arguments to a function appear in the (parentheses)
+# next to the function name and are separated from each other with commas.
+#
+#########################################################################.
+
+# Remember that the round function takes TWO arguments
+#
+#   x is the values to round
+#
+#   digits is the position to round to
+
+round(100.729, 1)  # 100.7
+
+round(100.729, 2)  # 100.73
+
+round (100.729)    # 101
+
+# The first argument is allowed to be a vector with multiple values
+
+round (   c(100.729, 200.618)  , 1)  # 100.7  200.6
+grades = c(82, 105, 89, 95)
+
+sum(grades)  # one argument - add up all grades (not very useful for grading ...)
+
+sum(c(82,105,89,95))  # also one argument - same exact thing, sum is given 1 vector
+
+sum(82,105,89,95)     # four arguments - same result, HOWEVER sum is given 4 different vectors - same answer
+```
+
+## 2023 WILF - UP TO HERE - AFTER CLASS 2 - Aug 31, 2023 ####
+
+
+```{r}
+# The sum function will sum all of the values in all 
+# of its arguments. The following all produce the same
+# result (i.e. 306) but in different ways.
+
+sum( c(100,200) , c(1,2,3))   # 2 arguments
+
+sum( c(100,200,1,2,3) )       # 1 argument
+
+sum( 100,200,1,2,3 )          # 5 arguments
+
+
+#---------------------------------------------------------------.
+#
+# To get an average use the mean function.  ####
+#
+#---------------------------------------------------------------.
+
+# IMPORTANT: the mean function works a little differently than the sum function.
+#
+# The mean function requires that all values being averaged are passed as a single vector. ####
+
+grades        # show all the grades
+
+grades = c(82, 105, 89, 95)  
+mean(grades)  # get the average
+
+mean( c(82,105,89,95) )  # same thing - there is ONE vector, ie a vector, c(72,95,79,85)
+
+mean(82,105,89,95)    # I didn't use the c() function here - there are 4 vectors!!!
+
+?mean
+
+# Examine the documentation for mean to see why. The Usage section of the 
+# documentation includes the following: mean(x, trim = 0, na.rm = FALSE, ...)
+# The "x" corresponds to a single vector that contains
+# the values to be averaged. If you pass the values without
+# the c() function, then the 2nd value listed is actually
+# passed to the "trim" argument of mean. If you want to know
+# what the "trim" argument is used for, see the help
+# page for "mean". If you don't specify any value for "trim"
+# then "mean" will work as you expect.
+# "x" 
+?mean     # see the documentation for mean
+
+# Arguments passed to mean:
+#
+#  x      - a vector that contains the values to be averaged
+#
+#  trim   - a fraction (0 to 0.5) of observations to be ignored (i.e. trimmed) from the beginning and end of the vector
+#
+#  na.rm  - WE WILL DISCUSS THIS LATER ...
+
+
+
+# Return the average of the numbers in the vector.
+#
+# Return value is 400 , i.e.  (100+200+300+500+900) / 5
+mean(c(100,200,300,500,900))        
+
+# the code above does the same as the next line
+sum(c(100,200,300,500,900)) / 5
+
+# DO NOT DO THE FOLLOWING !!!!  
+# The mean function is being passed a SINGLE value and 
+# does nothing meaningful in this case.
+
+mean(sum(100,200,300,500,900) / 5)  # basically same as:  sum(100,200,300,500,900) / 5
+
+# This is because by the time, the mean function
+# starts working the value: sum(100,200,300,500,900) / 5
+# has already been calculated as 400.
+# It would be just as rediculus as running the following code
+# which just returns the number 400 - the mean function does
+# nothing meaningful in this case. 
+
+mean ( 400 )   # This is the same as 400 / 1 
+```
+
+## trim argument to mean 
+
+```{r}
+# the "trim" argument to mean   ####
+#
+# trim (ie. remove) 0.2 (ie. 1/5) of the values (ie. 1 value) 
+# from the beginning and end of the vector
+#
+# Return value is 333.333, ie. mean(c(200,300,500))
+mean(c(100,200,300,500,900), 0.2) 
+mean(c(200,300,500)) # same result
+
+grades = c(5, 82, 85, 89, 105)
+
+mean(grades)   # mean ( c(5,82,85,89,105))
+
+mean(grades, trim = 0.2)  # mean(c(82,85,89))
+
+grades
+
+# trim (ie. remove) 0.4 (ie. 2/5) of the values (i.e. 2 values)
+# from the beginning and end of the vector
+#
+# Return value is 300, i.e. mean(300) 
+mean(c(100,200,300,500,900), 0.4)   # trim 0.4 = 2/5 of the values from the beginning and end
+
+mean(c(500,200,300,900,100), 0.4)   # trim 0.4 = 2/5 of the values from the beginning and end
+
+
+# In the following the result is 100
+# This is because the arguments are assigned in the following order
+#
+# x, ie. the values to be averaged = first argument = 100
+# trim = second argument = 200
+# na.rm = 3rd argument = 300
+# ... = all other arguments = c(500,900)
+#
+# Other than the x=100, the other arguments are really meaningless so
+# the result is the average of 100, which is 100.
+
+mean(100,200,300,500,900)
+
+
+
+
+# PROBLEM:
+#
+# REMEMBER that mean requires that all values being averaged are in a SINGLE vector
+# Therefore to take the average of the values in x and in y the following WILL NOT WORK:
+
+mean(x, y)   # will not work - will just show the mean of the values in x
+
+# SOLUTION:
+#
+# Remember that you can combine multiple vectors into a single vector with 
+# the c function.
+
+x <- c(10,20,30)
+y <- c(40, 50)
+
+mean(c(x,y))  # combine x and y into a single vector and take the mean of that vector
+
+#--------------------------------------------------------.
+# QUESTION : ####
+#
+# Grades for class1 and class2 are as shown below. 
+# 
+#   class1grades <- c(80,90,100)
+#   class2grades <- c(85, 88)
+#
+# (a) get the two averages, one for each class
+# (b) get the average for all the students in both classes
+#--------------------------------------------------------.
+
+
+# ANSWER	
+class1grades <- c(80,90,100)	     # ANSWER	
+class2grades <- c(85, 88)	         # ANSWER	
+class1average <- mean(class1grades)	# ANSWER	
+class2average <- mean(class2grades)	# ANSWER	
+allStudentsAverage <- mean ( c(class1grades, class2grades))	# ANSWER	
+class1average	# ANSWER	
+class2average	# ANSWER	
+allStudentsAverage # ANSWER	
+
+
+
+
+# sum and mean are not consistent in the way they handle multiple arguments
+sum(1,2,3)   # works as expected
+mean(1,2,3)  # does not work as most people would expect - answer is 1
+```
+
+## The "recycling" rule.
+
+```{r}
+
+#-------------------------------------------------------------.
+# 
+# VECTOR ARITHMETIC WITH TWO VECTORS
+# 
+# RECYCLING RULE - used in vector arithmetic with TWO vectors when vecors are different lengths
+#
+#-------------------------------------------------------------.
+
+# when you perform arithmetic between two vectors and they are the same length
+# then you view each correpsonding set of values as being operated on. 
+# For example
+
+c(100,200,300) + c(1, 2, 3)   # 101  202  303
+
+c(100 + 1 , 200 + 2 , 300 + 3) # ... same thing
+
+
+# Another example : remember the order of operations
+
+c(40, 20, 30) - c(4,5,6) * c(1, 2, 3)  # remember the order of operations!
+
+# original :              c(40, 20, 30) - c(4,5,6) * c(1, 2, 3)
+# do the * :              c(40, 20, 30) - c(4*1,5*2,6*3) 
+#          :              c(40, 20, 30) - c(4,10,18)
+# do the - :              c(40-4, 20-10, 30-18) 
+#          :              c(36 , 10, 12) 
+
+
+# if one vector is shorter than the other then ...
+# 
+# step 1: In R's memory (you don't see this) the values from the 
+#         shorter vector are repeated over and over until the shorter vector
+#         is the same length as the longer vector. 
+#
+# Step 2: The math happens ...
+#
+# For example the following 
+
+c(10,20,30,40) + c(1,7)  # same as c(10,20,30,40)+c(1,7,1,7) ... ie. 11  27  31  47
+
+# Original:       c(10,20,30,40) + c(1,7) 
+# Recycling rule: c(10,20,30,40) + c(1,7,1,7)
+# addition:       c(10+1,20+7,30+1,40+7)
+# final result:   c(11, 27, 31, 47)
+
+
+# It doesn't matter if the shorter vector is first or last
+c(1,7) + c(10,20,30,40)  # same as c(1,7,1,7)+c(10,20,30,40) ... i.e. 11  27  31  47
+
+# Doing math with a vector that contains a single value is just a special case of
+# this rule. Example:
+
+3 * c(2,3,4)    # same as c(3,3,3) * c(2,3,4)
+
+# original:       3 * c(2,3,4)
+# recycling rule: c(3,3,3) * c(2,3,4)
+# multiplication: c(3*2, 3*3, 3*4)
+# final answer:   c(6,9,12)
+
+
+# REMEMBER THE ORDER OF OPERATIONS!!!
+
+c(1,2) + 3 * c(10,20,30,40)    # 31  62  91  122
+
+# original :      c(1,2) + 3 * c(10,20,30,40) 
+# do the * :      c(1,2) + c(3,3,3,3) * c(10,20,30,40)
+#          :      c(1,2) + c(3*10 , 3*20, 3*30, 3*40)
+#          :      c(1,2) + c(30 , 60, 90, 120)
+# do the + :      c(1,2,1,2) + c(30 , 60, 90, 120)
+#          :      c(1+30 , 2+60 , 1+90 , 2+120)
+#          :      c(31, 62, 91, 122)
+
+
+c(1,2) + 3 * sum(10,20,30,40)
+# orignal       : c(1,2) + 3 * sum(10,20,30,40)
+# sum function  : c(1,2) + 3 * 100
+# multiplication: c(1,2) + 300
+# addition      : c(1+300 , 2+300)
+#               : c(301, 302)
+
+
+
+c(1,2) + 3 * sum(2 ^ 3 , 3-4*5)
+
+# original: c(1,2) + 3 * sum(2 ^ 3 , 3-4*5)
+# figure out the values of the arguments:  c(1,2) + 3 * sum( 8 , -17)
+# do the sum function:                     c(1,2) + 3 * -9
+# do the * :                               c(1,2) + -27
+# recycling rule:                          c(1,2) + c(-27,-27)
+# final answer:                            c(1 + -27 , 2 + -27)
+# final answer:                            c( -26 , -25)
+# If the length of the longer vector is not a multiple of the length of
+# the shorter vector, it WILL work, but you will get a WARNING. 
+#
+# The warning is to alert you to the fact that you might have done something
+# that you didn't intend to, however, it will still work.
+#
+# The recycling will continue as usual for the full length of the longer
+# vector.
+# Example:
+
+c(1,2) + c(100,200,300,400,500, 600) # 101 202 301 402 501 602
+
+c(1,2) + c(100,200,300,400,500)      # 101 202 301 402 501  (with a warning)
+
+# The above command is processed as follows
+# original: c(1,2) + c(100,200,300,400,500) 
+# recycling rule: c(1,2,1,2,1) + c(100,200,300,400,500)
+# final answer  : c (101, 202, 301, 402, 501)
+# 
+# Because the first vector was recycled a non-whole-number of times
+# R displays a warning.
+```
+
+
+## 2023 WILF - UP TO HERE - AFTER DAY 03
+
+## 2023 BEREN - UP TO HERE - AFTER CLASS 04
+
+
+## ERRORs vs WARNINGs
+
+```{r}
+
+# When you get an ERROR, the command doesn't have ANY effect. ####
+#
+# When you have an error, the command ends at the time the error happens.
+# Therefore, in the following command no value is assigned to the variable.
+#
+# NOTE - just in case you have a variable, x, that was already created, we
+# will "remove" that variable on the next line. This helps us to prove our point.
+# this is here just to prove a point. 
+
+x = 100
+
+x + 5
+
+rm(x)  # remove x (just in case it already exists) to help us prove our point
+
+x + 5     # ERROR - x doesn't exist  (GOOD - that's what we wanted)
+
+x = combine_stuff(10,20,30) + c(1,2,3)    # ERROR - the function combine_stuff doesn't exist
+
+x      # ERROR - x still doesn't exist, i.e. the above command did NOTHING
+
+# When you get a WARNING, the command DOES have an effect. ####
+#
+# If you assign the result of something that produces a warning the assignment
+# will happen and you can use that value without getting anymore warnings.
+
+rm(nums)
+nums
+nums <- c(1,2) + c(100,200,300,400,500)    # 101 202 301 402 501  (with a warning)
+nums
+
+# The value of nums was still assigned and can be used normally
+nums   # this will NOT generate a warning
+nums - 50   # this will NOT generate a warning
+```
+
+## --- PRACTICE ---
+
+```{r}
+#----------------------------------------------------------------------------.
+# QUESTION
+#
+# Use the recycling rule to generate the first ten multiples of 5 in a single
+# command.
+# The result should be as shown below. 
+#
+#    > YOUR COMMAND GOES HERE     # replace this line with your command
+#
+#   [1] 5 10 15 20 25 30 35 40 45 50
+#----------------------------------------------------------------------------.
+
+
+#----------------------------------------------------------------------------.
+# QUESTION
+# 
+# numValues is a variable that contains a number.
+# Write code that produces numValues of the 5 times table. 
+#
+# EXAMPLE 1
+#  > numValues = 3
+#  > YOUR CODE GOES HERE
+#  [1] 5 10 15
+#
+# EXAMPLE 2
+#  > numValues = 7
+#  > YOUR CODE GOES HERE
+#  [1] 5 10 15 20 25 30 35
+#----------------------------------------------------------------------------.
+
+# THINK ABOUT THIS - to answer the question you need ONE command that will 
+# use the numValues variable to create the following results 
+5 * c(1,2,3)          # when numValues is 3
+5 * c(1,2,3,4,5,6,7) # when numValues is 7
+
+
+
+#----------------------------------------------------------------------------.
+# QUESTION   ####
+#
+# Use the recycling rule to generate the first five multiples 
+# of 2 and 100 using a single command. The result should be as shown below. 
+#
+# > YOUR COMMAND GOES HERE     # replace this line with your command
+#
+# [1] 2 100 4 200 6 300 8 400 10 500
+#----------------------------------------------------------------------------.
+
+# ANSWER
+x = 100                                           # ANSWER
+rep(c(2,100), times=x) * rep(seq(1,x), each=2)    # ANSWER
+
+#----------------------------------------------------------------------------.
+# QUESTION   ####
+#
+# Use the recycling rule to generate the first five multiples 
+# of 2 and 100 using a single command. The result should be as shown below. 
+# Write the command using the least amount of typing.
+#
+#   > YOUR COMMAND GOES HERE     # replace this line with your command
+#   [1] 2 4 6 8 10 100 200 300 400 500
+#
+# The following is NOT the answer but helps you to think about how to generate
+# the same thing using shorter code.
+# c( 2 * 1 , 2 * 2 , 2*3 , 2*4 , 2*5 , 100 * 1 , 100 * 2 , 100 * 3 , 100 * 4, 100*5) 
+#----------------------------------------------------------------------------.
+```
+
+## More about the rep function.
+
+```{r}
+###########################################################.
+#
+# More about the rep function.
+#
+###########################################################.
+
+# The rep function can be used in several ways.
+# In the simplest use of the rep function, rep returns a vector
+# that contains the values from the first argument to the function
+# repeated the number of times specified in the 2nd argument. 
+# Examples:
+
+# Repeat the number 3 five times
+rep(3, 5)
+
+# repeat the number 5 three times:
+rep(5, 3)
+
+
+?rep    # see the documentation for rep function
+
+# since the rep function returns a vector, you can do anything with the
+# return value that you can do with any other vector
+
+threeFives <- rep(5,3)
+threeFives
+threeFives * 10
+
+# The default value for the number of repetitions is 1 (i.e. one)
+rep(100)   # same as 100 ... why would you do this ??? you probably wouldn't ... yet ...
+
+?rep
+
+# You can use rep to repeat entire vectors
+nums <- c(10,20,30,40)
+rep(nums, 2)   # 10 20 30 40 10 20 30 40
+```
+
+## times argument
+
+```{r}
+########################################################################.
+# Other arguments of the rep function.
+#
+# The "Details" section of the rep documentation shows the 
+# following:
+#
+#     rep(x, times = 1, length.out = NA, each = 1)
+#
+# See the "Arguments" section of the rep documentation for
+# an explanation of what each of the arguments mean.
+########################################################################.
+
+# Let's start with some data:
+
+nums <- c(10,20)
+nums               # show the value in nums
+
+# The rep documentation shows the following:
+#
+#     rep(x, times = 1, length.out = NA, each = 1)
+#
+# "x" is the first argument - "x" is the vector that will be repeated.
+# "times" is the 2nd argument - "times" is the number of times to repeat "x" (default is 1 time)
+#
+# Therefore the following are the same thing:
+
+rep(nums, 5)       # 5 is the value of 2nd argument to rep
+rep(x=nums, times=5) # same thing - specify 5 as the value of the "times" argument
+rep(times=5, x=nums) # same thing - specify 5 as the value of the "times" argument
+```
+
+### length.out argument
+
+```{r}
+#--------------------------------------------------------.
+# rep ( SOME_VECTOR, length.out=SOME_NUMBER )
+#
+#    is the same as
+#
+# rep_len ( SOME_VECTOR, SOME_NUMBER )
+#--------------------------------------------------------.
+
+# The length.out argument causes the values in the x argument, i.e. the 1st argument, to be repeated to the specified length.  ####
+nums                     # nums didn't change
+rep(nums, length.out=5)  # repeat the values in nums to a length of 5
+
+
+
+# The rep_len is just a shorthand for using the length.out argument in the rep function   ####
+# to accomplish the same thing
+nums                     # show the values in nums
+rep(nums, length.out=5)  # repeat the values in nums to a length of 5
+rep_len(nums,5)          # same thing, another way
+
+rep(nums, length.out=15)  # repeat the values in nums to a length of 15
+rep_len(nums,15)          # same thing, another way
+```
+
+## each argument
+
+```{r}
+#-----------------------------------------------------------.
+# rep ( SOME_VECTOR, each = SOME_NUMBER )
+#-----------------------------------------------------------.
+
+# The each argument causes each value the x argument to be repeated sequentially the specified number of times   ####
+
+nums               # show the values in nums
+rep(nums, each=5)  # repeat each value of nums 5 times       ####
+
+
+#-----------------------------------------------------------------------------------------.
+# Sometimes it's hard to know what a function will do. The help page
+# doesn't really explain what will happen for all the different possible combinations of 
+# the arguments, times, length.out and each.
+#
+# We can experiment to find out ...
+#-----------------------------------------------------------------------------------------.
+```
+
+## times and each
+
+```{r}
+# rep with times and each
+nums
+rep(nums, times=2, each=3)  # 10 10 10 20 20 20 10 10 10 20 20 20    ####
+```
+
+## length.out and each
+
+```{r}
+# rep with length.out and each
+nums
+rep(nums, length.out=8, each=3)  # 10 10 10 20 20 20 10 10   ####
+rep(nums, each=3, length.out=8 )  # same results : 10 10 10 20 20 20 10 10
+```
+
+## times, length.out, each
+
+```{r}
+# rep with times, length.out and each
+nums
+rep(nums, times=2, length.out=5, each=3)  # 10 10 10 20 20   ####
+
+# Look at the help file for specifics ...
+?rep
+```
+
+## Understanding R's help files   ####
+
+```{r}
+#######################################################################################.
+# Understanding R's help files   ####
+#
+# R functions can be used in many many different ways. You must become familiar with 
+# the R help files in order to understand how each function can be used. 
+#
+# Pay attention to the following in the R help files
+#
+# - what arguments can be specified
+#
+# - what are the names of the arguments
+#
+# - what are the default values (if any) of the arguments. The default values of
+#   an argument appear after an = sign next to the argument in the help file.
+#
+# - how the function works when different arguments are specified
+#######################################################################################.
+```
+
+## sort function
+
+```{r}
+############################################################################.
+#
+# sort( SOME_VECTOR )                    # returns the vector sorted in increasing oder ####
+#
+# sort( SOME_VECTOR, decreasing=TRUE )   # returns the vector sorted in decreasing order  ####
+#
+############################################################################.
+
+grades = c(93, 76 , 69, 83, 77, 98, 100, 25, 89, 92, 91, 52)
+grades
+
+sort(grades) # show the grades in sorted order, i.e. 25  52  69  76 ... etc
+
+# The variable grades is still in the original order
+grades       # the variable grades is still in the original order
+
+# REMEMBER - as always, if you want to change a variable, you MUST use an
+#            assignment statement.
+#
+# If you want to change the value of the grades variable, then you must
+# assign the result back to the grades variable. 
+
+grades= sort(grades)  # now the variable grades contains the sorted values
+grades
+
+
+#---------------------------------------------------------------------.
+# The decreasing argument may be TRUE or FALSE (default is FALSE) ####
+#---------------------------------------------------------------------.
+
+sort(grades, decreasing = FALSE)  # same thing  (default for decreasing is FALSE)
+
+sort(grades, decreasing = TRUE)
+
+
+# See the help page for advanced options that can be used with sort
+?sort
+```
+
+## More about the seq function.   ####
+
+
+```{r}
+############################################################################.
+#
+# More about the seq function.   ####
+#
+############################################################################.
+
+# Review of the basic use of seq
+# We already covered the following:
+
+?seq   # see the help page for seq
+
+seq(from=8, to=10)   # 8 9 10     count up  
+
+seq(from=10, to=8)   # 10 9 8     count down
+
+seq(10,8)   # 10 9 8 - same thing - the names aren't necessary if you write the arguments in the expected order
+
+# ... seq can also accept other arguments:
+
+#-----------------------------------------------------------------------------.
+# seq( ...   by=SOME_POSITIVE_OR_NEGATIVE_NUMBER   .... )  ####
+#
+#   The by argument tells seq what number to "count by". (by can be positive or negative)    ####
+#
+#   1st value in the output vector is the   "from" value.
+#   2nd value in the output vector is       "from" + "by"
+#   3rd value in the output vector is       "from" + "by" + "by"
+#   4th value in the output vector is       "from" + "by" + "by" + "by"
+#   etc ...
+#
+# By default, the value of by is 1.
+#
+# See examples below.  
+#-----------------------------------------------------------------------------.
+
+# count by threes ... up until but not past the to value
+seq(from=20, to=30, by=3)   #  20  23  26  29
+
+# To count down by any number other than 1 you must use a negative value for by.
+# 
+# In the following command we count down
+# from 10 to 3 by threes, so by must be MINUS three (i.e. by = -3)
+
+seq(from=30, to=20, by=-3)  # 30  27  24  21  count down by threes 
+
+# if you use the wrong sign (+ or -) for by you'll get an error
+
+#seq(from=30, to=20, by=3)   # ERROR - counting down - must have negative value for by
+
+#seq(from=20, to=30, by=-3)  # ERROR - counting up - must have positive value for by
+
+
+#-----------------------------------------------------------------------------.
+#   The return value of seq always starts with the "from" value and goes no further than the "to" value.  ####
+#
+#   NOTE that the result might not actually include the "to" value if the "to" value
+#   doesn't naturally arise from the implied sequence.
+#
+#   See the examples below.
+#-----------------------------------------------------------------------------.
+
+seq( from = 10  ,  to = 20, by=4 ) # 10 14 18  - result does NOT include 20.
+
+
+#-----------------------------------------------------------------------------.
+#
+#   the arguments "from" and "to" do NOT have to be whole numbers  ####
+#
+#-----------------------------------------------------------------------------.
+
+seq( from = .5, to = 3.5)  # 0.5  1.5  2.5  3.5     
+
+seq( from = 0.75  ,  to = 3 ) # 0.75  1.75  2.75  - result does NOT include 3.   ####
+```
+
+## --- PRACTICE ---
+
+```{r}
+#########################################################################.
+# QUESTION ####
+#########################################################################.
+# Write code to generate the number -5 until -200 but no further. Count down by 5's
+# The code should produce
+# -5 -10 -15 .... -200
+#########################################################################.
+
+# ANSWER
+seq(from=-5, to=-200, by=-5)   # ANSWER
+
+
+#########################################################################.
+# QUESTION ####
+#########################################################################.
+# 
+# Based on the documentation for seq, what will the following command display?
+#
+# > seq()   # what will this display???
+# 
+# How did you figure out your answer from the documentation?
+#########################################################################.
+
+# ANSWER - just try it - it shows 1 - can you understand why? 
+# See the documentation ?seq
+seq()
+```
+
+## Even more about the seq function.   ####
+
+```{r}
+#-----------------------------------------------------------------------------.
+# Other arguments:
+#
+#   length.out - total length of the resulting vector
+#
+#   along.with - specify a vector whose length should be used as the length of the result
+#
+# See examples below
+#-----------------------------------------------------------------------------.
+
+?seq
+
+
+# from,to,length.out (without by) - start with from, end with to, total of 5 numbers
+seq( from=1, to=2, length.out=5)    # 
+
+# from,by,length.out (without to) - start with from, keep adding by, for a total of length.out numbers
+seq(from=2, by=3, length.out=20)  # start from 2, add 3 each time until you get 20 numbers
+
+
+#-----------------------------------------------------------------------------.
+# QUESTION: What will the following produce ? 
+#
+# I guess you can run it to find out but you should know how to answer this 
+# WIHTOUT needing to run the code.
+#-----------------------------------------------------------------------------.
+
+seq(2, 3, length.out=20)
+
+
+# to,by,length.out   (without from)
+seq(to=100, by=3, length.out=4)  # generate 4 numbers each one 3 greater than the next until you get to 100
+
+
+#-----------------------------------------------------------------------------.
+# QUESTION: What will the following produce ? 
+#
+# See if you can figure out what each of the following will
+# display BEFORE running the command
+#-----------------------------------------------------------------------------.
+
+seq(from=2, to=3, by=0.2)
+
+seq(from=1, to=3, length.out=6)
+
+seq(from=0.5, to=1, by=.05)
+
+length( seq(from=0.5, to=1, by=.05) )
+
+seq(10, 1000, by=10)
+
+
+#--------------------------------------------------------------------.
+#
+# length.out argument                 ####
+#
+#--------------------------------------------------------------------.
+
+# length.out is similar to the length.out for the rep function.
+# If you specify length.out you do not have to specify the to argument
+
+seq(3, length.out=7, by=-1)   # 3  2   1   0  -1  -2  -3
+
+seq(3, length.out=7)          # 3  4  5  6  7  8  9
+
+seq(3, length.out=7, by=-2)   # 3  1  -1  -3  -5  -7  -9
+
+
+seq(3, length.out=7, by=10)   # 3  13  23  33  43  53  63
+
+
+
+
+#--------------------------------------------------------------------.
+#
+# along.with=SOME_VECTOR               ####
+#
+# This argument is the same as     length.out=length(SOME_VECTOR)
+#
+# see examples below
+#--------------------------------------------------------------------.
+
+# Example: suppose a professor wanted to give a curve so that people
+# with lower grades got a higher curve.
+# 
+# The professor could do the following:
+
+# Here are the original grades
+grades = c(98,77,64,79,76, 84, 92, 78)
+grades
+
+length(grades)   # how many grades are there?
+
+# Sort the grades in decreasing order
+sortedGrades = sort(grades, decreasing=TRUE)
+sortedGrades
+
+# Generate a vector with the amount to curve each grade.
+# Highest grade has a curve of 1 point, 2nd highest grade has a curve
+# of 2 points, etc.
+
+curveAmounts = seq(from=1, along.with=sortedGrades)
+curveAmounts
+
+curvedGrades = sortedGrades + curveAmounts
+
+sortedGrades # original grades
+curvedGrades  # curved grades
+```
+
+## Skipping arguments
+
+```{r}
+#############################################################################.
+# You can skip an argument by repeating commas.
+# This works but it is not usually how R programmers write code. Therefore
+# others might not understand your code if you do this. You should know 
+# that it works but I recommend that you don't do it in practice. 
+#############################################################################.
+
+# value of 1st argument (ie. "from") is 2
+# value of 2nd argument (ie. "to") is 3
+seq(2, 3, length.out=20)
+
+# value of 1st argument (ie. "from") is 2
+# value of 2nd argument (ie. "to") is blank - i.e. the default is used
+# value of 3rd argument (ie. "by") is 3 - i.e. the default is used
+
+seq(2, , 3, length.out=20)   # now the 3 is being passed to 3rd argument, ie. by
+```
+
+## --- PRACTICE ---
+
+```{r}
+
+#######################################################.
+# QUESTION ####
+#
+# A professor wants to curve the grades of his students. 
+# The grades are in the variable named grades.
+#
+# The highest grade should get a 1 point curve, 
+# ... the next lower grade a 3 point curve
+# ... the next lower grade a 5 point curve
+#     etc.
+#
+# Write R code to store the curved grades in a variable named curvedGrades.
+# Your code should work unchanged no matter what values are stored in
+# the grades vector.
+#
+# EXAMPLE 1
+#   > grades = c(98,77,64,79,76, 84, 92, 78)
+#   > # YOUR CODE GOES HERE
+#   > curvedGrades
+#   [1] 99 95 89 86 87 88 89 79
+#
+# EXAMPLE 2
+#   > grades = c(70, 90, 60, 80)
+#   > # YOUR CODE GOES HERE
+#   > curvedGrades
+#   [1] 91 83 75 67
+#######################################################.
+
+
+# ANSWER
+# Start by thinking about the answer this way:       # ANSWER
+# 1. Sort the grades into decreasing order       # ANSWER
+# 2. Generate the sequence 1,3,5,... etc       # ANSWER
+# 3. Now add part (1) to part (2) to get the answer       # ANSWER
+#
+# The following is not the answer yet, but shows how we want to        # ANSWER
+# build up to the final answer.        # ANSWER
+grades = c(98,77,64,79,76, 84, 92, 78)         # ANSWER
+grades = sort(grades, decreasing=TRUE)       # ANSWER
+curvedGrades = grades + c(1,3,5,7,9,11,13,15)       # ANSWER
+curvedGrades       # ANSWER
+
+# The previous code works if you know exactly how many grades there are. # ANSWER
+# However, your code should work, unchanged, for any value of the grades # ANSWER 
+# vector.                                                                # ANSWER
+
+# Use the seq function to generate the c(1,2,3 ... etc) vector   # ANSWER
+# This can be done in two different ways.          # ANSWER
+# (a) with the along.with argument of seq    # ANSWER
+# (b) with the along.with length.out argument seq and length function   # ANSWER
+
+# This is the code for (a)        # ANSWER
+grades = c(98,77,64,79,76, 84, 92, 78)       # ANSWER
+grades = sort(grades, decreasing=TRUE)       # ANSWER
+curvedGrades = grades + seq(from=1, by=2, along.with=grades)       # ANSWER
+curvedGrades       # ANSWER
+
+# This is the code for (b)        # ANSWER
+grades = c(98,77,64,79,76, 84, 92, 78)       # ANSWER
+grades = sort(grades, decreasing=TRUE)       # ANSWER
+curvedGrades = grades + seq(from=1, by=2, length.out=length(grades))       # ANSWER
+curvedGrades       # ANSWER
+
+
+#######################################################.
+# QUESTION ####
+#
+# Do the same as the previous question, however, this time
+# the professor wants to give the highest 25% of the class no curve.
+# The first grade below the highest 25% of the class a 1 point curve, 
+# ... the next lower grade a 3 point curve
+# ... the next lower grade a 5 point curve
+#       etc.
+#
+# EXAMPLE 1 
+#    > grades = c(98,77,64,79,76, 84, 92, 78)
+#    > # YOUR CODE GOES HERE
+#    [1] 98 92 85 82 83 84 85 75
+#
+# EXAMPLE 2
+#    > grades = c(70, 90, 60, 80)
+#    > # YOUR CODE GOES HERE
+#    [1] 90 81 73 65
+#
+#######################################################.
+
+# ANSWER
+# Start with some data                    # ANSWER
+grades = c(98,77,64,79,76, 84, 92, 78)    # ANSWER
+
+# Think about it this way - we need to curve the following                 # ANSWER
+# grades in the following way:                                           # ANSWER
+#
+#    SORTED GRADES: 98 92 84 79 78 77 76 64
+#    CURVE:          0  0  1  3  5  7  9 11
+
+# We can accomplish this with the following code:                    # ANSWER
+grades = c(98,77,64,79,76, 84, 92, 78)                # ANSWER
+grades = sort(grades, decreasing=TRUE)                # ANSWER
+grades                # ANSWER
+zeros = rep(0, times=length(grades) * 0.25)                # ANSWER
+zeros                # ANSWER
+curves = seq(from=1, by=2, length.out=length(grades) - length(grades)*.25 )                # ANSWER
+curves                # ANSWER
+curvedGrades = grades + c(zeros, curves)                # ANSWER
+curvedGrades                # ANSWER
+
+# Some people, might write the code all in one line.                     # ANSWER
+# I don't recommend that in this case - it's too confusing.                 # ANSWER
+# However, you should be able to READ code like this                 # ANSWER
+# as you WILL SEE code like this written by others.                # ANSWER
+# To help you understand the code you can highlight                # ANSWER
+# portions of the line and press ctrl-ENTER or cmd-ENTER                 # ANSWER
+# to run just those portions of the code.                 # ANSWER
+# Practice on the following to make sure you understand                # ANSWER
+# how to read code like this and understand it.                # ANSWER
+grades = c(98,77,64,79,76, 84, 92, 78)
+grades = sort(grades, decreasing=TRUE)
+grades
+curvedGrades = grades + c(rep(0, times=length(grades) * 0.25)  , seq(from=1, by=2, length.out=length(grades) - length(grades)*.25 ))
+curvedGrades
+
+
+
+#################################################################.
+# QUESTION  ####
+# 
+# This time make the curve amounts the square root of 100-grade for each 
+# person's grade. All students should get this curve.
+#
+# EXAMPLE 1
+#   > grades = c(100, 99, 96, 91, 86, 75, 19, 0)
+#   # YOUR CODE GOES HERE
+#   [1] 100 100  98  94  88  80  28  10
+#
+#
+# EXAMPLE 2
+#   > grades = c(98,77,64,79,76, 84, 92, 78)
+#   # YOUR CODE GOES HERE
+#   [1] 99.41421 81.79583 70.00000 83.58258 80.89898 88.00000 94.82843 82.69042
+#################################################################.
+
+# ANSWER
+grades = c(100, 99, 96, 91, 84, 75, 19, 0)    # ANSWER
+curves = sqrt(100-grades)    # ANSWER
+curvedGrades = grades + curves    # ANSWER
+curvedGrades    # ANSWER
+
+# ANSWER
+# (this answer is all in one line of code)    # ANSWER
+grades = c(98,77,64,79,76, 84, 92, 78)    # ANSWER
+curvedGrades = grades + sqrt(100-grades)    # ANSWER
+curvedGrades    # ANSWER
+```
+
+## Practice with NESTING functions one inside the other
+
+```{r}
+#################################################################.
+# QUESTION  ####
+#
+# create a vector that contains the even #rs from 2 through 30 followed by 
+# the odd #rs from from 1 through 30. Write your command using the least amount
+# of typing possible.
+#
+# The result should be as shown below. 
+#
+#      > # YOUR COMMAND GOES HERE
+#
+#      [1] 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29
+#################################################################.
+
+
+
+
+#################################################################.
+# QUESTION  ####
+#
+# Use R's functions that we learned about to 
+# create a vector of the evens from 2 through 10 repeated to a length of 27
+# DO NOT SIMPLY JUST TYPE THE NUMBERS IN A c(). One or more functions other than just c().
+#
+# The result should be as shown below. 
+#
+#      > # YOUR COMMAND GOES HERE
+#
+#      [1] 2 4 6 8 10 2 4 6 8 10 2 4 6 8 10 2 4 6 8 10 2 4 6 8 10 2 4
+#################################################################.
+
+
+
+
+
+#################################################################.
+# QUESTION  ####
+#
+# Generate a vector that contains the even #rs from 1 through 10 
+#                      followed by the odd #rs from 1 through 10.
+# All of these numbers should be repeated 3 times
+# 
+# The output should look like this:
+#
+#   > # YOUR COMMAND GOES HERE
+#
+#    [1]  2  4  6  8 10  1  3  5  7  9  2  4  6
+#   [14]  8 10  1  3  5  7  9  2  4  6  8 10  1
+#   [27]  3  5  7  9
+#
+# MAKE SURE YOU
+# - use the c function when necessary to combine the evens and odds into a single vector
+# - put the commas in the correct place
+# - put all parentheses in the correct places
+#################################################################.
+
+
+
+
+
+#################################################################.
+# QUESTION  ####
+#
+# Create vector that has the numbers 0.3, 0.6, 0.9, 1.2, 1.5 ... for a total of 300 values
+#################################################################.
+```
+
+# The : operator 
+
+
+```{r}
+#----------------------------------------------------------------------------.
+# The : operator is a shorthand for a basic usage of the seq function that only uses from and to arguments  ####
+#
+# For example:
+# 
+#     > 3:6     # is the same as seq(from=3, to=6)
+# 
+#     [1] 3 4 5 6
+#
+# See more examples below.
+#----------------------------------------------------------------------------.
+
+3:5       # 3 4 5 
+seq(3,5)  # 3 4 5 (same thing)
+
+5:3       # 5 4 3 
+seq(5,3)  # 5 4 3 (same thing)
+
+-3:5      # -3 -2 -1 0 1 2 3 4 5
+seq(-3,5) # -3 -2 -1 0 1 2 3 4 5 (same thing)
+
+3:-5      # 3 2 1 0 -1 -2 -3 -4 -5
+seq(3,-5) # 3 2 1 0 -1 -2 -3 -4 -5 (same thing)
+```
+
+
+
+
+
+## Order of operations in R
+
+
+```{r}
+###########################################################################.
+# Order of operations in R    ####
+#
+# To see the full list of the order of operations for R (or "operator precedence")
+# type the following (notice the CAPITAL "S" in ?Syntax).
+#
+#   ?Syntax     #  Operators that appear higher in the list are done first.  ####
+#
+# or see the following webpage:
+#
+#   https://stat.ethz.ch/R-manual/R-devel/library/base/html/Syntax.html
+###########################################################################.
+
+# Let's look at the complete order of operations for R's operators.
+# as mentioned above operators that appear higher in the list are done 
+# before operators that appear lower in the list. 
+
+?Syntax
+
+# Notice that the colon operator is done  AFTER exponentiation but
+# BEFORE multiplication, division, addition and subtraction are done!
+#
+# Be careful of the order of operations!
+# The colon operator is done BEFORE the subtraction operator
+
+15-4:2   # result is 11 12 13  (might not be what you would have thought) 
+
+#original:         15-4:2
+# colon is first:  15-c(4,3,2)
+# minus is next:   c(15-4, 15-3, 15-2)
+#                  c(11, 12, 13)
+
+
+
+(15-4):2 # this is different
+#original:    (15-4):2
+# minus first: 11:2
+# colon is next: c(11,10,9,8,7,6,54,4,3,2)
+
+?Syntax
+```
+
+## 2023 - BEREN - UP TO HERE - AFTER CLASS 5  ####
+
+## Help pages for R's operators
+
+```{r}
+#------------------------------------------------------------------.
+#
+#   ?`:`   # type this to see the help page for the colon operator (e..g 3:5)   ####
+# 
+#------------------------------------------------------------------.
+
+# To get more info about the colon operator, 
+# you can read the R help documentation for the : operator.
+#
+# To do so, you must enclose the colon in `backticks` (also known as `grave accents`).
+# The backtick (or grave accent) character is on most USA keyboards
+# in the upper left hand corner under the ESC key.
+# It is on the same key as the "~" (tilde) character. 
+
+?`:`    # You must enclose the colon in `backticks` (also known as `grave accents`) ####
+
+help(`:`)   # this does the same thing
+
+
+
+# If you leave out the `backticks` (AKA `grave accents`) you will get an error.
+# Note the red "x" in the left margin in RStudio next to the following command.
+
+#?:    # ERROR
+
+    
+
+# You can also use backticks for help topics that contain other symbols or spaces
+
+?`+`      # Shows help topic for + (and other arithmetic operators)
+
+
+
+#############################################################################.
+# The following was added in 2022
+# NOTE - in recent versions of R, in addition to `backticks`
+#        'single quotes' (i.e. 'apostrophes')
+#        and "double quotes" (i.e. "quotes")
+#        also work.
+#############################################################################.
+
+# as of 2022, 'single quotes' "double quotes" and `backticks` all work
+
+?':'    # single quotes
+?":"    # double quotes
+?`:`    # backticks
+
+?'+'    # single quotes
+?"+"    # double quotes
+?`+`    # backticks
+```
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,507 @@
+# scientific notation *~(longer version)~*
+
+```{r}
+# remove all varibles
+rm (list = ls())
+
+########################################################
+########################################################
+##
+##  A couple of introductory comments about basic math
+##
+########################################################
+########################################################
+
+#--------------------------------------------
+# how many zeros are there in a power of 10?
+#--------------------------------------------
+
+# The number of zeros (before the decimal point) in a
+# POSITIVE power of 10 is the same as the exponent
+
+10^1    # 10  (one zero)
+10^2   # 100  (two zeros)
+10^3  # 1000  (three zeros)
+10^4  # 10000  (four zeros)
+# etc ...
+
+# The number of zeros after the decimal point in a
+# NEGATIVE power of 10 is one less than the absolute value of the exponent
+
+10^-1  # 0.1    (no zeros after the decimal point)
+10^-2  # 0.01   (one zero after the decimal point)
+10^-3  # 0.001  (two zeros after the decimal point)
+10^-4  # 0.0001 (three zeros after the decimal point)
+# etc ...
+
+#-------------------------------------------------------
+# Intro to Scientific Notation in R
+#
+# Multiplying numbers by powers of 10
+#-------------------------------------------------------
+
+# If you multiply a number by a POSITIVE POWER of 10 the decimal point
+# will move to the RIGHT by the number of positions as expressed by the exponent.
+# Example:
+
+1.234 * 10^0     # 1.234 : 10^0 is 1 so this doesn't change the first number
+1.234 * 10^1     # 12.34 : 10^1 is 10 so this moves the decimal to the right by 1 position
+1.234 * 10^2     # 123.4 : 10^2 is 100 so this moves the decimal to the right by 1 position
+1.234 * 10^3     # 1234.0
+1.234 * 10^4     # 12340.0
+# etc ...
+
+
+# If you multiply a number by a NEGATIVE POWER of 10 the decimal point
+# will move to the LEFT by the number of positions as expressed by the exponent.
+# Example:
+
+123.4 * 10^-1     # 12.34    move decimal point 1 position to the left
+123.4 * 10^-2     # 1.234    move decimal point 2 positions to the left
+123.4 * 10^-3     # 0.1234   move decimal point 3 positions to the left
+123.4 * 10^-4     # 0.01234  move decimal point 4 positions to the left
+# etc ...
+
+# These types of calculations can be used as a shorthand to write very large numbers
+# and very small numbers in a very compact way. For example: 
+#
+#   9.234 * 10^100  is shorthand for 
+#   the very very large number 9234000000...(total of 97 zeros)...0000
+#   i.e. 97 zeros after the 9234
+#
+#   9.234 * 10^-100 is shorthand for
+#   the very very small number 0.00000......(99 zeros)...0009234
+#   i.e. 99 zeros between the decimal point and the 9234
+#
+# The above calculations are examples of "Scientific notation".
+# Scientific notation is used as a shorthand for writing very big numbers
+# (and very small numbers - see below)
+
+#---------------------------------------------------------------------
+# R has a shorthand notation for writing these types of calculations.
+# Instead of writing 1.2345*10^6, you could instead write 1.2345e6
+#
+# The "e" in the number stands for "exponent". The "e" is understood
+# to be read as "times ten to the power of". The number after the "e"
+# is the exponent for the power of 10.
+# EXAMPLE - all of the following are the same exact number:
+#---------------------------------------------------------------------
+
+1234500            # this is the same
+
+1.2345 * 10^6      # this is the same   1234500
+
+1.2345e6           # this is the same
+
+# By default R will display values in scientific notation if the number is
+# very very big or very small. For example:
+
+# very large number - by default, R shows this value in scientific notation
+12300000000  # 1.23e+10 
+
+# very small number - by default, R shows this value in scientific notation
+0.000000123 # 1.23e-07
+
+# We can also write scientific notation in our code if we like.
+
+1.23e+9 / 1e+8  # 12.3 , same as  1230000000 / 100000000  but a easier to read :)
+
+1.2e-4  # 0.00012
+
+0.0000000000123 == 1.23e-11
+
+0.00000000001231 == 1.23e-11
+
+# If R returns some very large numbers or some very small numbers in a vector,
+# the ALL of the numbers in the vector will be displayed in scientific notation.
+
+# Some typical arithmetic - nothing surprising.
+
+100 / c(100, 20)         # 1   5  
+
+# Same code as above but the last value will be very large so ALL of the
+# results are expressed in scientific notation.
+
+100 / c(100, 20)   # 1  5
+
+100 / c(100, 20, 0.001)  # 1e+00  5e+00  1e+05
+
+
+# numbers are all low enough to display without scientific notation
+3 ^ (1:5)   # 3  9  27  81  243 
+
+# Some of the larger numbers are displayed in scientific notation so
+# R displays ALL of the numbers in scientific notation
+3 ^ (1:30) # 3.00e+00  9.00e+00  2.70e+01  8.10e+01  2.43e+02  etc ...
+
+
+
+#-----------------------------------------------------
+# MORAL OF THE STORY - don't become alarmed
+#
+# Occasionally, you will see R displaying numbers in 
+# scientific notation. Don't become confused. Understand
+# that these are just "regular numbers" being displayed in 
+# a more concise format. Any math that is done with these
+# numbers is the same as if you did the same math with the 
+# equivalent non-scientific-notation format.
+#-----------------------------------------------------
+
+
+
+
+
+#----------------------------------------------------------
+# PRACTICE
+#----------------------------------------------------------
+
+
+# QUESTION - Write the value 4.98e+5 as a "regular" number
+
+
+
+# QUESTION - Write the value of 4.98e-3 as a "regular" number
+
+
+# what are the values of the following expressions?
+#
+#    1e-2 + 2e-1
+#
+#    9.876e5
+#
+#    5.23e4 + 1000
+#
+#
+# What will R display for the following numbers?
+#
+#    12340000000000 (ten zeros)
+#
+#    0.0000000000123 (ten zeros)
+
+
+
+#########################################################################
+# 2022 - BEREN - ONLY COVERED UP TO HERE IN THIS FILE
+#        YOU ARE NOT RESPONSIBLE FOR THE MATERIAL BELOW THIS POINT IN THIS FILE
+#########################################################################
+
+#########################################################################
+# 2022 - WILF - ONLY COVERED UP TO HERE IN THIS FILE
+#        YOU ARE NOT RESPONSIBLE FOR THE MATERIAL BELOW THIS POINT IN THIS FILE
+#########################################################################
+
+
+
+############################################################
+############################################################
+#
+# Roundoff error in Decimal (base-10) and Binary (base-2)
+#
+############################################################
+############################################################
+
+# The numbers what we humans use every day are made up of 10 different digits i.e 0,1,2 .. 9
+# These numbers are therefore called "base-10" numbers or "decimal" numbers.
+#
+# It may sound strange, but in order to perform many calculations, computers internally use numbers
+# that only have 1 and 0 as digits. These numbers are known as "base-2" or "binary" numbers. When computers display numbers to 
+# people, the numbers are converted to the "base-10" (or "decimal") numbers that we are
+# used to seeing.
+#
+
+# Right now we will NOT discuss the intricate details of how 
+# computer work with Binary (base-2) numbers.
+# (For more info. you can refer to the powerpoint on Canvas.)
+# HOWEVER, you should understand the following ...
+#
+# The fractions that can be converted to an exact number with a decimal point are 
+# different for base-2 (aka binary) numbers and for base-10 (aka decimal) numbers. 
+# For binary numbers (i.e. numbers that computers use internally)
+# fractions that can be reduced to have a power of 2 in the denominator
+# can be represented by a terminating decimal point value. 
+# Other fractions cannot. 
+#
+# This issue leads to "roundoff" error very frequently when doing math
+# in computer programming- similar to 1/3 + 1/3 + 1/3 ...
+#
+# R masks this issue by displaying what you might think a number is.
+# However, the actual value for the number might be something else. 
+# 
+# You can use the print.default (or just print) function with the 
+# digits argument to display the ACTUAL value that R stores for a number
+
+0.1
+print(0.1, digits=22)
+
+0.3
+print(0.3, digits=22)
+
+0.6
+
+print(0.6, digits=22)
+
+1.1
+print(1.1, digits=22)
+
+# This issue can lead to "roundoff" errors. There are ways to deal with 
+# this but it can get a little involved for this early in the course.
+# for right now, just accept it. We'll revisit this issue later.
+
+
+
+
+# It is well known that the fraction 1/3 cannot be directly represented by 
+# a number with a decimal point. The best we can do is 0.333...  You would need
+# an infinite number of 3's after the decimal point to accurately represent the 
+# fraction 1/3. Therefore 0.333 + 0.333 + 0.333 is NOT the same as 1/3 + 1/3 + 1/3.
+# Similarly 1/11 is 0.090909... You cannot represent one eleventh exactly using
+# a finite number of digits.
+
+# In binary (i.e. base-2) a similar problem exists. However, the numbers that cannot
+# be represented exactly are different from those in decimal. For example, if you 
+# would convert 1/5 to binary, you would not get an exact representation. 
+# Therefore R will not be able to represent the value of 1/5 exactly 
+# using standard "numeric" values.
+
+oneFifth = 1/5
+oneFifth                   # R displays a rounded version of the value
+print(1/5 , digits=22)     # you can see the actual value stored by specifying the # of digits after the decimal point
+print(1/5 * 1, digits=22)
+print(1/5 * 2, digits=22)
+print(1/5 * 3, digits=22)
+print(1/5 * 4, digits=22)
+print(1/5 * 5, digits=22)
+
+
+# The same is true for 1/10
+
+oneTenth = 1/10
+oneTenth
+print(oneTenth, digits=22)
+print(oneTenth * 1 , digits =22)
+print(oneTenth * 2 , digits =22)
+print(oneTenth * 3 , digits =22)
+print(oneTenth * 4 , digits =22)
+print(oneTenth * 5 , digits =22)
+print(oneTenth * 6 , digits =22)
+print(oneTenth * 7 , digits =22)
+print(oneTenth * 8 , digits =22)
+print(oneTenth * 9 , digits =22)
+print(oneTenth * 10 , digits =22)
+
+######################################################################################
+#######################################################################################
+#
+# EXPLORING R's VARIOUS OPTIONS
+#
+# R has over 80 different options that you can set. For most of the time we will
+# choose to just leave the defaults that are set when R is installed. However, 
+# sometimes it is helpful to change some of these options. 
+# options()    # see all of R's options and their values
+#
+# When working with roundoff error issues it is helpful sometimes to automatically
+# see more digits after the decimal point when you perform R commands. 
+# You can do that through R's options. See the following for more info.
+#
+# options()          # see all of R's options and their values
+#
+# names(options())   # see just the names of the options without their values
+#
+# getOption("digits") # see the value of the digits option (default for new installation is 7)
+#
+# options(digits=22)  # set the number of max # of digits that R will display for a number
+#
+#
+#######################################################################################
+#######################################################################################
+
+options()    # see all of R's options and their values
+
+?options     # learn more about the options command
+
+names(options())   # see just the names of the options without their values
+
+getOption("digits") # see the value of the digits option (default for new installation is 7)
+
+
+options(digits=22)  # set the number of max # of digits that R will display for a number
+
+# You can see now that these numbers have roundoff error
+1/5
+1/10    
+
+# These numbers do not
+1/2
+1/4
+1/8
+
+# set digits option back to the default
+options(digits=7)  # set the number of max # of digits that R will display for a number
+
+# You don't see the roundoff error anymore but it is still there ...
+1/5
+1/10    
+
+
+
+
+
+
+
+
+
+
+
+
+# A somewhat more involved explanation ...
+
+#############################################################
+#############################################################
+##
+## Floating point numbers and "roundoff errors"
+##
+## (A "floating point number" refers to a number that 
+##  contains a decimal point. The term "floating point" is
+##  a reference to a technique that
+#   computers use to process numbers with decimal points in them.
+##  We will not cover exactly why they
+##  are called "floating point" numbers, but the reason is 
+##  related to the fact that multiplying a number by a power of 10
+##  simply moves the decimal point.)
+##
+#############################################################
+#############################################################
+
+# Some fractions that we write do not have an exact representation
+# as floating point numbers. For example, many people will write
+# 1/3 as 0.333, however there really should be an infinite number of 3's in the floating point
+# version. 0.333 is just a rough approximation. 0.3333 is closer to 1/3
+# and 0.33333 (five 3's) is even closer. However, you will NEVER get
+# an exact representation of 1/3 unless you write an infinite number
+# of 3's after the decimal point.
+#
+# Therefore 1/3  +  1/3   +  1/3 = 1
+# When converted into floating point numbers becomes, approximately 
+#
+#  0.333 + 0.333 + 0.333 = 0.999 (which looks wrong!)
+#
+# Some fractions can be converted exactly, eg.
+#    1/2 is 0.5 exactly
+#    1/4 is 0.25 exactly
+#    1/5 is 0.2 exactly
+#    1/8 is 0.125 exactly
+#    1/10 is 0.1 exactly
+#    1/16 is 0.0625 exactly 
+#    1/25 is 0.04 exactly
+#
+# In general if a fraction can be reduced to an equivalent fraction whose
+# denominator is a power of 2 , a power of 5 or a power of 10, then the 
+# fraction can be represented by an exact terminating decimal.
+
+
+#------------------------------------------------------------------
+# 
+# Base-10 (aka Decimal) numbers vs Base-2 (aka Binary) numbers
+# 
+#------------------------------------------------------------------
+
+# Languages such as Hebrew, Arabic and English use different alphabets.
+# However, some languages such as French, Spanish and English use the same
+# alphabet. However, the words they form often mean different things in the 
+# different languages. For example the word "pie" in English is a tasty treat
+# but "pie" in Spanish means a foot. In order to really understand what the word
+# "pie" means you need to know if the word is Spanish or English!!!
+
+# In a similiar way, there are different "numeric languages". 
+# "Numeric languages", such as "Roman numerals", use different "alphabets".
+# For example, the number that we know as one hundred and twenty three, i.e. 123
+# is written in Roman numerals as CXXIII.
+#
+# However, some "numeric languages" use the same digits that we recognize but
+# in a different way. The internal workings of computers are designed to use
+# a different "numeric language" than the numbers that people are used to seeing.
+# Internally, computers process information using a "numeric language" known as
+# "base-2" or "binary". For example, the number "one hundred and twenty three", i.e. 123, 
+# can be written in binary (or base-2) as 01111011. Every base-2 (or binary) number
+# is written using just zeros and ones. For example, the binary number
+# 1001100100100101 is the equivalent of the decimal (base-10) number
+# 39205 (i.e. thirty nine thousand two hundred and five).
+#
+# When a computer gets a decimal (base-10) number from a peson, the computer first converts
+# the decimal (base-10) number into a binary (base-2) number. The computer then
+# performs any processing it needs to do. Finally, the result is translated back
+# into the decimal form and displayed to the person.
+
+#----------------------------------------------------------------------------------
+# 
+# Decimal (base-10) and binary (base-2) numbers can represent the exact same integers.
+#
+#----------------------------------------------------------------------------------
+
+# Any integer that we can write in base-10 (or decimal) can also be written, in a different
+# form in base-2 (or binary). For example, the following are the decimal and binary
+# equivalents for a few numbers:
+#
+#     DECIMAL (base-10)   BINARY (base-2)
+#                    0                  0  
+#                    1                  1
+#                    2                 10
+#                    3                 11
+#                    4                100
+#                    5                101
+#                    6                110
+#                    7                111
+#                    8               1000
+
+
+#----------------------------------------------------------------------------------
+# 
+# Decimal (base-10) can NOT precisely represent some "real" numbers (i.e. fractions)
+# and there will be "roundoff" error.
+#
+#----------------------------------------------------------------------------------
+
+# In the number system we use every day, some fractions can be perfectly represented
+# by "real" numbers (i.e. numbers with decimal points) while others cannot.
+# For EXAMPLE:
+#             1/2 is EXACTLY 0.5
+#             1/4 is EXACTLY 0.25
+#             1/5 is EXACTLY 0.2
+#             1/8 is EXACTLY 0.124
+#             1/10 is EXACTLY 0.1
+#
+# However, the following fractions CANNOT be represented EXACTLY by a number with a decimal point.
+# These fractions lead to "repeating digits after the decimal point"
+# EXAMPLE:
+#             1/3 is 0.333...  (the 3's repeat forever)
+#             1/6 is 0.1666...          (the 6's repeat forever)
+#             1/7 is 0.142857142857...  (the 142857's repeat forever)
+#             1/9 is 0.111...           (the 1's repeat forever)
+
+#----------------------------------------------------------------
+#
+# Binary (base-2) can NOT represent other "real" numbers
+#
+#----------------------------------------------------------------
+
+# Binary numbers have similar limitations but for DIFFERENT fractions.
+# Any fraction that has a power of 2 in the denominator can be represented
+# exactly in binary. However, other fractions cannot.
+# For example:
+#
+#     1/2  is EXACTLY 0.1  (in binary)
+#     1/4  is EXACTLY 0.01  (in binary)
+#     1/8  is EXACTLY 0.001  (in binary)
+#     1/16  is EXACTLY 0.0001  (in binary)
+#     3/4  is EXACTLY  0.11 (in binary)
+#     3/8 is EXACTLY   0.011 (in binary)
+#     (any fraction for which the denominator is a power of 2 can be represented exactly in binary)
+#
+# However:
+#
+#     1/3  in binary is 0.010101... (the 01's repeat forever)
+#     1/5  in binary is 0.00110011... (the 0011's repeat forever)
+#     1/6  in binary is 0.0010101...  (the 01's repeat forever)
+#     1/10 in binary is 0.000110011... (the 0011's repeat forever)
+#     (fractions whose denomiators are not a power of two cannot be represented exactly in binary)
+```

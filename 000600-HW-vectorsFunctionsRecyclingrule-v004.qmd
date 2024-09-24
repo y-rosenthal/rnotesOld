@@ -1,0 +1,712 @@
+# Practice Questions - TOPIC: Vectors1
+```{r}
+##################################################################
+##################################################################
+## INSTRUCTIONS
+## 
+## Answer the questions below by writing R commands.
+## There are hints after many of the questions. You can follow those
+## hints. However, there are many different ways to write code to 
+## accomplish something. Feel free to experiment with different ways
+## to accomplish the same thing.
+##
+## - In general, each question should be completed using a SINGLE
+##   command (unless specified otherwise).
+##
+## - If a question asks you to create a variable - do 
+##   that in one command.
+##
+## - If another part of the same question then asks you to use that
+##   variable - do that in another command. 
+##
+## - In general each question is independent of other questions.
+##   However, a multi-part question (e.g. (a), (b), etc) may refer to the
+##   earlier steps
+##
+## - For the purpose of grading all steps in each multi-step question
+##   i.e. (a), (b), etc. counts as a full question
+##   (i.e. each part of every question is worth the same amount of points).
+##################################################################
+##################################################################
+```
+
+```{r}
+# Question 1 (a).
+#
+#     Create a variable named "nums" that contains numbers starting with 100.
+#     Each successive number should be 7 less than the previous number. Follow
+#     this pattern through the negative numbers. Do not go past -100.
+#     Remember to store the vector in the variable named "nums".
+#     (i.e. nums should contain the vector
+#          100 93 86 79 ... 9 2 -5 -12 ... -82  -89 -96 )
+#
+#     Hints
+#       - use the seq function with the from, to and by arguments
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+
+# since we're counting DOWN, the by value must be negative
+nums = seq(100,-100,by=-7)  
+
+# Here are the numnbers
+nums
+```
+:::
+
+```{r]}
+# Question 1 (b).
+#     Create a vector starting with the pattern 1 2 3 etc ...
+#     The vector should be as long as the nums vector from
+#     part (a). 
+#
+#     Hints:
+#       - use the seq function or the colon operator (your choice)
+#       - use the length function as part of your answer
+#       - use the length function to check the length of nums from 
+#         part (a) to make sure that your answer is correct
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+
+# one way - with seq function
+seq(1, length(nums))
+
+# another way - with : operator
+1:length(nums)
+```
+:::
+
+```{r]}
+# Question 1 (c).
+#     Do part (b) again, but this time generate the numbers
+#     2 4 6 etc ... The vector should be as long as the nums 
+#     vector from part (a).
+#     The answer should display the numbers: 2 4 6 ... 56 58
+#
+#     Hints: 
+#       - use the seq function with the from, by and length.out arguments
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+# Note that you don't have to type 
+# from= since from is the first argument as defined in the help info (i.e. ?seq) 
+# and the value 2 is typed in the 1st position of the function call. 
+# However, it is required to specify by= and length.out=
+# since these arguments as specified in the function call below 
+# are not in the same positions as defined in the help info.
+seq(from=2, by=2, length.out=length(nums))
+
+# As noted in the comment above, the following is the same as the previous line
+seq(2, by=2, length.out=length(nums))
+```
+:::
+
+```{r]}
+# Question 1 (d).
+#     Subtract the vector in part (c) from the "nums" vector you created
+#     in part (a). Since the answer to part (a) should contain 
+#       100 93 86 ... -89 -96
+#     and the answer to part (c) should contain the values
+#       2   4  6  ...  56  58
+#     the answer for this question should display the values
+#       98  89 80 ... -145 -154
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+nums - seq(from=2,by=2, length.out=length(nums))
+```
+:::
+
+```{r]}
+# Question 1 (e).
+#     Do part (c) again, but this time do NOT use the length
+#     function. Instead use the along.with
+#     argument to the seq function. We did NOT cover along.with
+#     in class, but you should get used to learning how to 
+#     learn about R functions. See the documentation for the seq
+#     function or search online for more information.
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+# along.with 
+seq(2, along.with=nums, by=2)
+```
+:::
+
+```{r]}
+# Question 2.
+#    Create a vector with the pattern 5 10 15 ... 50 repeated
+#    four times (i.e. 5 10 15 ... 50 5 ... 50 5 ... 50 5 ... 50)
+#    Hints:
+#      - create the vector 5 10 15 ... 50 using the seq function
+#        by specifying the from, to and by arguments
+#
+#      - modify your answer by using the rep function to repeat that
+#        vector four times
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+rep(seq(from=5,to=50,by=5), times=4)
+```
+:::
+
+```{r]}
+# Question 3.
+#
+# Create a vector that contains 3 copies of each of the even numbers
+# from 2 through 100. Store this in a variable named trippleEvens. 
+# i.e. trippleEvens should contain the values
+#         2 2 2 4 4 4 6 6 6 ... 98 98 98 100 100 100
+#
+# Hints:
+#   - create a vector of just the even numbers (i.e. 2 4 6 ... 100)
+#     by using the seq function with arguments, from, to, by
+#
+#   - extend your code by using the rep function with the "each" argument
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+rep( seq(from=2, to=100, by=2), each=3)
+```
+:::
+
+```{r]}
+# Question 4.
+#        Repeat the values 3 6 9 ... 60 as many times as 
+#        a necessary until you reach a vector of length 150
+#        (i.e. 3 6 9 ... 60 3 6 9 ... 60 3 ... etc until a total length of 150)
+#        Store the result in the variable named "tens".
+#
+#        Hints: 
+#          - use the seq function to create the vector 3 6 9 ... 60 
+#          - expand your answer by using the rep function with the length.out
+#            argument
+#          - Make sure that the vector has 150 values by using the length
+#            function.
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+rep( seq(from=3, to=60, by=3), length.out=150)
+```
+:::
+
+```{r]}
+# Question 5 (a).
+#
+#    Display the powers of 10 from 10^9 down to 10^1.
+#
+#        Hints: 
+#          - Use vector arithmetic. Raise 10 to the power of
+#            a vector that contains the numbers 1 2 3 ... 9
+#            You can create the vector 1 2 3 ... 9 with the 
+#            colon operator.
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+# Note that the parentheses ARE required since ^ comes before : in the 
+# order of operations ( see ?Syntax )
+#
+# 10^1:9 would NOT produce the correct results.
+#
+# Also note that since 10^9 is a rather large number, R displays the values in
+# "scientific notation". (We will learn more about scientific notation later)
+10^(1:9)
+```
+:::
+
+```{r}
+# Question 5 (b).
+#
+#     Display the square roots of the powers of 
+#     ten starting from the square root of 10^9 down to the 
+#     square root of 10. 
+#
+#        Hints: 
+#          - create the vector 9 8 7 ... 1 using the colon operator
+#          - raise 10 to the power of that vector
+#          - pass the whole expression to the sqrt function
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+sqrt(10^(9:1))
+```
+:::
+
+```{r]}
+# Question 6 (a).
+#
+#     Create a vector that contains 30 numbers, starting with 1 and 
+#     ending with 5. The numbers should be evenly spaced.
+#
+#        Hints:
+#          - use the seq function with the from, to and length.out arguments
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+seq(from=1, to=5, length.out=30)
+```
+:::
+
+```{r]}
+# Question 6 (b).
+#
+#     Do the same as (a) but round the values to the nearest hundredth
+#     place (i.e. 2nd number after decimal point)
+#
+#        Hints:
+#          - use the round function with the digits argument
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+round ( seq(from=1, to=5, length.out=30), digits=2)
+```
+:::
+
+```{r]}
+# Question 7.
+#    Create a vector that contains the 1st, 2nd, 3rd and 4th powers 
+#    of the numbers from 1 through 10 - there should be 40 values in all.
+#    (i.e.  1^1 1^2 1^3 1^4 2^1  2^2 2^3 2^4 3^1 3^2 3^3 3^4 ... 10^1 10^2 10^3 10^4 
+#     which should be displayed as:
+#           1   1   1   1   2    4   8   16  3   9   27  81  ... 10   100  1000 10000)
+#
+#    Hints:
+#      - There should be 40 numbers in all. We will use vector arithmetic ...
+#      - Therefore create 2 different vectors ... each will have 40 values.
+#      - The first vector should contain the numbers
+#           1 1 1 1 2 2 2 2 3 3 3 3 ... 10 10 10 10
+#      - The 2nd vector should contain the powers 1 2 3 4 1 2 3 4 etc.
+#      - Raise the first vector to the power of the 2nd vector using the ^ operator.
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+
+# One answer - this version uses the recycling rule - this is the preferred answer.
+# Note that according to the order of operations (see ?Syntax) the ^ operator
+# (i.e. exponentiation) has a higher precedence than the colon operator (i.e. :)
+# Therefore, the parentheses around (1:4) ARE necessary.
+rep(1:10, each=4) ^ (1:4)
+
+# Another answer - this version doesn't rely on the recycling rule.
+# In this version the 2nd vector is explicitly repeated to a length of 40.
+# As shown in the previous answer, this is actually not necessary.
+rep(1:10, each=4) ^ rep(1:4, length.out=40)
+
+```
+:::
+
+```{r]}
+# Question 8.
+#
+# Write code that displays the 4th value from the vector nums.
+# (nums could contain anything)
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+nums = c(10,20,30,40,50,60,70,80,90,100)   # make up some sample data
+nums[4]  # Answer
+```
+:::
+
+```{r]}
+# Question 10.
+#
+# Write code that displays the 4th and 6th values from the vector nums.
+# (nums could contain anything)
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+
+# make up some sample data
+nums = c(10,20,30,40,50,60,70,80,90,100)   
+
+# Answer - the c() IS REQUIRED here since there must be only a single
+# vector between the [brackets]
+nums[c(4,6)]  
+```
+:::
+
+```{r]}
+# Question 11.
+#
+# Write code that displays 3 copies of the 2nd value from the vector nums.
+# (nums could contain anything)
+# For example if nums contains 10 20 30 40
+# Then your code should display 20 20 20
+#
+# Hints:
+#   - pass the 2nd value of nums to the rep function
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+
+# make up some sample data
+nums = c(10,20,30,40,50,60,70,80,90,100)   
+
+# Answer
+rep(nums[2] , 3)
+```
+:::
+
+```{r]}
+# Question 12.
+#
+# Write code that displays the 3rd through the 30th values from the vector nums.
+# (nums could contain anything)
+#
+# Hints:
+#   - create a vector that contains the numbers 3 4 5 ... 30
+#   - display the values in those positions from nums by 
+#     placing the code that creates the vector 3 4 5 ... 30
+#     between [brackets] next to the name "nums"
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+
+# make up some sample data
+nums = seq(10,length.out=40,by=10)
+nums
+
+# Answer
+nums [ 3:30 ]
+```
+:::
+
+```{r]}
+# Question 13.
+#
+# Display the values that are in the even positions of nums. 
+# nums may contain anything. For example if nums contains
+# the values 10 20 30 40 50 60 70 80
+# then your code should display 20 40 60 80.
+#
+# Hints:
+#   - use the seq function to create a vector of even numbers.
+#     2 4 6 ... The vector should have as many numbers in it
+#     as 1/2 the length of nums. For example, if nums contains
+#     10 20 30 40 50 60 70 80 then the vector of even numbers
+#     should contain 2 4 6 8
+#
+#   - use the vector of even numbers between the [brackets]
+#     used to retrive specific positions from the nums
+#     vector
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+
+# Setup some sample data
+nums = c(10,20,30,40,50,60,70,80)
+
+# One answer - in two lines
+evenPositions = seq(2,length(nums),2)
+nums[evenPositions]   
+
+# Another answer - all in one line
+nums[seq(2,length(nums),2)]
+```
+:::
+
+
+```{r}
+# Question 14.
+#
+# Display all values from the vector nums EXCEPT for the
+# 2nd and 5th values. nums can contain any values.
+# For example if nums contains 10 20 30 40 50 60
+# then your code should display the numbers 10 30 40 60
+# Hints: 
+#   - use a negative indexes between the [brackets], i.e. -2
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+
+# Setup some sample data
+nums = c(10,20,30,40,50,60)
+
+# One answer
+nums[c(-2,-5)]
+
+# Another answer, use the negation operator (i.e. minus sign) 
+# to change the values to negatives
+nums[- c(2,5)]
+```
+:::
+
+```{r]}
+# Question 15. 
+#
+# Display all values from the vector nums EXCEPT for the
+# 3rd, 6th, 9th, etc values.
+#
+# For example if nums contains 10 20 30 40 50 60 70 80 90 100
+# then your code should display 1st, 2nd, 4th, 5th, 7th, 8th and 10th values
+# i.e. the numbers 10 20 40 50 70 80 100
+#
+# Hints:
+#   - write code to create a vector that contains the numbers 3 6 9 ... etc
+#     The last number of this vector should not be larger than 
+#     the number of values in nums.
+#
+#   - negate those values to get -3 -6 -9 ... etc
+#
+#   - use that vector between the [brackets] next to nums to get
+#     all values from nums except the numbers in the specified positions.
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+
+# Setup some sample data
+nums = seq(from=10, to=100, by=10)
+nums 
+
+# One answer, use one - sign before the call to seq
+nums[ - seq(3,length(nums), by=3) ]
+
+# Another answer, use negative from to and by arguments to seq
+nums[ seq(-3,-length(nums), by=-3) ]
+```
+:::
+
+```{r]}
+# Question 16. 
+#
+# Create a vector named "rainbow" that contains the names of colors of the 
+# rainbow - i.e. red orange yellow green blue indigo violet.
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+
+# One answer - with "double quotes"
+rainbow = c("red","orange","yellow","green","blue","indigo","violet")
+rainbow
+
+# Another answer - with 'single quotes' (i.e. apostrophes)
+rainbow = c('red','orange','yellow','green','blue','indigo','violet')
+
+# Note that even though we defined the variable with 'single quotes'
+# it gets displayed by R with "double quotes" (see the output)
+rainbow
+```
+:::
+
+```{r]}
+# Question 17.
+#
+# (a) Create a vector that contains the following two sentences. 
+#     Store the vector in a variable named sentences. 
+#     When you are done, the command :  length(sentences) 
+#     should return the number 2.
+#
+#     Sue said "Hi" to Joe.
+#     What's up with you?
+#
+# (b) Dispaly the sentences to the screen so that they appear exactly 
+#     as shown above.
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#################.
+# ONE ANSWER 
+#################.
+
+# answer to part (a) - using backslashes
+sentences = c("Sue said \"Hi\" to Joe.", "What's up with you?")
+sentences
+length(sentences)
+
+# answer to part (b) 
+cat(sentences, sep="\n")
+
+#################.
+# ANOTHER ANSWER
+#################.
+
+# answer to part (a) - no backslashes necessary
+sentences = c('Sue said "Hi" to Joe.', "What's up with you?")
+sentences
+length(sentences)
+
+# answer to part (b) - same as previous answer
+cat(sentences, sep="\n")
+```
+:::
+
+```{r}
+# Question 18.
+#
+# Create a vector with the powers of 3 from 1 to 10. 
+# This should get you ten numbers:
+#    3 9 27 81 243 729 2187 6561 19683 59049
+#
+# Then create a vector with the products 30*1 30*2 ... 30*10
+# This should get you ten numbers:
+#    30 60 90 120 150 180 210 240 270 300
+#
+# Compare the first list of numbers to the second list of 
+# numbers with the greater than sign. This should get the
+# following logical vector 
+# FALSE FALSE FALSE FALSE TRUE TRUE TRUE TRUE TRUE TRUE
+# (i.e. 4 FALSE values followed by 6 TRUE values)
+#
+# Explain in your own words why the result is
+#    FALSE FALSE FALSE FALSE TRUE TRUE TRUE TRUE TRUE TRUE
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+#############.
+# ANSWER 
+#############.
+3^(1:10) > 30*(1:10)
+
+# The result will be comprised of TRUE/FALSE values since the 
+# "greater than" operator i.e. > results in TRUE/FALSE values. 
+#
+# There will be 10 values in the result since each of the numeric vectors
+# in the command has 10 values. 
+#
+# The result is FALSE wherever the 1st vector
+# i.e. 3 9 27 81 243 729 2187 6561 19683 59049
+# is not greater than the corresponding value in the 2nd vector
+# i.e. 30 60 90 120 150 180 210 240 270 300
+# The result is TRUE for every other position.
+
+```
+:::
+
+
+```{r}
+# Question 19.
+# TOPICS: character vectors, nchar, rep, recycling rule between arguments of a single function
+#
+# charvec is a character vector.
+# Write a command that repeats each value in charvec by as many characters 
+# that are in that value. See the example below.
+#
+# EXAMPLE:
+#
+#    > charvec = c("a", "bc", "def")
+#    > YOUR CODE GOES HERE
+#    [1] "a"   "bc"  "bc"  "def" "def" "def"
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer
+```{r}
+###########.
+# ANSWER
+###########.
+
+# setup some sample data
+charvec = c("a", "bc", "def")
+
+# answer
+rep(charvec, nchar(charvec))
+```
+:::

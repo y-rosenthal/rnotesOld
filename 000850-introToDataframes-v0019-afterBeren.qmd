@@ -1,0 +1,1075 @@
+# dataframes
+
+```{r}
+# Remove all variables
+rm(list=ls())
+
+########################################################################
+# dataframes
+#
+# The contents of this file assume that you are familiar with the 
+# following topics
+#
+#   - lists
+#   - factors
+#   - attributes and attr
+#
+# A dataframe allows you to work with multiple parallel vectors
+# that are arranged in a grid.
+########################################################################
+```
+
+## Example of a data.frame
+
+```{r}
+# Example of a dataframe
+#
+# You can create a dataframe with the data.frame function
+# (NOTICE the "." in the name data.frame. Don't forget to type it.
+#  In R, a period is simply a regular character that can be used
+#  in the name of a variable or function. It is often used to separate
+#  words such as: a.long.variable.name = 100)
+
+gradebook = data.frame(student =      c("joe", "sue", "sam", "anne", "bob", "carla", "dana", "david"),
+                       test1 =        c(70,     80,    90,    75,    85,    95,      100,    60),
+                       test2 =        c(81,     77,    88,    87,    91,    92,      99,     73),
+                       year  = factor(c("fr",   "fr",  "so",  "so",  "fr",  "se",    "so",   "so"), 
+                                      ordered=TRUE, levels=c("fr","so","ju","se")),
+                       honors =       c(FALSE,  FALSE, FALSE, FALSE, FALSE, TRUE,    TRUE,   FALSE),
+                         stringsAsFactors = FALSE)
+                       
+gradebook
+
+# The data.frame function takes a series of vectors as arguments. The vectors
+# must all be the same length. (remember that a factor is a vector too).
+#
+# The vectors become the columns of the dataframe.
+# The names of the arguments become the names of the columns in the dataframe.
+#
+# There are other arguments to the data.frame function that you may 
+# be interested in exploring when you get more adept at using dataframes.
+#
+# For now, the other argument we will look at is stringsAsFactors. 
+# We will discuss stringsAsFactors in more detail later. For now, we will simply set 
+#    stringsAsFactors=TRUE
+# Later, we will explain what stringsAsFactors=TRUE does and what 
+# it means if you set stringsAsFactors=FALSE or leave out stringsAsFactors
+# entirely.
+
+?data.frame
+
+gradebook
+```
+
+## Anatomy of a data.frame (it's a list of parallel vectors ... )
+
+```{r}
+#-----------------------------------------------------------------------
+# "Under the covers", a dataframe is actually a list of vectors.
+# All of the vectors in the list must have the same length.
+# R arranges the data into rows (horizontal) and columns (vertical).
+# The vectors are the columns.
+#
+# R arranges the vectors as the columns and displays them next to 
+# each other to make the dataframe appear as a "grid" with rows and columns.
+# Because each column in actually a vector - each column in the dataframe
+# must be a single class (eg. all data in a single column must be "numeric", "logical"
+# "character", "factor", etc.) There is NO such requirement for the rows
+# of a dataframe.
+#
+# A dataframe looks different than a simple list and has a few added
+# features (which we'll explore later below). This is because R recognizes
+# that the list should treated as a dataframe because the class attributre of
+# the list is set to "data.frame". This is done by the data.frame function
+# which is used to create the dataframe. There are also a couple of other 
+# attributes that are attached to the list. (see below)
+#
+# The following attributes are attached to every dataframe:
+#
+#      attribute name    attribute value
+#      --------------    ---------------
+#      class             "data.frame"
+#
+#      names             character vector with names of the columns
+#                        note that a plain list can also have a names attribute
+#                        with names of the entries in the list.
+#
+#      row.names         a character vector with names of the rows.
+#                        By default the row names are simply numbers.
+#                        You can change the row names to anything you like
+#                        (If you recall, we also did this with matrices.)
+# 
+# You can access these attributes by using the following functions
+# (see details in the code below)
+#
+#    attr(SOME_DATAFRAME, ATTRIBUTE_NAME)
+#    attributes(SOME_DATAFRAME)
+#    names(SOME_DATAFRAME)
+#    colnames(SOME_DATAFRAME)
+#    rownames(SOME_DATAFRAME)
+#    row.names(SOME_DATAFRAME)
+#------------------------------------------------------------------------------
+
+mode(gradebook) # "list"
+
+class(gradebook) # "data.frame"
+
+# There are a few attributes on the list that make R interpret how to display
+# and use the dataframe. 
+
+attributes(gradebook)  # names   class   row.names
+
+
+# The class attribute
+# Any of the following commands will display the contents of the "class" attribute.
+
+class(gradebook)            # "data.frame"
+attr(gradebook, "class")    # same thing
+attributes(gradebook)$class # same thing
+
+# The names attribute - contains the names of the columns
+# Any of the following commands will display the contents of the "names" attribute.
+
+names(gradebook)            # "student" "test1"   "test2"   "year"    "honors" 
+colnames(gradebook)         # same thing
+attr(gradebook, "names")    # same thing
+attributes(gradebook)$names # same thing
+
+# The row.names attribute - contains the names of the rows
+# Any of the following commands will display the contents of the "row.names" attribute.
+#
+# NOTE that there is both a "row.names" and a "rownames" function.
+# They return the same value. If you're curious about why both exist and which
+# is preferable to use (ie. row.names) see the link below. 
+#
+# ALSO NOTE, that while there is a row.names function, there is no
+# col.names function, only colnames.
+#
+# https://stackoverflow.com/questions/38466276/why-is-row-names-preferred-over-rownames/39179031
+
+row.names(gradebook)         # (as a character vector) - "1" "2" "3" "4" "5" "6" "7" "8"
+rownames(gradebook)          # same thing (as a character vector)
+attr(gradebook, "row.names")    # actual value of the row.names attribute (by default these are integers)
+attributes(gradebook)$row.names # same thing
+```
+
+## Some useful functions: nrow, ncol, head, tail, class, length, etc.
+
+```{r}
+#-----------------------------------------------------------------------------
+# Other functions you can use with dataframes
+#-----------------------------------------------------------------------------
+
+gradebook
+nrow(gradebook)   # number of rows
+ncol(gradebook)   # number of columns
+
+head(gradebook, 2)  # show just the first 2 rows (or any other number)
+tail(gradebook, 2)  # show just the last 2 rows (or any other number)
+
+#-----------------------------------------------------------------------------
+# You can see that the dataframe is actually a list by removing the 
+# class attribute.
+#
+# This will stop the list from being a dataframe. 
+# When it is displayed it will look just like a plain list.
+#-----------------------------------------------------------------------------
+
+gradebook         # displayed in rows and columns
+class(gradebook)  # "data.frame"
+
+
+
+# either of the following lines will do the same thing ..
+
+gradebook = unclass(gradebook)  # remove the class attribute
+attr(gradebook, "class") = NULL # this does the same thing
+
+attributes(gradebook)  # "class" is gone!
+
+
+# Now you can see that the gradebook is no longer a dataframe
+gradebook        # displayed as a regular "list"
+class(gradebook) # "list"
+
+
+
+# Let's put back the class attribute and we'll see that it once again
+# is a dataframe
+class(gradebook) = "data.frame"
+gradebook        # once again it is a dataframe
+class(gradebook) # "data.frame"
+
+
+############################################################################
+# The "list" features of a dataframe.
+#
+# Because a dataframe is a list, all the features of lists
+# also work for dataframes. The following all work because a dataframe
+# is a list.
+############################################################################
+
+length(gradebook)    # the number of columns - same as ncol(gradebook)
+
+ncol(gradebook)      # same thing
+
+#..............................................................................
+# unlist - i.e. retrieve all the values in the dataframe in one large named vector
+#..............................................................................
+vec = unlist(gradebook)  # put the entire contents of the dataframe in a single named vector
+vec
+
+#. . . . . . . . . . . . . 
+# using the unlisted data
+#. . . . . . . . . . . . . 
+mode(vec)   # "character" - the exact mode will depend on the implicit conversion rules
+
+class(vec)  # "character" 
+
+names(vec)  # just the names of the named vector
+
+names(vec) = NULL # get rid of the names
+
+vec               # just the data without the names
+
+#............................................................
+# Retrieve specific columns with [single-bracket] notation.
+# This will return a smaller dataframe (ie. list) with just those columns.
+#
+#     ** This all works because a dataframe IS A LIST **
+#............................................................
+
+# single brackets (with one vector inside the [brackets])
+# will return just the columns that you request.
+# You can use any of the methods to request the columns that you can use 
+# with a named list, i.e. a vector that contains
+#   - position numbers
+#   - negative position numbers
+#   - TRUE FALSE values
+#   - names of items in the list (i.e. the column names)
+
+gradebook[1]  # a dataframe that contains just the 1st column
+
+gradebook[c(1,3)]   # items 1 and 3 from list - i.e. 1st and 3rd columns
+
+gradebook[c(-2,-4,-5)]  # everything EXCEPT for columns 2,4,5 - i.e. same result
+
+gradebook[c(TRUE,FALSE,TRUE,FALSE,FALSE)] # same result
+
+gradebook[c("student","test2")] # items named "student" and "test2" from the list 
+
+# The recycling rule also works for indexing with logical vectors
+gradebook[c(TRUE,FALSE)]  # every other column starting with the 1st
+
+
+#.............................................................................
+# Retrieve specific columns with $dollar-sign-notation.
+# This returns a VECTOR (i.e. the actual contents of what's in the list)
+#
+#     ** This all works because a dataframe IS A LIST **
+#.............................................................................
+
+gradebook$student        # "joe"   "sue"   "sam"   "anne"  "bob"   "carla" "dana"  "david"
+
+class(gradebook$student) # "character"   ( NOT "data.frame" )
+
+
+
+gradebook$test1        # 70  80  90  75  85  95 100  60
+
+class(gradebook$test1) # "numeric"   ( NOT "data.frame" )
+
+#.............................................................................
+# Retrieve specific columns with [[double-bracket]] notation.
+# Same as using $dollar-sign-notation.
+# This returns a VECTOR (i.e. the actual contents of what's in the list)
+#
+#     ** This all works because a dataframe IS A LIST **
+#.............................................................................
+
+gradebook[[1]] # Just 1st column AS A VECTOR, (same as gradebook$student) - "joe" "sue" etc ...
+
+gradebook[[2]] # Just 2nd column AS A VECTOR, (same as gradebook$test1) - 70 80 90 etc ...
+```
+
+## Since a dataframe is a list of vectors, you can do all the following using list concepts ...
+
+```{r}
+##############################################################################.
+# A dataframe is a "list" of parallel vectors ...
+#
+# Since a dataframe is a "list", any technique that works with
+# lists also works with dataframes. If you understand how to use lists
+# then you already understand how to use many of the features of dataframes
+# since **a dataframe IS A LIST. The following topics do not introduce
+# any new concepts. The following topics simply show how to apply
+# your knowledge of mainipulating lists directly to dataframes.
+##############################################################################.
+```
+
+### Using lapply with a dataframe
+
+```{r}
+#.............................................................................
+# You can use lapply with a dataframe just as you'd use lapply with a simple list.
+#
+# lapply will apply a function to each column of the gradebook (i.e. to each item in the list).
+# lapply returns a list of the results of running the function on each different column.
+#
+#     ** This all works because a dataframe IS A LIST **
+#.............................................................................
+
+lapply(gradebook, mode)  # a list of the mode of each column
+
+lapply(gradebook, class)  # a list of the class of each column (notice that year is a factor)
+
+lapply(gradebook, max)    # a list of the max value from each column
+
+lapply(gradebook, summary) # a list with the results of the summary function for each column
+
+# You can also call summary directly on the dataframe
+#
+# Remember that summary is a generic function that has different versions (i.e. methods)
+# for different classes of data. 
+
+summary(gradebook)             # This automatically calls summary.data.frame(gradebook)
+
+summary.data.frame(gradebook)  # REVIEW - same thing - this is not necessary - just call summary(gradebook)
+
+
+# The mean function will not work for character or factor columns
+# Get a copy of the gradebook with just the test columns.
+gradebook_justTests = gradebook[ colnames(gradebook) == "test1" | colnames(gradebook) == "test2"]
+gradebook_justTests
+# another way that assumes you know the positions of the columns
+gradebook_justTests = gradebook[c(2,3)]
+gradebook_justTests
+
+lapply ( gradebook_justTests, mean)
+
+# or all in one shot
+lapply(gradebook[c(2,3)], mean)
+
+#. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+# REMEMBER - You can also use custom functions with lapply.
+#. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+
+# return largest two values in a vector
+largestTwo = function(vec){
+  sort(vec)[c(length(vec)-1, length(vec))]
+}
+lapply(gradebook[c(2,3)], largestTwo)   # highest two grades on both tests
+
+# REMEMBER - You can also do it with an anonymous function
+lapply(gradebook[c(2,3)], function(col) sort(col)[c(length(col)-1, length(col))] )
+```
+
+### Removing columns from a dataframe (same as removing items from a list)
+
+```{r}
+#............................................................
+# Remove columns from a dataframe
+#............................................................
+# You can remove columns from a dataframe by setting the column value to NULL
+# (just as you can remove an item from a list by setting the value to NULL) by
+# using $dollar-sign-notation 
+# or    [single-bracket-notation]
+# or    [[double-bracket-notation]]
+#
+#     ** This all works because a dataframe IS A LIST **
+#............................................................
+
+gradebook
+
+# any of the methods to refer to columns works
+
+gradebook[[4]]= NULL # remove the 4th column (i.e. the year)
+gradebook
+
+gradebook$honors = NULL   # remove the honors column
+gradebook
+
+gradebook[c(2,3)] = NULL  # remove the 2nd and 3rd columns
+gradebook
+
+# let's recreate the gradebook
+gradebook = data.frame(student =      c("joe", "sue", "sam", "anne", "bob", "carla", "dana", "david"),
+                       test1 =        c(70,     80,    90,    75,    85,    95,      100,    60),
+                       test2 =        c(81,     77,    88,    87,    91,    92,      99,     73),
+                       year  = factor(c("fr",   "fr",  "so",  "so",  "fr",  "se",    "so",   "so"), 
+                                      ordered=TRUE, levels=c("fr","so","ju","se")),
+                       honors =       c(FALSE,  FALSE, FALSE, FALSE, FALSE, TRUE,    TRUE,   FALSE),
+                       stringsAsFactors = FALSE)
+
+gradebook
+```
+
+### Adding new columns to an already existing dataframe (same as adding vectors to a list)
+
+```{r}
+#............................................................
+# Add columns to a dataframe
+#............................................................
+# You can add columns to a dataframe by
+# using $dollar-sign-notation 
+# or    [single-bracket-notation]
+# or    [[double-bracket-notation]]
+#
+#     ** This all works because a dataframe IS A LIST **
+#............................................................
+
+gradebook
+ncol(gradebook)
+
+# Add test3 as c(70,80,90,60,70,80,90,100)
+# using $dollar-sign-notation
+
+gradebook$test3 = c(70,80,90,60,70,80,90,100)
+ncol(gradebook)  # we added a column
+gradebook        # the new column is there and it is named "test3"
+
+# Add test4
+# using double bracket notation
+
+gradebook[[7]] = c(74,84,94,64,74,84,94,99)
+ncol(gradebook)  # we added a column
+gradebook        # name of new column is "V7" - not exactly what we want
+names(gradebook)[7] = "test4"  # change the name to test4
+gradebook
+
+
+# Add test5
+# using single bracket notation
+
+gradebook[8] = c(75, 85,95,65,75,85,95,98)
+ncol(gradebook)
+gradebook
+# change the name of the last column
+names(gradebook)[ncol(gradebook)] = "test5" # change the name of the last column
+gradebook
+```
+
+## Replace columns with other columns (same as replacing items in a list with other items)
+
+```{r}
+#............................................................
+# Replace columns in a dataframe
+#
+# You can replace a column in a dataframe with a different column (ie. vector)
+# by using $dollar-sign-notation
+# or using [[double-bracket-notation]]
+#
+#     ** This all works because a dataframe IS A LIST **
+#............................................................
+
+# replace the test5 column with lastName
+#
+# you can use [single-bracket-notation]
+# or [[double-bracket-notation]]
+# or $dollar-sign-notation
+
+gradebook
+ncol(gradebook) 
+gradebook[8] = c("schwartz", "rosen", "aames", "chill", "jones", "fox", "katz", "cohen")
+
+# The following alternatives would have accomplished the same thing as 
+# the line of code above.
+#
+#    # [[double-brackets]]
+#    gradebook[[8]] = c("schwartz", "rosen", "aames", "chill", "jones", "fox", "katz", "cohen")
+#
+#    # $dollar-sign-notation
+#    gradebook$test5 = c("schwartz", "rosen", "aames", "chill", "jones", "fox", "katz", "cohen")
+
+gradebook  # the column name was not changed. It is still "test5"
+names(gradebook)[8] = "lastName" # change the name of the 8th column
+gradebook
+```
+
+## Rearrange the order of the columns (same as rearranging the items in a list)
+
+```{r}
+#............................................................
+# Rearrange the order of columns in a dataframe
+#
+# You can rearrange the order of columns in a dataframe by 
+# using [single-bracket-notation].
+#
+#     ** This all works because a dataframe IS A LIST **
+#............................................................
+
+
+gradebook
+ncol(gradebook)
+
+# Rearrange the gradebook so firstName and lastName are grouped together
+# and all tests are grouped together.
+#
+# Either of the following will work
+
+gradebook = gradebook[  c(1,8,2,3,6,7,4,5)   ]
+gradebook
+
+# Reorder thew columns again - this time using a different notation
+gradebook = gradebook[  c("student", "lastName", "year", "honors", "test1", "test2", "test3", "test4")   ]
+gradebook
+```
+
+## Refer to specific rows and columns
+
+```{r}
+###########################################################################.
+# Dataframes vs matrices
+#
+# Dataframes and matrices are different types of objects. 
+# A matrix is actually a vector while a dataframe is actually a list.
+# Therefore a matrix is limited to a single mode of data (e.g. numeric,
+# logical or character). However, a dataframe can have columns of 
+# different modes.
+#
+# However, dataframes and matrices are similar in that they both arrange
+# their data in rows and columns. Therefore the syntax for manipulating
+# the data by specifying specific rows and columns is basically the 
+# same syntax for dataframes as for matrices.
+# If you understand how to access data from specific rows/columns in 
+# in a matrix, the same techniques are available for dataframes.
+#########################################################################.
+```
+
+### Access data in specific rows and columns (same syntax as for matrices)
+
+```{r}
+###############################################################################
+###############################################################################
+## Additional features of dataframes that are not available with simple "lists"
+##
+## You can access specific ROWS and COLUMNS in the same way as is
+## done with matrices.
+###############################################################################
+###############################################################################
+
+rm(list=ls() )   # start over
+gradebook = data.frame(student =      c("joe", "sue", "sam", "anne", "bob", "carla", "dana", "david"),
+                       test1 =        c(70,     80,    90,    75,    85,    95,      100,    60),
+                       test2 =        c(81,     77,    88,    87,    91,    92,      99,     73),
+                       year  = factor(c("fr",   "fr",  "so",  "so",  "fr",  "se",    "so",   "so"), 
+                                      ordered=TRUE, levels=c("fr","so","ju","se")),
+                       honors =       c(FALSE,  FALSE, FALSE, FALSE, FALSE, TRUE,    TRUE,   FALSE),
+                       stringsAsFactors = FALSE)
+
+gradebook
+
+# If you specify TWO vectors in [single-brackets], then
+# the 1st vector indicates the ROWS you want and
+# the 2nd vector indicates the COLUMNS you want.
+# Examples:
+
+gradebook [  c(1,2) , c(1,2,3)]  # rows: 1,2   columns: 1,2,3
+
+gradebook [ c(TRUE,FALSE) , c(-2,-3)]  # rows: every other, cols: all except 2 and 3
+
+gradebook [ c(-2,-3) , c("student", "year")] # rows: all except 2 and 3; columns: student, year
+
+# If the rows are NOT specified but the comma (,) is present it implies ALL rows
+gradebook [    ,    c(1,2)]  # rows: all , columns: 1,2
+
+gradebook [ c(1,2) ]   # same as above BECAUSE no comma means only specify columns
+
+# If the columns are NOT specified but the comma (,) is present it implies ALL columns
+gradebook [ c(1,2)   ,    ]  # rows: 1,2  columns: all
+
+
+
+#.............................................................................
+# Using ROW names
+#.............................................................................
+# row names can have actual values instead of just numbers
+#.............................................................................
+
+# Recall that we can use column names to indicate columns. 
+gradebook [ , c("student","honors")]  # all rows, just "student" and "honors" cols
+
+# Rows can also have names can have actual values instead of just numbers
+# For example the following version of the dataframe uses the student names
+# as the row names. This is not necessarily recommended ... but it is possible.
+
+gradebookWithRownames = 
+            data.frame(test1 =        c(70,     80,    90,    75,    85,    95,      100,    60),
+                       test2 =        c(81,     77,    88,    87,    91,    92,      99,     73),
+                       year  = factor(c("fr",   "fr",  "so",  "so",  "fr",  "se",    "so",   "so"), 
+                                      ordered=TRUE, levels=c("fr","so","ju","se")),
+                       honors =       c(FALSE,  FALSE, FALSE, FALSE, FALSE, TRUE,    TRUE,   FALSE),
+                       row.names =      c("joe", "sue", "sam", "anne", "bob", "carla", "dana", "david"),
+                       stringsAsFactors = FALSE)
+
+gradebookWithRownames # in this version the student names are the row names and are not an actual column of data
+ncol(gradebookWithRownames) # only 4 columns - student names are no longer a column
+
+
+gradebook # in this version the student names are a separate column
+ncol(gradebook) # 5 columns - student names ARE a column of data
+
+
+
+# you can use the row names to access data too
+
+gradebookWithRownames[c("joe","sam") , ]  # just rows for joe and sam, all columns
+
+gradebookWithRownames[c(1,2) , ]   # same thing, we're just using row numbers instead of names
+
+gradebookWithRownames[c("joe","sam") , c("test2","year")]  # rows: joe, sam    columns: test2, year
+
+# You use different indexing methods for the rows and for the cols
+
+gradebookWithRownames[c("joe","sam") , c(2,3)]  # rows: joe, sam    columns: 2,3
+
+rownames(gradebookWithRownames)
+row.names(gradebookWithRownames)
+```
+
+### Data from a SINGLE ROW is returned as a data.frame BUT data from a SINGLE COLUMN is returned as a VECTOR!
+
+```{r}
+#-------------------------------------------------------------------------
+# Data from a SINGLE ROW is returned as a data.frame.
+# Data from a SINGLE COLUMN is returned as a VECTOR!
+#-------------------------------------------------------------------------
+
+# Data from a single row is returned as a dataframe.
+# This should not be surprising.
+
+gradebook[ 2 ,   ]   # one row - result is a data.frame
+
+gradebook[ 2 ,  c(2,3) ]   # one row - result is a data.frame 
+
+gradebook[ 2 ,  c("test1", "test2") ]   # same thing
+
+
+
+# Data from a single row is returned as a VECTOR!
+
+gradebook[   , 2 ]   # one column - result is a vector
+
+gradebook[   , 2 , drop=FALSE]   # one column - result is data.frame
+
+gradebook[   , "test2" ]   # same thing
+
+gradebook[   , "test2" , drop=FALSE]   # one column - result is data.frame
+
+gradebook[   , c(2,3) ]   # two columns - result is a data.frame
+
+gradebook[   , c("test1", "test2") ]   # same thing
+
+gradebook[  gradebook$test1 >= 90 , 2 ]   # Data from a single column - VECTOR!
+
+# Show the year for the students who got above a 90 on test1
+gradebook[  gradebook$test1 >= 90 , 4 ] 
+
+# another way
+gradebook[  gradebook$test1 >= 90 , "year" ] 
+```
+
+## --- Practice ---
+
+```{r}
+###########################################################################
+###########################################################################
+## Practice questions
+###########################################################################
+###########################################################################
+
+# Use the following data
+
+rm(list=ls() )   # start over
+gradebook = data.frame(student =      c("joe", "sue", "sam", "anne", "bob", "carla", "dana", "david"),
+                       test1 =        c(70,     80,    70,    75,    85,    95,      100,    60),
+                       test2 =        c(81,     77,    60,    87,    91,    92,      99,     73),
+                       year  = factor(c("fr",   "fr",  "so",  "so",  "fr",  "se",    "so",   "so"), 
+                                      ordered=TRUE, levels=c("fr","so","ju","se")),
+                       honors =       c(FALSE,  FALSE, FALSE, FALSE, FALSE, TRUE,    TRUE,   FALSE),
+                       stringsAsFactors = FALSE)
+
+gradebook
+
+
+
+#----------------------------------------------------------------------
+# QUESTION
+# PART A - show the average grade on test1
+# PART B - show the average grade that sophomores got on test1
+# PART C - Show the names for the students who scored above average on test1
+# PART D - Show the rows for the students who scored above average on test1
+# PART E - Show just the student names and test1 grades for students who scored above average on test1
+# PART F - Show the rows for the students who scored above average on test1 and on test2
+# PART G - Show the rows for the freshmen and sophomores who scored above average on test1 and on test2
+# PART H - Show the complete rows for "sue" and "bob". Write the code so that
+#          you do NOT need to know in which position the desired students appear.
+#----------------------------------------------------------------------
+
+# PART A - show the average grade on test1
+
+mean(gradebook[ , "test1"])
+
+mean(gradebook[ , 2])
+
+mean(gradebook[[2]])
+
+mean(gradebook$test1)
+
+# new question
+# Show just the data for sophomores test1 as a vector
+
+gradebook [   gradebook$year == "so"   ,      "test1" ] 
+
+
+# PART B - show the average grade that sophomores got on test1
+
+mean ( gradebook$test1[ gradebook$year == "so"    ] )
+
+mean ( gradebook [   gradebook$year == "so"   ,      "test1" ] )
+
+# PART C - Show the names for the students who scored above average on test1
+
+gradebook$student [ gradebook$test1 >   mean(gradebook$test1)   ]
+
+gradebook [ gradebook$test1 >   mean(gradebook$test1)            , "student" ]
+
+# PART D - Show the rows for the students who scored above average on test1
+
+gradebook [ gradebook$test1 >   mean(gradebook$test1)            ,     ]
+
+
+# PART E - Show just the student names and test1 grades for students who scored above average on test1
+
+gradebook [ gradebook$test1 >   mean(gradebook$test1)  ,  c("student", "test1")   ]
+
+# PART F - Show the rows for the students who scored above average on test1 and on test2
+
+gradebook [ gradebook$test1 >   mean(gradebook$test1)  &
+              gradebook$test2 >   mean(gradebook$test2) 
+            ,    ]
+
+# PART G - Show the rows for the freshmen and sophomores who scored above average on test1 and on test2
+
+gradebook [ gradebook$test1 >   mean(gradebook$test1)  &
+              gradebook$test2 >   mean(gradebook$test2) &
+              (gradebook$year == "fr" | gradebook$year == "so")
+            ,    ]
+
+
+
+# More practice questions
+
+#----------------------------------------------------------------------
+# QUESTION
+#
+# Show the complete rows for "sue" and "bob". Write the code so that
+# you do NOT need to know in which position the desired students appear.
+#----------------------------------------------------------------------
+
+# One answer
+gradebook [ gradebook$student %in% c("sue", "bob") ,  ]   # don't forget the comma
+
+# Another answer:
+gradebook[gradebook$student=="sue"|gradebook$student=="bob" ,  ]   # don't forget the comma
+
+
+
+#----------------------------------------------------------------------
+# QUESTION
+#
+# PART A - Show just carla's grade on test1. 
+#            (Write the code in a way that you do NOT need to know which row).
+#
+# PART B -  Add 1 point to carla's grade on test1.
+#           (Write the code in a way that you do NOT need to know which row
+#            contains carla's data).
+#----------------------------------------------------------------------
+
+# PART A - Show just carla's grade on test1. 
+#            (Write the code in a way that you do NOT need to know which row).
+
+gradebook
+gradebook[ gradebook$student == "carla" , "test1"]
+
+# PART B -  Add 1 point to carla's grade on test1.
+#           (Write the code in a way that you do NOT need to know which row
+#            contains carla's data).
+
+gradebook
+
+gradebook[ gradebook$student == "carla" , "test1"] = 
+  gradebook[ gradebook$student == "carla" , "test1"] + 1
+
+gradebook
+
+#----------------------------------------------------------------------
+# QUESTION
+#
+# Add 2 points to the test1 grades for all freshmen (year == "fr")
+#----------------------------------------------------------------------
+gradebook
+
+gradebook [ gradebook$year == "fr", "test1" ] = 
+  gradebook [ gradebook$year == "fr", "test1" ] + 2
+
+gradebook
+
+
+#----------------------------------------------------------------------
+# QUESTION
+#
+# PART A - Display the complete rows for all sophomores who scored at least 
+#          5 points below average on test1 and on test2
+#
+# PART B - Display JUST the test1 and test2 grades of those students.
+#
+# PART C - Add 2 points to the test1 and test2 grades of those students.
+#----------------------------------------------------------------------
+
+gradebook
+
+# PART A - Display the complete rows for all sophomores who scored at least 
+#          5 points below average on test1 and on test2
+
+gradebook[  gradebook$year == "so" &
+            gradebook$test1 <= mean(gradebook$test1) - 5 &
+            gradebook$test2 <= mean(gradebook$test2) - 5 
+            , ]
+
+# PART B - Display JUST the test1 and test2 grades of those students.
+
+gradebook[  gradebook$year == "so" &
+              gradebook$test1 <= mean(gradebook$test1) - 5 &
+              gradebook$test2 <= mean(gradebook$test2) - 5 
+            , c("test1", "test2")]
+  
+# PART C - Add 2 points to the test1 and test2 grades of those students.
+
+gradebook
+gradebook[  gradebook$year == "so" &
+              gradebook$test1 <= mean(gradebook$test1) - 5 &
+              gradebook$test2 <= mean(gradebook$test2) - 5 
+            , c("test1", "test2")] = 
+  
+   2 + gradebook[  gradebook$year == "so" &
+                   gradebook$test1 <= mean(gradebook$test1) - 5 &
+                   gradebook$test2 <= mean(gradebook$test2) - 5 
+                 , c("test1", "test2")]
+  
+  
+gradebook
+
+
+
+#----------------------------------------------------------------------
+# stringsAsFactors=FALSE      or        stringsAsFactors=TRUE
+#----------------------------------------------------------------------
+
+rm(list = ls() )   # start over from scratch
+
+# The data.frame function contains an argument named stringsAsFactors
+# that is expected to be TRUE or FALSE. The default value is TRUE.
+# (see the documentation for data.frame, i.e. ?data.frame)
+#
+#
+# WHAT IS A STRING???
+#
+# Don't get confused by the word "string". The term "string" means the same
+# thing as "an element of a character vector". The term "string" is used a LOT
+# in other languages, e.g. Java, Python, etc. instead
+# of what we call an element of a "character vector". The word seeped into
+# R in a few places. One of them is in the name of the argument
+# ?stringsAsFactors = FALSE. Perhaps a better name for this argument 
+# could have been charactersAsFactors but that's not what it is.
+#
+# Are you curious about why an element of a character vector is known
+# as a "string" in many other languages? The word string comes from
+# "stringing together many individual 'characters', 
+# e.g. 'a' and 'p' and 'p' and 'p' and 'l' and 'e' can be strung together
+# like a string of beads on a necklace to make a single
+# "string of characters" e.g. "apple".
+#
+#
+#
+# WHAT DOES stringsAsFactors=FALSE DO ?
+#
+# By default, if you create a dataframe using character vectors, the 
+# character vectors will be converted into factors before they are stored in the
+# dataframe. If that is not what you want then you can specify
+# stringsAsFactors = FALSE
+
+
+# EXAMPLE : stringsAsFactors = TRUE 
+#           (this is the default if you don't specify anything for stringsAsFactors)
+
+gradebook_fact = data.frame(first = c("joe", "sue", "sam", "anne", "bob", "carla", "dana", "david"),
+                       last =  c("baker", "jones", "smith", "fox", "cohen", "jones", "schwartz", "rosen"),    
+                       test1 = c(70,     80,    90,    75,    85,    95,      100,    60),
+                       test2 = c(81,     77,    88,    87,    91,    92,      99,     73),
+                       year  = c("fr",   "fr",  "so",  "so",  "fr",  "se",    "so",   "se"),
+                       honors =       c(FALSE,  FALSE, FALSE, FALSE, FALSE, TRUE,    TRUE,   FALSE),
+                stringsAsFactors = TRUE)   # THIS IS THE DEFAULT IF YOU DONT SPECIFY ANYTHING 
+
+gradebook_fact
+# character vectors were converted to factors in the dataframe
+class(gradebook_fact$first)  
+class(gradebook_fact$last)
+class(gradebook_fact$year)
+summary(gradebook_fact$first)
+summary(gradebook_fact$last)
+summary(gradebook_fact$year)
+
+
+# EXAMPLE : stringsAsFactors = FALSE
+
+gradebook_char = data.frame(first = c("joe", "sue", "sam", "anne", "bob", "carla", "dana", "david"),
+                       last =  c("baker", "jones", "smith", "fox", "cohen", "jones", "schwartz", "rosen"),    
+                       test1 = c(70,     80,    90,    75,    85,    95,      100,    60),
+                       test2 = c(81,     77,    88,    87,    91,    92,      99,     73),
+                       year  = c("fr",   "fr",  "so",  "so",  "fr",  "se",    "so",   "se"),
+                       honors =       c(FALSE,  FALSE, FALSE, FALSE, FALSE, TRUE,    TRUE,   FALSE),
+                stringsAsFactors = FALSE)
+# character vectors were NOT converted to factors in the dataframe
+class(gradebook_char$first)
+class(gradebook_char$last)
+class(gradebook_char$year)
+summary(gradebook_char$first)
+summary(gradebook_char$last)
+summary(gradebook_char$year)
+
+
+# QUESTION
+#
+# In the gradebook_char variable we created above, the year is a character
+# vector but it should be a factor. Create a new variable named 
+# gradebook, that changes the year column into a factor. You should
+# NOT use the data.frame function at all. Rather replace the year 
+# column from gradebook_char with a factor that has the same data.
+
+
+# QUESTION
+#
+# In the gradebook_fact variable we created above, the first and last
+# name columns are factor columns. However, they should NOT be factors. 
+# Create a new variable named  gradebook, that changes the
+# first and last columns into character vectors. You should
+# NOT use the data.frame function at all. Rather replace the
+# first and last columns from gradebook_fact with a charcter vectors
+# that have the same data.
+```
+
+## Importing a CSV file into an R data.frame variable
+
+```{r}
+############################################################################
+############################################################################
+##
+## importing a CSV file into an R data.frame variable
+##
+############################################################################
+############################################################################
+
+# CSV stands for "comma separated values". 
+#
+# A CSV file contains data that is is intended to be arranged
+# in rows and columns (similar to an Excel file). Hoewver, in the 
+# CSV file itself, the data is not lined up in columns. Rather
+# commas separate the data that should go in different columns.
+#
+# Each row of the data is a line in the CSV file.
+# Each value in a line is separated from the other values by commas. 
+#
+# EXAMPLE: The following could be the contents of a CSV file.
+#
+#           student,year,gender,test1,test2,final,honors
+#           joe,so,m,100,100,89,TRUE
+#           sam,so,m,95,93,missing,FALSE
+#           sue,fr,f,80,66,68,FALSE
+#           al,fr,m,59,52,42.5,FALSE
+#           alice,fr,f,85,missing,missing,TRUE
+#           anne,se,f,75,65,76,FALSE
+#           bertha,se,f,65,58,62.5,FALSE
+#           charlie,so,m,86,84,93,FALSE
+#           david,so,m,78,82,88,TRUE
+#           edgar,fr,m,64,68,60,FALSE
+#           lou,ju,m,83,78,92.5,FALSE
+#           francine,ju,f,90,91,79.5,FALSE
+#           dan,ju,m,83,69,93,TRUE
+#           daniella,se,f,96,100,100,FALSE
+#           sarah,ju,f,80,68,78,FALSE
+#           rebecca,so,f,77,83,75,FALSE
+#           rachel,ju,f,80,82,86,TRUE
+#           deborah,fr,f,95,100,100,FALSE
+
+
+# import the file grades.csv
+# - press "Import Dataset" button in Environment window
+# - choose "From Text (base)"
+# - choose the file
+# - fill in the following values:
+#   o Name :    the name of the variable that will hold your data
+#   o Heading:  choose "yes" if the data has column heading (otherwise, choose "no")
+#   o Separator: for csv files choose "comma" (you can choose other types of separators based on the data in the file)
+#   o na.strings: choose the value in the file that indicates NA data
+#   o Strings as factors:   for now make sure to UNcheck this - we will learn more about this later# - read.csv
+#
+# This will run the read.csv function and assign the result to the variable
+# that you specified in the "Name" box. By default this will be the same name
+# as the name of the file.
+#
+# RStudio will then run the View command to show the data in a tab in the 
+# "source window" in RStudio.
+
+# Result of following the instructions above is that the following two 
+# commands will be excuted.
+# - The 1st command creates a variable to hold the data.
+# - The 2nd command displays the data in the source window.
+#
+#      grades <- read.csv("C:/Users/Home/Desktop/grades.csv", header=FALSE, stringsAsFactors=FALSE)
+#      View(grades2)
+#
+# You can type these commands yourself but the RStudio interface makes it
+# easier to remember exactly how to type the commands.
+
+# Read the information from the file into the variable, grades.
+#grades <- read.csv("C:/Users/Home/Desktop/grades.csv", header=TRUE, stringsAsFactors=FALSE)
+grades <- read.csv("C:/Users/yrose/Dropbox (Personal)/website/yu/ids2030-busAnalyticsAndProgramming/77fall21-ids2030-busAnalyticsAndProgramming/classwork_and_hw/wilf-class18/grades.csv", header=TRUE, stringsAsFactors=FALSE)
+
+grades
+
+# To view the data in RStudio's source window use the View function
+View(grades)
+
+# To view the data in the Console window, just type the name of the variable
+grades
+```
+
+
+## Use the ***order*** function to sort the rows of a dataframe. ***DON'T USE THE sort FUNCTION***
+
+```{r}
+############################################################################
+############################################################################
+##
+## Additional topics related to dataframes
+##
+############################################################################
+############################################################################
+
+
+#-----------------------------------------------------------------------------
+# order function
+#
+# You can use the order function to put the rows of a dataframe in sorted 
+# "order" based on the contents of one or more columns.
+#
+#
+#
+# WARNING: DON'T USE sort
+#
+# The sort function will NOT help you to do this at all!!!
+# sort only works for individual vectors!!!
+#-----------------------------------------------------------------------------
+```
+

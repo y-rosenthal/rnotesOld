@@ -1,0 +1,760 @@
+# Intro To R
+
+```{r}
+##############################################.
+##############################################.
+# SUMMARY OF TOPICS IN THIS FILE
+##############################################.
+##############################################.
+#--------------------------------------------------------------------------.
+# Comments in R 
+#
+# "Code Sections" in RStudio (not in the "plain" RGui program)  
+#
+# Installing R and RStudio on your computer 
+#
+# Using the https://posit.cloud online version of RStudio 
+#
+# DON'T run two copies of RStudio at the same time (this might have been fixed)
+#
+# RStudio "panes"
+#
+# The "console" pane
+#
+# Modifying previous commands (use the arrow keys)
+#
+# insert key (on Windows)
+#
+# Erasing commands - ESC key
+#
+# The "source" pane - for saving code  
+#
+# Do NOT use Word (or similar programs) to type your commands
+#
+# Using R to do basic arithmetic     
+#
+# Do NOT use commas, dollar signs, etc in numbers
+#
+# more operators:  %/% and %%   
+#
+# Variables   and   "assignment statements"    
+#
+# Variable names may NOT start with a number  
+#
+# Variable names may ONLY include letters, numbers, underscores "_" and periods "."  
+#
+# Variable names are case sensitive.  
+#
+# To see the names of all your existing varaibles you can run the ls() command 
+#
+# Don't forget the parentheses!   ls()   NOT    ls    
+#
+# Use the rm() command to remove a variable.  
+#
+# When there are no variables at all, the ls() command will display "character(0)". 
+#
+# Changing the value of a variable, eg.   x = x + 5   
+#
+# BEREN (FALL 2023) - UP TO HERE - AFTER DAY 1
+#
+# Other ways of assigning variables     =   <-  ->    
+#
+# WILF (FALL 2023) - UP TO HERE - AFTER DAY 1 
+#--------------------------------------------------------------------------.
+```
+
+# Getting the software:
+
+## Option 1: Installing R and RStudio on your computer ####
+
+1. install R first
+
+2. Install RStudio next
+
+   see instructions on Canvas
+
+### WARNING - DON'T run two copies of RStudio at the same time (this might have been fixed) ####
+
+```{r}
+#--------------------------------------------------------------------------.
+#
+# DON'T run two copies of RStudio at the same time (this might have been fixed) ####
+#
+#    This issue only applies to the version of RStudio that you install on
+#    your personal machine. 
+#
+#    This does NOT apply to the online version of RStudio - 
+#
+#--------------------------------------------------------------------------.
+# Running two copies of RStudio at the same time can sometimes
+# lead to problems. These problems are often not obvious. Therefore it is
+# highly recommended that you do NOT run two copies of RStudio at the same
+# time. If you notice strange things happening in RStudio, your first thing
+# to check is that you don't have two copies of RStudio running
+# simultaneously. If you do then shutdown one or both of them and see if the
+# problem goes away.
+#
+# NOTE - this used to be a problem prior to 2023. However, I've noticed
+# recently that it doesn't seem to be a problem anymore. However, if you notice
+# that something weird is happening with RStudio, just make sure that you're
+# not running RStudio in two different windows at the same time.
+```
+
+
+Use RStudio for all of your work.
+The "base R" (i.e. R) is usable by itself
+but RStudio adds many features that makes using R much easier to use.
+
+## Option 2: Using the online version of the software.
+
+https://posit.cloud hosts an online version of the RStudio program.
+You can get started simply with the "free" plan.
+It should be pretty easy to figure out how to do that
+by navigating to https://posit.cloud
+
+When you login to posit.cloud you should create a "New RStudio Project".
+You can then use that project for all of your R work.
+
+posit.cloud also has several tutorials (i.e. "primers").
+You can get to these by clicking the "primers" button.
+The first primer is called "The Basics".
+"The Basics" primer is divided into "Visualization Basics"
+and "Programming Basics".
+This class will focus on programming, not visualization.
+To get a better feel for R, you may optionally go throught the
+"programming basics" section of "The Basics" primer on posit.cloud
+
+
+
+# Using RStudio - window panes, arrow keys, ESC key, etc
+
+## What are RStudio "panes" ####
+
+```{r}
+#-----------------------------------------------------------.
+#
+# RStudio "panes" ####
+#
+#-----------------------------------------------------------.
+
+# RStudio's "window panes" - R Studio has 4 sections on the screen. 
+# When you first install RStudio the window panes are in the following
+# configuration (this can be changed).
+#
+#   upper left: source - use this to write commands that you want to save
+#   lower left: console - this is where all commands are acutally "run"
+#   upper right: environment, history - (more about this later)
+#   lower right: files, plots, help - (more about this later)
+#
+# If you don't see all the "panes" choose the following from the RStudio menu:
+#      View --> Panes --> Show All Panes
+#
+# You can change which info appears in which pane with the following RStudio menu:
+#      View --> Panes --> Pane Layout
+#      (I recommend that you don't change this until you get more experience with R).
+```
+
+## The "console" pane ####
+
+```{r}
+#-----------------------------------------------------------.
+#
+# The "console" pane ####
+#
+#-----------------------------------------------------------.
+
+# To write code you can type it directly in the "console" (lower left pane).
+# You'll see the answer immediately. For example, if you type
+# 3+2 into the console, you will see the answer 5.
+3+2
+
+# You'll see the answer immediately. For example, if you type
+# 10*3 into the console, you'll see 30.
+10*3
+```
+
+## Modifying previous commands (use the arrow keys) ####
+
+```{r}
+#-----------------------------------------------------------.
+#
+# Modifying previous commands (use the arrow keys) ####
+#
+#-----------------------------------------------------------.
+
+# If you want to modify a command that you previously typed, you can use the
+# up-arrow and down-arrow to search for commands that you previously typed.
+# When you find the command that you want, you can
+# (a) either press ENTER to run it again
+# (b) or use the left-arrow, right-arrow, backspace, delete (windows) keys to edit the command.
+#
+# For example, in the console,
+# (1) use the up arrow, and change 3+2 to 4+2 then hit ENTER to get the new value.
+# (2) use the up-arrow and down-arrow to see your history of commands.
+#
+# You can also see all of your previous commands in the "history" pane (which is by default
+# in the upper right hand corner of your screen). You can double-click any command to show
+# it in the console.
+```
+
+## insert key (on Windows) ####
+
+```{r}
+#-----------------------------------------------------------.
+#
+# insert key (on Windows) ####
+#
+#-----------------------------------------------------------.
+
+# On Windows, the "insert" key will switch between "overstrike" mode and "insert" mode.
+# If you see that you are "typing over" existing text instead of inserting new text
+# then press the "insert key" to switch to "insert mode".
+```
+
+## Erasing commands - ESC key ####
+
+```{r}
+#-----------------------------------------------------------.
+# Erasing commands - ESC key ####
+# 
+# Clearing the console - ctrl-L (windows) or  cmd-L (mac)
+#
+#-----------------------------------------------------------.
+
+# If you type a long line that you want to erase, press the ESC key.
+
+# If you want to clear the entire console window, press ctrl-L (windows) or cmd-L (mac)
+```
+
+## The "source" pane - for saving code   ####
+
+```{r}
+#-----------------------------------------------------------.
+#
+# The "source" pane - for saving code   ####
+#
+#-----------------------------------------------------------.
+
+# To write code that you want to save you need to create a new "R Script" file.
+# Choose the following menu choice:
+#    File --> New File --> R Script
+#
+# This will open a new file in the "source" pane (which is by default in
+# the upper-left corner of the screen).
+# 
+# You can type any commands in this file.
+#
+# You can run any command that is in a script file in the following ways:
+# (a) place your cursor on the line you want to executed and then
+#     press ctrl-ENTER (on Windows) or cmd-ENTER (on Mac)
+#
+# (b) to run several commands, select all of the lines you want to execute
+#     then press ctrl-ENTER (windows) or cmd-ENTER (mac)
+#
+# (c) you can even select just PART of a line to execute JUST THAT PART.
+#     For example, if the script contains the line:
+#         3+4*5-1
+#     and you highlight JUST the 4*5 and press ctrl-ENTER/cmd-ENTER you will see the answer 20.
+#     This even works with code in a comment. Try it with the line 3+4*5-1 above.
+#
+# (d) press ctrl-a (windows) or cmd-a (mac) to select all of the code
+#     then press ctrl-ENTER (windows) or cmd-ENTER (mac) to run all of the code.
+
+
+# To save changes you make to the file - press ctrl-s (windows) or cmd-s (mac)
+#
+# These files are saved with a .R (captial "R") filename extension.
+# If you don't know what a filename extension is, watch these videos
+# (or search for other videos or explanations ...)
+# Windows Filename Extensions: https://www.youtube.com/watch?v=m58rkfVRDlc
+# Mac Filename Extensions: https://www.youtube.com/watch?v=mYNchWitkyg
+#
+# If you double-click on the file, it should open up RStudio to display the file.
+```
+
+## Other RStudio features 
+
+```{r}
+# Other RStudio features 
+#
+# There are many different RStudio features. You can explore the various
+# menus and tabs to learn more. Don't be afraid to try things. Search online
+# for explanations.
+```
+
+## Do NOT use Word (or similar programs) to type your commands ####
+
+```{r}
+###########################################################################.
+###########################################################################.
+#
+# Do NOT use Word (or similar programs) to type your commands ####
+#
+###########################################################################.
+###########################################################################.
+
+# It is important to note that Microsoft Word and other similar programs will
+# sometimes replace minus signs (i.e. "-") with "long dash" characters (these
+# look like minus signs but are a little longer). Word also may quotes (")
+# with "smart quote" characters. All of these changes will make a command
+# that "looks" correct, not work when you paste the code into R.
+#
+# The moral of the story is NEVER USE WORD to type R code.
+```
+
+# R Commands - an intro
+
+## Using R to do basic arithmetic      ####
+
+```{r}
+############################################################.
+############################################################.
+#
+# Using R to do basic arithmetic      ####
+#
+############################################################.
+############################################################.
+
+# R can be used as a simple "calculator"
+
+3 + 2    # This will show 5. The part after the # is a "comment" that is ignored.
+
+# In general, extra spaces are meaningless. They can be added to improve readability of your code.
+# The following two command will produce the exact same answers.
+3+2-100+50             # you don't need spaces
+   3 + 2 -   100 + 50  # but spaces do not change the result
+
+
+# Exponents are written using the caret character, ^ (above the 6 on most keyboards).
+   
+2^3   # ie. "2 to the power of 3", i.e. 8
+
+
+# Division is done using the FORWARD SLASH (i.e. /)
+# (The backslash (i.e. "\" will NOT work for division)
+
+10/4   # this will show 2.5
+
+#10\4   # ERROR - don't use a backslash!
+```
+
+# R Commands - an intro
+
+## Order of operations
+
+```{r}
+# R follows the "order of operations" in math (i.e. PEMDAS), specifically ...
+# FIRST:  All parentheses are done first
+# SECOND: All exponents are done next
+# THIRD:  All multiplications and divisions are done next (starting from the
+#                                                     leftmost * or / and working to the right)
+# FOURTH: All additions and subtractions are done (from left to right)
+
+# Examples
+3+2*5   # 13, not 30, i.e. the * is done before the +
+
+# In the following command: 100-12/3*4/2+10
+# the answer is 102.
+# It gets calculated as follows:
+#
+# original                     --> 100-12/3*4/2+10
+#
+# first step: 12/3 becomes 4   --> 100-(4)*4/2+10
+#
+# second step: 4*4 becomes 16  --> 100-(16)/2+10
+#
+# third step: 16/2 becomes 8   --> 100-(8)+10
+#
+# fourth step: 100-8 become 92 --> (92)+10
+#
+# last step: 92+10 becomes 102 --> 102
+
+100-12/3*4/2+10   # This becomes 102 (see explanation in comments above)
+```
+
+## Do NOT use commas, dollar signs, etc in numbers ####
+
+```{r}
+#-----------------------------------------------------------.
+# 
+# Do NOT use commas, dollar signs, etc in numbers ####
+#
+#-----------------------------------------------------------.
+
+# R does NOT recognize commas, dollar signs, etc as part of numbers.
+
+3.25 + 2.00   # 5.25
+
+# $3.25 + $2.00  # ERROR
+
+50000 + 20000   # 70000
+
+# 50,000 + 20,000 # ERROR
+```
+
+## more operators:  %/% and %%    ####
+
+```{r}
+############################################################.
+############################################################.
+#
+# more operators:  %/% and %%    ####
+#
+#    %/% ("integer" division)
+#
+#    %%  ("remainder", AKA "modulus" or "mod")
+#
+############################################################.
+############################################################.
+
+# Symbols such as +, -, *, /, ^ and (parentheses) are known as "operators"
+# since they perform "operations". For example, the + performs the "addition operation"
+# and "*" performs the "multiplication operation".
+
+# R has additional operators that go beyond regular math. For example
+# Some operators consist of two percent signs with possibly something in between ...
+
+# Integer division is done using %/%. This gives the whole number result of dividing a
+# number by another number. Any numbers after a decimal point are removed.
+13 %/% 4  # answer: 3
+
+# Remainder (also known as, AKA, "modulus") is done using just two %% signs. This is the
+# "remainder" of dividing the first number by the 2nd number. For example, 15 %% 4, is 1
+# since 4 goes into 15 3 times with 1 left over (3*4 is only 12, but 13 is 1 more than that)
+13 %% 4   # answer: 1
+
+# remember 13/4 is regular division, i.e. 3.25
+13/4
+
+#-----------------------------------------------------------.
+#
+# PRACTICE: Write R code to figure out the following ...
+#
+#-----------------------------------------------------------.
+
+numberOfCandies = 27
+numberOfChildren = 5
+
+# QUESTION: 
+# 
+# If there are numberOfCandies, pieces of candy in a package and numberOfChildren
+# children, what is the maximum number of
+# candies we can give each child so that all the children get the same number of candies?
+
+numberOfCandies %/% numberOfChildren    # ANSWER
+
+# QUESTION: 
+#
+# (see the information in the previous question)
+# How many candies will be left over after we give out the candies to the children?
+
+numberOfCandies %% numberOfChildren     # ANSWER
+
+
+############################################################.
+############################################################.
+#
+# Variables   and   "assignment statements"     ####
+#
+############################################################.
+############################################################.
+
+# You can use "variables" to represent values in R.
+# A variable has a "variable name" and a "value". For example, suppose Joe's salary
+# is 50 thousand dollars. You can represent that as follows:
+
+joesSalary = 50000    # notice that "Salary" has a capital "S" to make it easy to read.
+
+# The "name" of the variable (i.e. joesSalary) is on the left hand side of the = sign and 
+# the "value" of the variable (i.e. 50000) is on the right hand side of the = sign.
+
+# You may NOT include spaces in variable names!
+
+# To see the value of joesSalaray, you can simply type the word joesSalary
+joesSalary
+
+# The line above, "joesSalary=50000", is known as an "assignment statement. It assigns
+# a value to a variable name. The left hand side of the "=" sign is a single
+# variable name. The right hand side could be any "expression". For example
+
+priceOfApple = 1.99
+
+# Suppose a person buys 5 apples and hands the cashier a $20 bill. Write a command
+# that assigns the amount of change the person gets back into the variable change.
+
+change = 20 - priceOfApple * 5
+
+# Show the change
+change
+
+#-----------------------------------------------------------.
+# 
+# rules for variable names
+#
+#-----------------------------------------------------------.
+
+# Variable names may NOT start with a number   ####
+
+oneOrange = 1.50    # good
+
+# 1Banana = 1.25      # ERROR
+
+price1 = 50.00    # good
+
+
+
+# Variable names may ONLY include letters, numbers, underscores "_" and periods "."   ####
+
+this.is.a.good.variable.name = 100
+
+this_is_also_a_good_variable_name = 200
+
+# this$is$not = 300    # ERROR - bad variable name
+
+# Variable names are case sensitive.   ####
+# The following are TWO DIFFERENT VARIBLES
+Lettuce = 0.99
+lettuce = 3.50
+
+# Show the values of each variable
+Lettuce
+lettuce
+
+#----------------------------------------------------------.
+#
+# Managing your variables:
+#
+#   Environment window
+#  
+#   ls()
+#
+#   rm(variableName)
+#----------------------------------------------------------.
+
+# You can see the values of all variables in the "Environment" window in R Studio
+# By default, the "Environment" window is in the upper right hand corner of your screen.
+
+
+# To see the names of all your existing varaibles you can run the ls() command  ####
+
+ls()    # you MUST include the (parentheses)
+
+# Don't forget the parentheses!   ls()   NOT    ls     ####
+#
+# if you forget to type the parentheses, you will see a bunch of stuff that is
+# way beyond the scope of what we are talking about today (we'll get to that later in the course)
+
+ls
+
+# Use the rm() command to remove a variable.   ####
+#
+# You can include the variable name in "quotes" or not include it in quotes.
+# For example:
+
+# show all defined variables
+ls()
+
+# Remove the lettuce variable
+rm(lettuce)
+
+# show that lettuce is no longer defined - or just look at the Environment window
+ls()
+
+# In quotes also works 
+rm("change")
+
+# To remove ALL of your variables, type the following command:
+rm( list=ls() )
+
+# When there are no variables at all, the ls() command will display "character(0)".  ####
+# This may be confusing. We'll explain why you get this confusing result a
+# little later in the course.
+
+
+# There are no more variables - character(0)
+ls()    # you will see "character(0)" if there are no variables.
+
+
+#-----------------------------------------------------------.
+#
+# PRACTICE: Write R code to figure out the following ...
+#
+#-----------------------------------------------------------.
+
+# QUESTION:
+#
+# The price of an apple is $1.50. Create a variable named priceOfApple that contains that value.
+
+priceOfApple = 1.50   # ANSWER
+
+# QUESTION:
+#
+# Given the information below, write a command that creates a variable
+# named "costOfPie" that stores the amount of money it takes to create a
+# single apple pie. (do not use $ signs):
+#
+#   - The price of an apple is stored in the variable priceOfApple
+#   - The price of a prepared pie crust is $7.50
+#   - It takes 10 apples and one pie crust to make an apple pie.
+
+costOfPie = priceOfApple * 10 + 7.50    # ANSWER
+
+
+
+# QUESTION    ####
+#
+# ( see the information in the previous question )
+# Write a command that stores the amount of money it takes to make 3 apple pies
+# in the variable named totalAmount
+
+totalAmount = costOfPie * 3   # ANSWER
+
+#-----------------------------------------------------------.
+#
+# Changing the value of a variable, eg.   x = x + 5    ####
+#
+#-----------------------------------------------------------.
+
+# Let's get back to Joe's salary.
+joesSalary = 50000
+
+
+# if Sue's salary is 70000 you can store that information in another variable
+suesSalary = 70000
+
+# You can show the total salary for the company by adding together the two salaries
+joesSalary + suesSalary
+
+# notice that joesSalary didn't change
+joesSalary
+
+# suesSalary didn't change either
+suesSalary
+
+# to figure out the total salary you can type the same comamnd again
+joesSalary + suesSalary
+
+# But typing the same commands over and over is not very efficient.
+# Instead, you can create a new variable, e.g. totalSalary, that contains the result of
+# adding together the two salaries.
+totalSalary = joesSalary + suesSalary
+
+# notice that when we type the above command that the "answer" isn't displayed. The command
+# simply saves the result in the variable named, totalSalary. To see the result, you can
+# type the variable name:
+totalSalary
+
+# if want to give Joe a 10% raise. We can calculate the new Salary as follows:
+joesSalary * 1.10
+
+# However, that still didn't actually change joesSalary
+joesSalary
+
+# To actually change joesSalary, we can use an assignment statement as follows.
+# The first step is that the value on the right hand side of the = sign is calculated using
+# whatever values we already know. The 2nd step is that the variable on the left hand
+# side of the = sign gets this new value.
+joesSalary = joesSalary * 1.10
+
+# Now let's see what joesSalary became
+joesSalary
+
+# Notice that the totalSalary did NOT change.
+totalSalary
+
+# To change the totalSalary, we would have to calculate it again.
+totalSalary = joesSalary + suesSalary
+
+# show the new totalSalary
+totalSalary
+
+
+#-------------------------------------------------------------.
+# 
+# PRACTICE - write R commands to figure out the following ...
+#
+#-------------------------------------------------------------.
+
+
+# QUESTION:   
+#
+# There are 5 children. 
+# Each package of candy costs $3.50 and contains 23 pieces.
+# What is the maximum number of candies could we give to each child if we only have $15.00 to spend? 
+# How much money will be left over? 
+# How many candies will be left over?
+#
+# HINTS: 
+# - create a variable, numPackages that contains the # of packages we can buy with $15.00
+# - create a variable, totalCandies, that contains the total # of candies we will have
+# - calculate the number of candies for each child
+# - calculate the amount of money left over
+# - calculate the number of candies left over
+
+rm(list=ls())  # lets start with a clean slate     # ANSWER
+numberOfChildren = 5                               # ANSWER
+priceOfPackage = 3.50                               # ANSWER
+candiesInPackage = 23                               # ANSWER
+moneyToSpend = 15                               # ANSWER
+
+numPackages = moneyToSpend %/% priceOfPackage        # ANSWER
+
+totalCandies = numPackages * candiesInPackage        # ANSWER
+candiesPerChild = totalCandies %/% numberOfChildren  # ANSWER
+moneyLeftOver = moneyToSpend - priceOfPackage * numPackages # ANSWER
+
+########################################################################.
+########################################################################.
+#
+# BEREN (FALL 2023) - UP TO HERE - AFTER DAY 1 ####
+#
+########################################################################.
+########################################################################.
+
+
+
+
+#-------------------------------------------------------------.
+# 
+# Other ways of assigning variables     =   <-  ->     ####
+#
+#    variable = value
+#
+#    variable <- value
+#
+#    value -> variable
+#-------------------------------------------------------------.
+
+# R allows an assignment statement to be written in 3 different ways. These all
+# produce the exact same results.
+
+# OPTION 1 - use an = sign
+# This is what we've been doing all along up until now. Example:
+
+numStudents = 32
+
+# OPTION 2 - same as above but use "<-" instead of an = sign. The <- looks like
+# an arrow. It consists of a less than sign followed by a minus sign. There may NOT
+# be any spaces between the "<" and the "-"
+
+numProfessors <- numStudents %/% 6
+
+# OPTION 3 - same as above but the name of the varible goes on the right hand side
+# and the "arrow" faces right ... e.g.
+
+numProfessors - 1 -> numDeans
+
+# show the variables values
+numStudents
+numProfessors
+numDeans
+
+
+########################################################################.
+########################################################################.
+#
+# WILF (FALL 2023) - UP TO HERE - AFTER DAY 1  ####
+#
+########################################################################.
+########################################################################.
+```

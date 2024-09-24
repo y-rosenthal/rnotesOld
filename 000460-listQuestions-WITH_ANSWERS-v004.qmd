@@ -1,0 +1,690 @@
+# Practice Questions - TOPIC: Lists and Dataframes.
+
+```{r}
+rm(list=ls())
+
+# The following list contains the data for a chain of hardware stores
+# From October 2021.
+#
+# The data for each store in the chain is stored in a separate list within
+# the list of stores. 
+#
+# The first two items in the list are the year and month for the data.
+# The other items in the list are lists of information for each store in 
+# the chain. For simplicity, the data below only shows three stores. However, 
+# there could be many stores in the chain, each with similarly structured data.
+#
+# Each store is allowed to set their own prices and salePrices. 
+# Each store is also allowed to carry a somewhat different selection of 
+# products than the other stores.
+#
+# Answer the questions below by referring to this data. You should 
+# write the code so that it will continue to work even if the actual 
+# values in the data change. 
+
+stores = list(
+  
+  year=2021,
+  
+  month=10,
+  
+  list(
+      address="123 main street",
+      storeId="1000",
+      manager="joe",
+      products = data.frame(
+        product =          c("hammer", "screwdriver", "hand saw", "wrench" ),
+        price=             c(10.99,    8.00,          15.00,      5.00),
+        salePrice=         c(8.99,     NA,            NA,         4.50),
+        amountSold=        c(100,      200,           50,         75),
+        amountInInventory= c(20,       12,            0,          5)
+      )
+  ),
+  
+  list(
+    address="99 hickory place",
+    storeId="1111",
+    manager="sue",
+    products = data.frame (
+      product =          c("wrench","screwdriver", "screws", "nails","pliers" ),
+      price=             c(11.99,    8.00,          3.50,    2.99,   4.99),
+      salePrice=         c(NA,       7.00,          NA,      2.50,   4.50),
+      amountSold=        c(80,       195,           200,     400,    80),
+      amountInInventory= c(20,       15,            40,      15,     0)
+    )
+  ),
+  
+  list(
+    address="450 broadway",
+    storeId="2345",
+    manager="carla",
+    products = data.frame (
+      product =          c("wrench","saw","hammer","screws", "nails","drill" ),
+      price=             c(11.99,    8.00, 11.00,  3.50,    2.99,   44.99),
+      salePrice=         c(NA,       7.00, 10.00,  2.50,    2.50,   NA),
+      amountSold=        c(40,       100,  3,      100,     200,    10),
+      amountInInventory= c(30,       5,    40,     0,       0,      3)
+    )
+  )
+  
+  # If there were more stores then the data for the other
+  # stores would appear as separate lists here.
+)
+
+# NOTE - the following command may help you to understand the data better
+str(stores)
+```
+
+```{r}
+#----------------------------------------------------------------------------------
+# QUESTION 1
+# TOPIC: lists, paste
+# 
+# PART A
+#
+# Write a command to show the year and month of the data in the format
+# month/year. For example if the year is 2021 and the month is 11
+# then your command should show "11/2021". Remember that your command should
+# continue to work even if the value of the year or month in the data changes.
+#
+# Use the $dollar-sign-notation for this answer.
+#
+# PART B
+#
+# Create a new variable, stores2, that has all the same values as the stores
+# variable. However, instead of the first two values being year and month, 
+# the first value in the stores2 variable should be a value named date that 
+# contains the month and year in month/year format (as in part A). 
+# The data for the first store should appear in the 2nd position in the 
+# stores2 list.
+#----------------------------------------------------------------------------------
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### part a - click here for answer {.unnumbered}
+```{r}
+###################.
+# Answer - part A
+###################.
+
+paste( stores$month , stores$year, sep="/")
+```
+:::
+
+::: {.callout-note icon=false collapse="true"}
+#### part b - click here for answer {.unnumbered}
+```{r}
+##################################.
+# Answer - part B - ONE ANSWER
+##################################.
+
+# copy the values from stores
+stores2 = stores             
+
+# set the first value in stores2 to be the month/year
+stores2[[1]] = paste( stores$month , stores$year, sep="/")
+
+# change the name of the first value to "date"
+names(stores2)[1] = "date"
+
+# remove the 2nd value (i.e. the month) from stores2
+stores2[[2]] = NULL            # remove the 2nd value from stores2
+
+str(stores2)
+
+##################################.
+# Answer - part B - ANOTHER ANSWER
+##################################.
+
+# create an empty list
+stores2 = list()
+
+# set the date 
+stores2$date = paste( stores$month , stores$year, sep="/")
+
+# copy the data for all the stores from the stores variable
+stores2[2:(length(stores)-1)] = stores[3:length(stores)]
+
+str(stores2)
+```
+:::
+
+```{r}
+#----------------------------------------------------------------------------------
+# QUESTION 2
+# TOPIC: lists, paste
+# 
+# Same as the previous question but DO NOT use the $dollar-sign-notation
+# for accessing the list.
+#----------------------------------------------------------------------------------
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+###########.
+# ANSWER
+###########.
+
+# The [[double-bracket]] notation is equivalent to the $dollar-sign notation.
+# NOTE - do NOT use the [single-bracket] notation.
+#
+# stores[[1]] in the data above is "2021"
+#
+# However, stores[1] in the data above is a LIST that contains "2021"
+
+paste( stores[[2]] , stores[[1]], sep="/")
+```
+:::
+
+```{r}
+#----------------------------------------------------------------------------------
+# QUESTION 3
+# TOPIC: lists, c
+# 
+# Part A
+# Write a single command that returns a vector that contains
+# the addresses of the first and second stores.
+# The answer should look as follows: 
+  #   [1] "123 main street"  "99 hickory place"
+#
+# Part B
+# Do this again, but this time use a different notation to access the list.
+#----------------------------------------------------------------------------------
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### part a - click here for answer {.unnumbered}
+```{r}
+##################.
+# ANSWER - PART A
+##################.
+
+# Look at the answer carefully.
+# NOTE that stores[[3]] is the list for the first store
+# Therefore stores[[3]]$address is the address of the first store.
+#
+# HOWEVER - be careful
+# stores[3] is a LIST that contains the list for the first store.
+# Therefore stores[3]$address is wrong since the list stores[3] only 
+# contains a single item, i.e. another list, and does NOT contain an $address item.
+# 
+# You can see this more clearly if you use the str function. 
+# Compare the output of the following 3 commands:
+# str(stores)
+# str(stores[[3]])
+# str(stores[3])
+
+c(stores[[3]]$address, stores[[4]]$address)
+```
+:::
+
+::: {.callout-note icon=false collapse="true"}
+#### part b - click here for answer {.unnumbered}
+```{r}
+##################.
+# ANSWER - PART B
+##################.
+
+c(stores[[3]][[1]], stores[[4]][[1]])
+```
+:::
+
+```{r}
+#----------------------------------------------------------------------------------
+# QUESTION 4
+# TOPIC: lists
+# 
+# Write a command to display the number of different products
+# that are carried by the first store.
+#----------------------------------------------------------------------------------
+```
+
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+###########.
+# ANSWER
+###########.
+
+nrow(stores[[3]]$products)
+```
+:::
+
+```{r}
+#----------------------------------------------------------------------------------
+# QUESTION 5
+# TOPIC: lists
+#
+# Write a command that calculates the number of stores in the chain.
+#----------------------------------------------------------------------------------
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+###########.
+# ANSWER
+###########.
+
+length( stores ) - 2
+```
+:::
+
+```{r}
+#----------------------------------------------------------------------------------
+# QUESTION 6
+# TOPIC: lists
+#
+# Write a command to retrieve a list that contains 
+# the year, month and just the data for the 2nd store.
+# Store this new list in a variable called store2.
+# The structure of the data should be exactly the same.
+#
+# Remember that the data above only contains three stores, but the command you write
+# should work even if there were more stores (e.g. 100 stores) in the data.
+#----------------------------------------------------------------------------------
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+###########.
+# ANSWER
+###########.
+
+store2 = stores[c(1,2,4)]
+
+# The following commands are NOT part of the answer but may help
+# you to understand the results.
+store2   # see the answer
+str(store2) # understand the structure of the answer
+```
+:::
+
+```{r}
+#----------------------------------------------------------------------------------
+# QUESTION 7
+# TOPIC: lists
+#
+# The first store in the data actually went out of business in 9/2021
+# However, it was mistakenly left in the data for 10/2021.
+# Write a command to create a variable named updatedStores that contains
+# all of the data from the stores list but without the data for the first store.
+#
+# Remember that the data above only contains three stores, but the command you write
+# should work even if there were more stores (e.g. 100 stores) in the data.
+#----------------------------------------------------------------------------------
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+###########.
+# ANSWER
+###########.
+
+# [single-brackets] since you are getting back a list of items
+# The index -3 means get back everything except for the third item
+# in the list, i.e. everything except for the data for the first store.
+updatedStores = stores[-3] 
+
+# The following commands are NOT part of the answer but may help
+# you to understand the results.
+updatedStores   # see the answer
+str(updatedStores) # understand the structure of the answer
+```
+:::
+
+```{r}
+#----------------------------------------------------------------------------------
+# QUESTION 8
+# TOPIC: lists, %in%
+#
+# The stores are allowed to carry different product lines.
+# Write a command that shows those products that are carried by the 
+# second store that are not carried by the first store.
+# 
+# PART A - write this answer using the %in% operator
+# PART B - write this answer without using the %in% operator
+#----------------------------------------------------------------------------------
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+###########.
+# ANSWER
+###########.
+
+# PART A
+stores[[4]]$product [ ! ( stores[[4]]$product %in% stores[[3]]$product ) ]
+
+# PART B
+setdiff(stores[[4]]$product, stores[[3]]$product)
+```
+:::
+
+```{r}
+#----------------------------------------------------------------------------------
+# QUESTION 9
+# TOPIC: lists, is.na
+#
+# The products that are on sale have a number for the sale price.
+# The products that are NOT on sale have NA for the sale price.
+# Write a command to return a VECTOR of the names of the products
+# that are on sale in the first store.
+#----------------------------------------------------------------------------------
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+###########.
+# ANSWER
+###########.
+
+stores[[3]]$product [ !is.na(stores[[3]]$salePrice) ]
+```
+:::
+
+```{r}
+#----------------------------------------------------------------------------------
+# QUESTION 10
+# TOPIC: lists, is.na, parallel vectors
+#
+# See the previous question.
+#
+# For this question create a variable named saleProducts that
+# contains a dataframe with just those rows from the first store's products
+# which are on sale. (You may answer using several lines of code).
+#
+#----------------------------------------------------------------------------------
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+###########.
+# ANSWER
+###########.
+
+products = stores[[3]]$products
+saleProducts = products[ !is.na(products$salePrice) , ]
+
+# The following commands are NOT part of the answer but may help
+# you to understand the results.
+products   
+saleProducts
+```
+:::
+
+```{r}
+#----------------------------------------------------------------------------------
+# QUESTION 11
+# TOPIC: lists, names
+#
+# The list, stores, contains names for the year and month entries,
+# but does not contain names for the two stores. 
+# 
+# PART A
+#
+# Copy the data for stores into a variable named storesWithNames
+# i.e. storesWithNames = stores
+# Then modify storesWithNames so that
+#  - the list of data for the 1st store has the name "store1" in the main list
+#  - the list of data for the 2nd store has the name "store2" in the main list
+#  - etc ... for all of the stores (you code should work even if there were more stores)
+#
+#
+# PART B
+# Now use the storesWithNames variable to display just the product names and prices 
+# in the 1st store, i.e. store1, whose prices are $10 or more.
+# Use the new names that you just created in PART A as part of your answer.
+#----------------------------------------------------------------------------------
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### part a - click here for answer {.unnumbered}
+```{r}
+####################.
+# ANSWER - Part A
+####################.
+
+storesWithNames = stores   # as directed to do in the question
+names(storesWithNames)[3:length(storesWithNames)] = paste0("store", 1:(length(storesWithNames)-2))
+
+# The following commands are NOT part of the answer but may help
+# you to understand the results.
+storesWithNames   # see the answer
+str(storesWithNames) # understand the structure of the answer
+```
+:::
+
+::: {.callout-note icon=false collapse="true"}
+#### part b - click here for answer {.unnumbered}
+```{r}
+####################.
+# ANSWER - Part B
+####################.
+
+# Answer with one line of code
+storesWithNames$store1$products [ storesWithNames$store1$products$price >= 10 , c("product","price")]
+
+  # Alternative answer with more than one line of code
+store1products = storesWithNames$store1$products
+store1products[ store1products$price >= 10, c("product", "price")]
+```
+:::
+
+```{r}
+#----------------------------------------------------------------------------------
+# QUESTION 12
+# TOPIC: lists
+#
+# Write the following function: 
+#    addStore(stores, address, storeId, manager, products)
+#
+# Arguments:
+#    stores - the complete stores list
+#    address - the address of the new store
+#    storeId - the id of the new store
+#    manager - the manager of the new store
+#    products - the products dataframe of the new store
+#
+# Returns:
+#    A new stores vector that includes an entry for the new store.
+#
+# Your code should add the new store as at the end of the list of stores.
+# Right now the stores list only contains 3 stores so your code should 
+# add the new store as the 4th store - however, your code should work no
+# matter how many stores are in the list.
+#
+# Example: 
+#    YOUR CODE TO DEFINE THE FUNCTION GOES HERE
+#
+#    stores = addStore(stores, "4 apple drive", "4000", "dana",
+#                      data.frame(product = c("hammer","saw"),
+#                                 price = c(10,15),
+#                                 salePrice=c(NA,NA),
+#                                 amountSold = c(100,200),
+#                                 amountInInventory = c(20,30)))
+#
+#    stores = addStore(stores, "5 orange grove", "5000", "jan",
+#                      data.frame(product = c("wrench","hammer"),
+#                                 price = c(12,9.50),
+#                                 salePrice=c(NA,NA),
+#                                 amountSold = c(90,80),
+#                                 amountInInventory = c(10,20)))
+#
+#    str(stores[c(6,7)])
+#----------------------------------------------------------------------------------
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+###########.
+# ANSWER
+###########.
+
+addStore = function(stores, address, storeId, manager, products){
+  stores[[length(stores)+1]] = list(address = address,
+                                    storeId = storeId,
+                                    manager = manager, 
+                                    products=products)
+  return(stores)
+}
+
+# try it
+
+newStores = stores
+newStores = addStore(newStores, "4 apple drive", "4000", "dana",
+                  data.frame(product = c("hammer","saw"),
+                             price = c(10,15),
+                             salePrice=c(NA,NA),
+                             amountSold = c(100,200),
+                             amountInInventory = c(20,30)))
+
+newStores = addStore(newStores, "5 orange grove", "5000", "jan",
+                  data.frame(product = c("wrench","hammer"),
+                             price = c(12,9.50),
+                             salePrice=c(NA,NA),
+                             amountSold = c(90,80),
+                             amountInInventory = c(10,20)))
+
+str(newStores[c(6,7)])
+
+str(newStores)
+```
+:::
+
+```{r}
+#----------------------------------------------------------------------------------
+# QUESTION 13
+# TOPIC: lists
+#
+# PART A
+# Use lapply to retrieve a list of just addresses from all of the
+# stores in the stores list. Your code should work no matter how many
+# stores are in the list.
+#
+# PART B
+# Modify your answer to use sapply so that you get a vector instead
+# of a list.
+#----------------------------------------------------------------------------------
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### part a - click here for answer {.unnumbered}
+```{r}
+##################.
+# ANSWER - PART A
+##################.
+
+lapply(stores[3:length(stores)],
+       function(store) store$address)
+```
+:::
+
+::: {.callout-note icon=false collapse="true"}
+#### part b - click here for answer {.unnumbered}
+```{r}
+##################.
+# ANSWER - PART B
+##################.
+
+sapply(stores[3:length(stores)],
+       function(store) store$address)
+```
+:::
+
+```{r}
+#----------------------------------------------------------------------------------
+# QUESTION 14
+# TOPIC: lists, dataframes, rbind
+#
+# Create a single products dataframe that combines the products
+# from the 1st and 2nd stores. Hint - use rbind.
+#
+# The combined dataframe should include a new column, location, that records
+# the address of the store from which the data in a particular row comes from.
+# Setup the new dataframe so that the location column is the first column.
+#
+# Store the new dataframe in a variable named, combinedProducts.
+#
+# You may use more than one line of code.
+#----------------------------------------------------------------------------------
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+```{r}
+###########.
+# ANSWER
+###########.
+
+df1 = stores[[3]]$products
+df1$location = stores[[3]]$address
+
+df2 = stores[[4]]$products
+df2$location = stores[[4]]$address
+
+combinedProducts = rbind ( df1, df2 )
+
+combinedProducts = combinedProducts[ , c(ncol(combinedProducts), 1:(ncol(combinedProducts) - 1))]
+
+combinedProducts
+```
+:::
+
+```{r}
+#----------------------------------------------------------------------------------
+# QUESTION 15
+# TOPIC: lists
+#
+# PART A
+# 
+# Use lapply to create a list that contains just the products dataframes from 
+# all of the stores. Each dataframe in the list of dataframes should
+# include a location column that contains the address of the store
+# for the products. Name the list productDataframes.
+#
+# PART B
+# 
+# Look up the documentation for the do.call function. 
+# Use do.call to combine ALL of the product dataframes from PART A 
+# into a single combined dataframe named allProducts.
+#----------------------------------------------------------------------------------
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### part a - click here for answer {.unnumbered}
+```{r}
+##################.
+# ANSWER - PART A
+##################.
+
+productsWithLocation = function(store) {
+  products = store$products
+  products$location = store$address
+  products = products[ c( ncol(products), 2:(ncol(products) - 1)) ]
+  return(products)
+}
+
+productDataframes = lapply(stores[3:length(stores)], productsWithLocation)
+```
+:::
+
+::: {.callout-note icon=false collapse="true"}
+#### part b - click here for answer {.unnumbered}
+```{r}
+##################.
+# ANSWER - PART B
+##################.
+
+allProducts = do.call ( rbind, productDataframes )
+allProducts
+```
+:::

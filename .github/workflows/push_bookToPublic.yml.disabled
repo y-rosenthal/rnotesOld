@@ -1,0 +1,73 @@
+name: Push _book folder to rnotesWebsite
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "_book/**" # Only trigger the workflow if files in _book are changed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Show the SSH private
+        run: 'echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64'
+
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+
+      - name: Set up SSH for pushing
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Clone the target repo (rnotesWebsite)
+        run: |
+          git clone git@github.com:y-rosenthal/rnotesWebsite.git website
+          cd website
+
+      ################################ ChatGPT
+      - name: Copy _book folder to the target repo (rnotesWebsite)
+        run: |
+          rsync -av --progress _book/ website/_book/  # Sync _book folder from source to target
+          #cd website
+
+      - name: Commit and push changes to rnotesWebsite
+        run: |
+          cd website
+          git config --global user.email "yrosenthal@gmail.com"
+          git config --global user.name "YR"
+          git add _book
+          git commit -m "Sync _book folder"
+          git push origin master
+      ################################ Claude
+      #      - name: Copy only _book folder
+      #        run: |
+      #          git config --global user.email "yrosenthal@gmail.com"
+      #          git config --global user.name "YR"
+      #          git remote add website git@github.com:y-rosenthal/rnotesWebsite.git
+
+      #          # Clear the repository except for the _book folder
+      #          find . -not -path './_book*' -delete
+
+      #          # Commit and push only the _book folder
+      #          git add _book
+      #          git commit -m "Sync _book folder"
+      #          git push website master
+      #################### YR
+      #- name: Copy only _book folder
+      #  run: |
+      #    git config --global user.email "yrosenthal@gmail.com"
+      #    git config --global user.name "YR"
+      #    git remote add website git@github.com:y-rosenthal/rnotesWebsite.git
+
+      #    # Clear the repository except for the _book folder
+      #    #find . -not -path './_book*' -delete
+
+      #    # Commit and push only the _book folder
+      #    git add _book
+      #    git commit -m "Sync _book folder"
+      #    git push website master

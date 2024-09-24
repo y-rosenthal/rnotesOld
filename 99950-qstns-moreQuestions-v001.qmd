@@ -1,0 +1,13 @@
+# Practice Questions - TOPICS: Dataframes, & | !
+
+Click 
+<a href="000880-qstns-R-Assignment-logicalOperatorsAndDataframes-stocks-v004.docx">
+here 
+</a>
+for the questions.
+
+Click 
+<a href="000880-qstns-R-Assignment-logicalOperatorsAndDataframes-stocks-v004-SOLUTIONS-v001.docx">
+here 
+</a>
+for the answers.

@@ -1,0 +1,130 @@
+################################################################.
+################################################################.
+#
+# append function
+#
+# The append function adds elements to a vector. The following is from 
+# the help page for ?append
+#
+# Description: Add elements to a vector.
+# Usage:       append(x, values, after = length(x))
+# Arguments
+#              x	     the vector the values are to be appended to.
+#
+#              values	 the values to be included in the modified vector.
+#
+#              after	 a subscript, after which the values are to be appended.
+#                      To add values to the beginning of the vector you 
+#                      can specify after=0
+#
+# Return Value
+#   A vector containing the values in x with the elements of values appended 
+#   after the specified element of x.
+#
+################################################################.
+################################################################.
+
+
+#-------------------------------------------------------------------.
+# EXAMPLE : append value to the end of a vector
+#-------------------------------------------------------------------.
+
+students <- c("abe", "bob", "charlie")
+students                    # abe bob charlie
+
+# return a vector that contains all the students plus carla
+append(students, "carla")   # abe bob charlie
+
+# THIS DID NOT CHANGE THE VALUE OF STUDENTS!!!
+students                    # abe bob charlie
+
+# To change the value of students, you must ASSIGN the new value to the students variable
+students <- append(students, "carla")   
+students                    # abe bob charlie carla
+
+
+# add denice, edward and frieda
+students <- append(students, c("denice", "edward", "frieda"))
+students
+
+#-------------------------------------------------------------------.
+# EXAMPLE : append values to the beginning of a vector
+#-------------------------------------------------------------------.
+
+students <- c("abe", "bob", "charlie")
+students                    # abe bob charlie
+
+# add denice, edward and frieda to the BEGINNING of the students vector
+students <- append(students, c("denice", "edward", "frieda"), after=0)
+students
+
+#-------------------------------------------------------------------.
+# EXAMPLE : append values in the middle of a vector
+#-------------------------------------------------------------------.
+
+students <- c("abe", "bob", "charlie")
+students                    # abe bob charlie
+
+# add denice, edward and frieda after the 2nd value in the vector
+students <- append(students, c("denice", "edward", "frieda"), after=2)
+students   # abe bob denice edward frieda charlie
+
+##########################################################################.
+# QUESTION
+#
+# Write code to add values to the beginning of a vector without using 
+# the append function
+##########################################################################.
+
+#-------------------------------------------------------------------------------------------.
+# one way - replaces the vector with a combination of the original vector and the new values
+#-------------------------------------------------------------------------------------------.
+
+students <- c("abe", "bob")
+students 
+
+# add carla to the students
+students <- c(students, "carla")
+students
+
+# add denice, edward and frieda
+students <- c(students, "denice", "edward", "frieda")
+students
+
+
+#-------------------------------------------------------------------------------------------.
+# another way - assign new values to positions after the end of the vector
+#-------------------------------------------------------------------------------------------.
+
+students <- c("abe", "bob")
+students 
+
+# add carla to the students
+students[3] <- "carla"
+students
+
+# add denice, edward and frieda
+students[c(4,5,6)] <- c("denice", "edward", "frieda")  # BOTH c() functions ARE NECESSARY
+students
+
+# We can have R figure out the next index number to use
+students[length(students) + 1:3] = c("george", "helen", "ida")
+students
+
+# if you assign a value to a position that is much greater than the number of 
+# values that are currently in your vector, the values between the end of the 
+# current vector and the new value will be NA
+
+students[15] = "oscar"
+students
+length(students)
+
+
+
+################################################################.
+# BEREN - UP TO HERE - AFTER CLASS 10 (last class before Sukkot)  ####
+################################################################.
+
+################################################################.
+# WILF - UP TO HERE - AFTER CLASS 10 (last class before Sukkot)  ####
+################################################################.

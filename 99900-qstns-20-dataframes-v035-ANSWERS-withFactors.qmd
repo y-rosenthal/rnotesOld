@@ -1,0 +1,1029 @@
+# Practice Questions - TOPIC: Dataframes
+
+## Dataframes
+
+```{r}
+##############################################################################################.
+##############################################################################################.
+##
+##            TOPIC:  DATAFRAMES
+##
+##############################################################################################.
+##############################################################################################.
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 46
+# TOPICS: dataframes
+#
+# Write R code that creates a dataframe that has 2 columns.
+#
+# The first column should contain the even numbers 
+# from 2 through 1000, ie. 2,4,6 ... 1000.
+#
+# The 2nd column should contain the odd numbers
+# from 999 counting down to 1, i.e. 999, 997, 995, ... 1
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+##############.
+# ANSWER 1
+##############.
+
+# This answer creates the data.frame in one command.
+# NOTE: strinsAsFactors=FALSE is not necessary here since there are no character vectors in this dataframe.
+numbers <- data.frame(evens=seq(2,1000,by=2), odds = seq(999,1,by=-2))   # ANSWER
+
+# show the first 3 and last 3 rows of numbers (this is not part of the answer)
+head(numbers,3)   # show the first 3 rows
+tail(numbers,3)   # show the last 3 rows
+
+##############.
+# ANSWER 2 
+##############.
+
+# This answer creates variables for the vectors first.
+# The column names will be the same as the variable names of the vectors.
+evens <- seq(2,1000,by=2)              # ANSWER (MULTIPLE LINES)
+odds <- seq(999,1, by=-2)              # ANSWER (MULTIPLE LINES)
+numbers <- data.frame(evens,odds)      # ANSWER (MULTIPLE LINES)
+
+# show the first 3 and last 3 rows of numbers (this is not part of the answer)
+head(numbers,3)   # show the first 3 rows
+tail(numbers,3)   # show the last 3 rows
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 47
+# TOPICS: dataframes
+#
+# Write R code that creates a dataframe that contains the following information:
+#  
+# The name of the 1st column should be: "department"
+# The values in this column should be: produce, bakery, produce, produce, bakery. 
+#
+# The name of the 2nd column should be: "product"
+# The values in this column should be: apple, chocolate cake, orange, pear, rye bread. 
+#
+# The name of the 3rd column should be: "price"
+# The values in this column should be: 1.99 , 1.59, 0.99, 1.99, 4.99.
+#
+# Store the dataframe in a variable named "prices".
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+###########################################################.
+# ANSWER 1 - create the data.frame with a single command
+###########################################################.
+
+prices <- data.frame(department=c("produce","bakery","produce","produce","bakery"),   # ANSWER (MULTIPLE LINES)
+                     product=c("apple","chocolate cake","orange","pear","rye bread"), # ANSWER (MULTIPLE LINES)
+                     price=c(1.99 , 1.59, 0.99, 1.99, 4.99),                          # ANSWER (MULTIPLE LINES)
+                     stringsAsFactors=FALSE)                                          # ANSWER (MULTIPLE LINES)
+
+# check our answer (this is NOT part of the answer)
+prices
+
+###########################################################.
+# ANSWER 2 - create variables for the columns first
+###########################################################.
+
+department <- c("produce","bakery","produce","produce","bakery")        # ANSWER (MULTIPLE LINES)
+product <- c("apple","chocolate cake","orange","pear","rye bread")      # ANSWER (MULTIPLE LINES)
+price <- c(1.99 , 1.59, 0.99, 1.99, 4.99)                               # ANSWER (MULTIPLE LINES)
+prices <- data.frame(department,product,price,stringsAsFactors = FALSE) # ANSWER (MULTIPLE LINES)
+
+# check our answer (this is NOT part of the answer)
+prices
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 48
+# TOPICS: dataframes
+#
+# Write a command that changes the names of the columns in the dataframe
+# from the previous question. The first column should now be named itemName and
+# the 2nd column should be named pricePerLb. Hint: use the colnames function.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+###############.
+# ANSWER 1
+###############.
+colnames(prices)[c(2,3)] <- c("itemName","pricePerLb")  # ANSWER
+# check ...
+prices
+
+################.
+# ANSWER 2
+################.
+colnames(prices)[2] <- "itemName"     # ANSWER (MULTIPLE LINES)
+colnames(prices)[3] <- "pricePerLb"   # ANSWER (MULTIPLE LINES)
+# check ...
+prices
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 49
+# TOPICS: dataframes
+#
+# Challenge: Write a command that changes the names of the rows in the
+# "prices" dataframe from the previous question. The new names of the rows
+# should be item1, item2 , etc. Write the code so that no matter how many rows
+# the dataframe would contain the names of the rows would follow the same pattern.
+# For example, if the dataframe happened to contain 1000 rows, then after your
+# command executed, they would be named: item1,item2,item3,item4,... item1000
+#
+# Hint: As part of your answer, you will need to use the paste function
+# with sep="" (nothing between the quotes). Note that we did not cover the paste
+# function in class. You should look at the help for the paste function and try a
+# few examples of your own. You can also type the R command example(paste) to
+# automatically run the examples that appear at the end of the help page for the
+# paste function.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the prices dataframe.
+
+#############################.
+# sample answer:
+#############################.
+
+# To generate the new rownames you can use the following command:
+paste("item", 1:length(rownames(prices)), sep="")
+
+# or the following command
+paste("item", 1:nrow(prices), sep="")
+
+# now just assign the result of one of these commands to the rownames:
+rownames(prices) <- paste("item", 1:nrow(prices), sep="")    # ANSWER  (THIS IS THE ONLY LINE YOU NEED)
+
+# check:
+prices
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 50 (a)
+# TOPICS: dataframes
+#
+# Write a command that modifies the dataframe from the previous question.
+# The command should change the word "apple" to "mcintosh apple".
+#
+# a. Do this assuming that the dataframe was created with the option stringsAsFactors=FALSE.
+#     For this simple answer, you may refer to the row and column number if you like.
+#
+# b. Do this again, but this time DO NOT refer to the actual row number or column number in your answer. Your answer should work successfully, no matter what row contains "apple". 
+#     (NOTE: This is an important technique that will be used later in the course to create our own functions).
+#
+# c. Do this assuming that the dataframe was created with the option stringsAsFactors=TRUE.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+# ANSWER - part a
+prices[1,2] <- "mcintosh apple"    # ANSWER
+
+# ANSWER - part b
+prices[prices$itemName == "apple" , "itemName"] <- "mcintosh apple"    # ANSWER
+prices
+
+# ANSWER - part c
+
+################.
+# ANSWER 1
+################.
+
+# Note that based on the above commands, the first two columns in the dataframe
+# are FACTORS. We can see the "levels" of the 2nd column with the following command:
+levels(prices[[2]])
+# since "mcintosh apple" is NOT a valid level in the 2nd column, the following
+# command will generate an error and will replace the word "apple" NOT with 
+# "mcintosh apple", but rather with "NA"
+#
+#      prices[1,2] <- "mcintosh apple"
+#
+# To avoid this problem, we can add "mcintosh apple" to the levels of the 2nd
+# columnn and only then change the value of "apple" to "mcintosh apple".
+levels(prices[[2]]) <- c(levels(prices[[2]]),"mcintosh apple")   # ANSWER (MULTIPLE LINES)
+levels(prices[[2]])
+prices[1,2] <- "mcintosh apple"                                  # ANSWER (MULTIPLE LINES)
+#check the answer
+prices
+
+################.
+# ANSWER 2  (read ANSWER 1 first)
+################.
+
+# Another way to avoid the problem is to convert the 2nd column from a factor
+# into a vector of characters 
+prices[[2]] <- as.character(prices[[2]])      # ANSWER (MULTIPLE LINES)
+# check - this will now be a vector
+prices[[2]]
+# now we can change "apple" to "mcintosh apple" without worrying about levels
+prices[1,2] <- "mcintosh apple"               # ANSWER (MULTIPLE LINES)
+prices
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 51
+# TOPICS: dataframes
+#
+# Write a command that modifies the dataframe from the previous question.
+# The command should increase the pricePerLb of oranges by 10%. Round the increased
+# price to the nearest penny.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the prices dataframe.
+
+###############################.
+# ANSWER 1 
+#    - using $ notation  
+#    - answer the question using two commands (may be easier to understand than a single command)
+###############################.
+# first let's identify which row contains oranges:
+rows <- prices$itemName == "orange"                                      # ANSWER (MULTIPLE LINES)
+rows
+
+# now lets change the price for that row. Note that we are rounding the new price to the nearest penny.
+prices[rows,"pricePerLb"] <- round( prices[rows,"pricePerLb"] * 1.1, 2)  # ANSWER (MULTIPLE LINES)
+
+# check our answer
+prices
+
+
+#########################################.
+# ANSWER 2
+#    - using [[double-bracket]] notation
+#    - answer the question using two commands (may be easier to understand than a single command)
+#########################################.
+# first let's identify which row contains oranges:
+rows <- prices[["itemName"]] == "orange"                                 # ANSWER (MULTIPLE LINES)
+rows
+
+# now lets change the price for that row. Note that we are rounding the new price to the nearest penny.
+prices[rows,"pricePerLb"] <- round( prices[rows,"pricePerLb"] * 1.1, 2)  # ANSWER (MULTIPLE LINES)
+
+# check our answer
+prices
+
+
+
+#########################################.
+# ANSWER 3
+#    - using $ notation  
+#    - answer using ONE command (avoids the need to create new variables that are otherwise unnecessary)
+#########################################.
+
+# we can avoid the need to create a new variable using the following approach to 
+# answer the question using a single command (for readability, the command is typed on two lines)
+prices[prices$itemName=="orange","pricePerLb"] <-                    # ANSWER (MULTIPLE LINES)
+  round(prices[prices$itemName=="orange","pricePerLb"]*1.1, 2) # ANSWER (MULTIPLE LINES)
+
+# check our answer
+prices
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 52
+# TOPICS: dataframes
+#
+# Write a command that modifies the "prices" dataframe from the previous question.
+# The command should increase the price of all items by 10%. Round the increased prices
+# to the nearest penny.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the prices dataframe.
+
+##############################.
+# ANSWER 1 - using $ notation
+##############################.
+
+prices$pricePerLb <- round( prices$pricePerLb * 1.1 , 2 )              # ANSWER
+
+# check
+prices
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+prices[["pricePerLb"]] <- round ( prices[["pricePerLb"]] * 1.1 , 2)   # ANSWER
+
+# check
+prices
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 53
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question. Write a command that adds
+# a new column named salePrice. The new column should contain the values from
+# the price column reduced by 25%. Round the prices in the new column to the nearest penny.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the prices dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+prices$salePrice <- round ( prices$pricePerLb * 0.75 , 2)     # ANSWER
+
+# check 
+prices
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+
+prices[["salePrice"]] <- round ( prices[["pricePerLb"]] * 0.75 , 2)   # ANSWER
+
+# check 
+prices
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 54
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question.
+# Write a command that displays the itemName and price of all items from the
+# produce department. Write the code so that it will continue work even if the
+# specific data in the dataframe changes.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the prices dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices$department == "produce"
+rows
+
+# now get the data for those rows from the specified columns:
+prices[rows,c("itemName","pricePerLb")]
+#
+# Alternatively, we can do all this in one line:
+prices[     prices$department == "produce"    ,c("itemName","pricePerLb")]
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices[["department"]] == "produce"
+rows
+
+# now get the data for those rows from the specified columns:
+prices[rows,c("itemName","pricePerLb")]
+
+# Alternatively, we can do all this in one line:
+prices[     prices[["department"]] == "produce"    ,c("itemName","pricePerLb")]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 55
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question.
+# Write a command that displays the itemName and price of all items whose price
+# is 2.00 or more. Write the code so that it will continue work even if the
+# specific data in the dataframe changes.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices$pricePerLb >= 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[rows,c("itemName","pricePerLb")]
+
+# Alternatively, we can do all this in one line:
+prices[     prices$pricePerLb >= 2    ,c("itemName","pricePerLb")]
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices[["pricePerLb"]] >= 2
+rows
+# now get the data for those rows from the specified columns:
+prices[rows,c("itemName","pricePerLb")]
+#
+# Alternatively, we can do all this in one line:
+prices[     prices[["pricePerLb"]] >= 2    ,c("itemName","pricePerLb")]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 56
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question.
+# Write a command that displays all of the columns for all items whose
+# price is 2.00 or more. Write the code so that it will continue work
+# even if the specific data in the dataframe changes.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices$pricePerLb >= 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[rows,]
+
+# Alternatively, we can do all this in one line:
+prices[     prices$pricePerLb >= 2  ,   ]
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices[["pricePerLb"]] >= 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[rows,]
+
+# Alternatively, we can do all this in one line:
+prices[     prices[["pricePerLb"]] >= 2  ,   ]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 57
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question. 
+# Write a command that calculates the average pricePerLb of all
+# items in the produce department.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+# First identify the rows we want:
+rows <- prices$department == "produce"
+rows
+
+# now get the data for those rows from the specified columns:
+mean( prices[rows,"pricePerLb"] )
+
+# Alternatively, we can do all this in one line:
+mean( prices[   prices$department == "produce"   ,"pricePerLb"] )
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+# First identify the rows we want:
+rows <- prices[["department"]] == "produce"
+rows
+
+# now get the data for those rows from the specified columns:
+mean( prices[rows,"pricePerLb"] )
+
+# Alternatively, we can do all this in one line:
+mean( prices[   prices[["department"]] == "produce"   ,"pricePerLb"] )
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 58
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question. 
+# Write a command that displays all of the data from just the odd numbered rows.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+##########.
+# ANSWER 
+##########.
+
+# First identify the rows we want:
+rows <- seq(1,nrow(prices),by=2)
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , ]
+
+# Alternatively, we can do all this in one line:
+prices[  seq(1,nrow(prices),by=2)   ,  ]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 59
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question.
+# Write a command that displays just the name of the items whose
+# pricePerLb is at least 1.00 but not more than 2.00.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices$pricePerLb >= 1 & prices$pricePerLb <= 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[    prices$pricePerLb >= 1 & prices$pricePerLb <= 2    , "itemName"]
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+# First identify the rows we want:
+rows <- prices[["pricePerLb"]] >= 1 & prices[["pricePerLb"]] <= 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[    prices[["pricePerLb"]] >= 1 & prices[["pricePerLb"]] <= 2    , "itemName"]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 60
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question.
+# Write a command that displays just the name of the items whose
+# pricePerLb is either less than 1.00 or more than 2.00.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices$pricePerLb < 1 | prices$pricePerLb > 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[    prices$pricePerLb < 1 | prices$pricePerLb > 2    , "itemName"]
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices[["pricePerLb"]] < 1 | prices[["pricePerLb"]] > 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[    prices[["pricePerLb"]] < 1 | prices[["pricePerLb"]] > 2    , "itemName"]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 61
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question.
+# Write a command that displays just the name of the produce whose pricePerLb is at
+# least 1.00 but not more than 2.00.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices$department == "produce" & prices$pricePerLb >= 1 & prices$pricePerLb <= 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[prices$department == "produce" & prices$pricePerLb >= 1 & prices$pricePerLb <= 2      , "itemName"]
+
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+
+# First identify the rows we want:
+rows <- prices[["department"]] == "produce" & prices[["pricePerLb"]] >= 1 & prices[["pricePerLb"]] <= 2
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[prices[["department"]]=="produce" & prices[["pricePerLb"]]>=1 & prices[["pricePerLb"]]<=2  , "itemName"]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 62
+# TOPICS: dataframes
+#
+# Refer to the dataframe from the previous question.
+# Write a single command that displays 
+#      the name of the produce whose pricePerLb is less than 1.00 and also 
+#      the produce whose pricePerLb is greater than 2.00
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+# First identify the rows we want (notice the parentheses - they ARE necessary)
+rows <- prices$department == "produce" & ( prices$pricePerLb < 1 | prices$pricePerLb > 2 )
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[prices$department=="produce" & (prices$pricePerLb<1 | prices$pricePerLb>2 ) , "itemName"]
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+# First identify the rows we want (notice the parentheses - they ARE necessary)
+rows<-prices[["department"]]=="produce" & (prices[["pricePerLb"]]<1 | prices[["pricePerLb"]]>2)
+rows
+
+# now get the data for those rows from the specified columns:
+prices[ rows , "itemName"]
+
+# Alternatively, we can do all this in one line:
+prices[prices[["department"]]=="produce" & (prices[["pricePerLb"]]<1 | prices[["pricePerLb"]]>2 ) , "itemName"]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 63
+# TOPICS: dataframes
+#
+# Write a command that displays all of the data for a "randomly chosen" row
+# from the dataframe. Your answer should work even if the data in the dataframe changes.
+#
+# Hint: as part of your answer, use the nrow function to determine the number of rows
+# that are in the dataframe.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############.
+# Answer:
+###############.
+
+# First identify a random row number (between 1 and the one more than the
+# max # of rows in the dataframe). The "+1" is because we will be "truncating" this
+# number in the next step.
+row <- runif(1,1,nrow(prices) + 1)
+row
+
+# now "truncate" that result to get an integer
+row <- trunc(row)
+row
+
+# now display the data for the randomly chosen row:
+prices[ row , ]
+
+# Alternatively, we can do all this in one line:
+prices[   trunc(runif(1,1,nrow(prices) + 1))   ,   ]
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 64
+# TOPICS: dataframes
+#
+# Write a command that displays the average pricePerLb of those items
+# whose pricePerLb is at least 1.50
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+###############################################.
+# ANSWER 1 - using $ notation
+###############################################.
+
+# First identify the rows we want
+rows <- prices$pricePerLb >= 1.5
+rows
+
+# now get the data for those rows from the specified columns:
+mean( prices[ rows , "pricePerLb"] )
+
+# Alternatively, we can do all this in one line:
+mean( prices[ prices$pricePerLb >= 1.5 , "pricePerLb"] )
+
+###############################################.
+# ANSWER 2 - using [[double-bracket]] notation
+###############################################.
+# First identify the rows we want
+rows <- prices[["pricePerLb"]] >= 1.5
+rows
+
+# now get the data for those rows from the specified columns:
+mean( prices[ rows , "pricePerLb"] )
+
+# Alternatively, we can do all this in one line:
+mean( prices[ prices[["pricePerLb"]] >= 1.5 , "pricePerLb"] )
+```
+:::
+
+---
+
+
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 65
+# TOPICS: dataframes
+#
+# Write a command that displays the number of items that are listed in
+# the "produce" department.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+#########.
+# ANSWER 
+#########.
+
+# First identify the rows we want as a logical vector
+rows <- prices$department == "produce"
+rows
+
+# Now sum the logical vector to get the total number of TRUEs
+sum(rows)
+
+# Alternatively, we can do all this in one line:
+sum(  prices$department == "produce"  )
+```
+:::
+
+---
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# QUESTION 66
+# TOPICS: dataframes
+#
+# Write a command that displays the number of items that are listed
+# in the "produce" department whose pricePerLb is at least 1.50.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+# NOTE: see the answers to questions 47 and 48 for code to create the dataframe.
+
+#########.
+# ANSWER 
+#########.
+
+# First identify the rows we want as a logical vector
+rows <- prices$department == "produce"  &  prices$pricePerLb >= 1.5
+rows
+
+# Now sum the logical vector to get the total number of TRUEs
+sum(rows)
+
+# Alternatively, we can do all this in one line:
+sum(     prices$department == "produce"  &  prices$pricePerLb >= 1.5    )
+```
+:::

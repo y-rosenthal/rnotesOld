@@ -1,0 +1,26 @@
+# matching braces, indentation
+
+```{r}
+# Using RStudio to find matching (parentheses), [square brackets] and {curly braces} ####
+#
+#
+# Place your cursor immediately after an "opening" (, [ or [ and 
+# RStudio will highlight the matching "closing" ), ] or } by shading it grey.
+# Similarly if you put your cursor immeately after a "closing symbol", RStudio
+# will highlight the corresponding "opening" symbol.
+#
+# If you try this and you don't see the matching symbol, chances are you're
+# missing either an "opening" or a "closing" symbol. 
+
+
+# Indentation  ####
+#
+# You can make it a lot easier for yourself (and others) to understand your
+# code and to find missing (or extra) {curly braces} by using "indentation"
+# consistently and carefully.
+#
+# EVERY TIME you type an open curly brace
+# (whether for an "if", an "if else", an "else", a "while loop" or a "for loop"), 
+# you should increase the level of indentation for the code inside the 
+# {curly braces}. 
+```

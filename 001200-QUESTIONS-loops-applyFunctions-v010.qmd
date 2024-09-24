@@ -1,0 +1,790 @@
+###############################################################################
+###############################################################################
+###############################################################################
+###
+### IMPORTANT! - Please read and understand the following section before you 
+###              attempt to answer the following questions.
+###
+###############################################################################
+###############################################################################
+###############################################################################
+
+###############################################################################
+# Many of the questions in this file are related to
+#
+#   - apply functions (e.g. lapply, sapply - there are others too that we didn't 
+#                                            learn about)
+#   - while loop
+#
+#   - for loop  (we didn't get to this yet)
+#
+#   - recursion (we might not cover this in class but is good to know about)
+#
+# All of these concepts involve getting R to do something over and over again.
+# Understanding while loops and for loops is VERY IMPORTANT. However, 
+# remember that R also has other ways to do something over and over and over.
+# For example, the sum function can add a whole vector of values. This
+# requires R to
+#     - add the 1st number to the 2nd number
+#     - then add that result to the 3rd number
+#     - then add that result to the 4th number
+#     - then add that result to the 5th number
+#     - etc ... until the last number
+#
+# Similarly, R's "operators" such as +, - *, /, ^, %/%, %%, etc
+# are "vectorized" operators so that they actually perform the same operation
+# multiple times. For example the following line of code only uses
+# the + operator once:
+#    c(1,2,3) + 10
+#
+# ... but that code is equivalent to the following code which uses the +
+# operator three times:
+#    c(1+10, 2+10, 3+10)
+#
+# The ability for R to do something "over and over" with its built in functions
+# and "vectorized operators" is a feature of R that many other languages
+# do not possess. In many other programming languages, these types of
+# repetitive calculations could only be accomplished by writing code 
+# with loops (or with recursion). (There are other languages that are similar
+# to R in this regard but many are not.)
+#
+# Therefore, loops are often used less in R programs than they are in 
+# equivalent programs that are written in other languages. R's vectorized
+# operators and functions are usually sufficient to address the "easy"
+# situations where a loop would otherwise be used (e.g. to sum a bunch
+# of numbers). Loops in R are often used for more complicated scenarios. 
+#
+# However, when a student is new to computer programming (and loops)
+# it is usually best to understand "easy" examples of loops before tackling 
+# more complex examples. Therefore, many of the questions in this file ask you 
+# to provide a solution using a loop, instead of with a more direct and 
+# straightforward approach. 
+#
+# It should be said that the best approach in R is usually to use the built-in 
+# vectorized operators and functions instead of loops when possible.
+# The built in vectorized operators and functions usually make the code
+# much easier to read/understand. These "vectorized" approaches also generally
+# run much faster in R than an equivalent solution that uses loops.
+###############################################################################
+
+#-----------------------------------------------------------------------------
+# QUESTION
+# TOPICS: if
+#
+# Write the function
+#
+#     numToEnglish_1digit = function(num)
+#
+# that converts a one digit number into an english word. num is expected to
+# be a one digit number.
+# If the number is NOT a one digit number, the function should stop with
+# an appropriate error message.
+#-----------------------------------------------------------------------------
+
+# ANSWER
+
+numToEnglish_1digit = function(num){
+  if(num == 0) return("zero")
+  else if (num == 1) return ("one")
+  else if (num == 2) return ("two")
+  else if (num == 3) return ("three")
+  else if (num == 4) return ("four")
+  else if (num == 5) return ("five")
+  else if (num == 6) return ("six")
+  else if (num == 7) return ("seven")
+  else if (num == 8) return ("eight")
+  else if (num == 9) return ("nine")
+  else stop("num must be a one digit number")
+}
+
+numToEnglish_1digit(3)
+numToEnglish_1digit(27)
+
+
+#-----------------------------------------------------------------------------
+# QUESTION
+# TOPICS: if
+#
+# Write the function
+#
+#     threeFiveBoth = function(num)
+#
+# If the num is divisible by 3 display the word "three" 
+# If the num is divisible by 5 display the word "five" 
+# If num is divisible by BOTH 3 and 5, display the word "both" (and nothing else)
+#-----------------------------------------------------------------------------
+
+# ANSWER
+
+threeFiveBoth = function(num){
+  if (num%%3==0  &  num%%5==0) {
+    
+    return("both")
+    
+  } else {
+    # num is not divisible by both 3 and 5
+    if (num %% 3 == 0)
+      return("three")
+    
+    else if (num %% 5 == 0)
+      return("five")
+  }
+}
+
+threeFiveBoth(6)   # "three"
+threeFiveBoth(10)  # "five"
+threeFiveBoth(15)  # "both"
+
+
+
+#-----------------------------------------------------------------------------
+# QUESTION
+# TOPICS: loops
+# 
+# Write the function
+#   splitDigits = function(num)
+#
+# num is expected to be a single whole number that is non-negative.
+# The function should stop with an appropriate error if it isn't.
+# The function should return a vector that contains each individual digit
+# of num. 
+#
+# EXAMPLE 1:
+#   > splitDigits(123)
+#   [1] 1   2   3
+#
+# EXAMPLE 2:
+#   > splitDigits(0)
+#   [1] 0
+#
+# EXAMPLE 2:
+#   > splitDigits(98760123)
+#   [1] 9  8  7  6  0  1  2  3
+#
+# HINTS:
+#   - you can treat 0 as a special case with an if and just return the number 0
+#  
+#   - if the number is not zero you can use a vector to contain the answer
+#
+#   - num %% 10    results in just the last digit of num. For example:
+#       > 123 %% 10 
+#       [1] 3
+#   
+#   - num %/% 10   results in num without the last digit or zero if num is just
+#                  a one digit number. For example:
+#       > 123 %/% 10 
+#       [1] 12
+#
+#       > 7 %/% 10 
+#       [1] 0
+#
+#   - Use a loop. Each time through the loop take off one digit from the number
+#     and put it in the vector
+#
+#   - The loop should end when the number is zero
+#
+# NOTE: A better way to do this in R is to use the strsplit function. However
+#       This question is designed to test your knowledge of using loops.
+#-----------------------------------------------------------------------------
+
+# ANSWER
+splitDigits = function(num){
+  if (!is.numeric(num) | trunc(num) != num | length(num) != 1 | num < 0)
+    stop("num must be a single whole number that is not negative")
+
+  if(num == 0)
+    return(0)
+
+  answer = numeric(0)   # create an empty numeric vector
+  
+  while(num > 0){
+    lastDigit = num %% 10
+    num = num %/% 10
+    answer = c(lastDigit, answer)
+  }
+  
+  answer
+}
+
+splitDigits(123)
+splitDigits(0)
+splitDigits(98760123)
+
+#-----------------------------------------------------------------------------
+# QUESTION
+# TOPICS: loops
+#
+# Write the function
+#
+#    numsWithDigit = function( digit, highest, times )
+#
+# ARGUMENTS:
+#   digit is expected to be a single digit number.
+#   highest is expected to be a positive whole number.
+#   times is expected to be either zero or a positive whole number.
+#
+# The function should return a vector that contains all of the numbers
+# from 1 through highest that contain the specified digit the specified 
+# number of times.
+#
+# HINT:
+#   use the following code to get a numeric vector that contains
+#   the digits of num.
+#         digits = as.numeric(strsplit(as.character(num),"")[[1]])
+#
+# EXAMPLES:
+#
+# > numsWithDigit(digit=2, highest=4, times=0)
+# [1]  1  3  4
+#
+# > numsWithDigit(digit=2, highest=100, times=1)
+# [1]  2 12 20 21 23 24 25 26 27 28 29 32 42 52 62 72 82 92
+#
+# > numsWithDigit(digit=2, highest=100, times=2)
+# [1] 22
+#
+# > numsWithDigit(digit=2, highest=200, times=1)
+# [1]    2  12  20  21  23  24  25  26  27  28  29  32  42  52
+# [15]  62  72  82  92 102 112 120 121 123 124 125 126 127 128
+# [29] 129 132 142 152 162 172 182 192 200
+#
+# > numsWithDigit(digit=2, highest=300, times=2)
+# [1]  22 122 202 212 220 221 223 224 225 226 227 228 229 232 242 252 262 272 282 292
+#
+# > numsWithDigit(digit=2, highest=300, times=3)
+# [1] 222
+#-----------------------------------------------------------------------------
+
+numsWithDigit = function( digit, highest, times ){
+  
+  answer = numeric(0)
+  num = 1
+  while(num <= highest){
+    allDigits = as.numeric(strsplit(as.character(num),"")[[1]])
+    count = sum(allDigits == digit)
+    if(count == times){
+      answer = c(answer, num)
+    }
+    num = num + 1
+  }
+    
+  answer
+}
+
+numsWithDigit(digit=2, highest=4, times=0)
+numsWithDigit(digit=2, highest=100, times=1)
+numsWithDigit(digit=2, highest=100, times=2)
+numsWithDigit(digit=2, highest=200, times=1)
+numsWithDigit(digit=2, highest=300, times=2)
+numsWithDigit(digit=2, highest=300, times=3)
+
+
+
+#-----------------------------------------------------------------------------
+# QUESTION
+# TOPICS: loops
+#
+# Write the function
+#
+#    horizontalLine = function( theChar, length )
+#
+# to display a horizontal "line" of the specified character the specified
+# number of times. (see the examples below). 
+#
+# Output to the screen should be done by using the cat function. Each call to
+# cat should only display one character at a time (ie. one letter, digit or
+# special character at a time). You must use cat. Do NOT use the rep function. 
+# 
+# EXAMPLE1
+#
+#   > horizontalLine( "*", 3 )
+#   ***
+#
+#   > horizontalLine( "?", 5 )
+#   ????
+#
+# EXAMPLE2
+#
+#   twoLines = function (ch, len){
+#     horizontalLine(ch, len)
+#     horizontalLine(ch, len)
+#   }
+#   
+#   > twoLines( "*" , 3 )   
+#   ***
+#   ***
+#-----------------------------------------------------------------------------
+
+# ANSWER
+horizontalLine = function(theChar, length){
+  
+  while(length > 0) {  
+    cat(theChar)
+    length = length - 1
+  }
+  
+  # This is only necessary if you want multiple calls to this function
+  # to appear on separate lines.
+  cat("\n")    
+}
+
+# EXAMPLE 1
+horizontalLine( "*" , 3 )
+
+horizontalLine( "?" , 5 )
+
+# EXAMPLE 2
+twoLines = function (ch, len){
+  horizontalLine(ch, len)
+  horizontalLine(ch, len)
+}
+   
+twoLines( "*" , 3)   
+
+
+
+
+#-----------------------------------------------------------------------------
+# QUESTION
+# TOPICS: loops
+#
+# Write the function
+#
+#    verticalLine = function( length , theChar )
+#
+# to display a horizontal "line" of the specified character the specified
+# number of times. (see the examples below). 
+#
+# Output to the screen should be done by using the cat function. Each call to
+# cat should only display one character at a time (ie. one letter, digit or
+# special character at a time). You must use cat. Do NOT use the rep function. 
+#
+# EXAMPLE1
+#
+#   > verticalLine( 3 , "*" )
+#   *
+#   *
+#   *
+#
+#   > verticalLine( 4 , "x" )
+#   x
+#   x
+#   x
+#   x
+#-----------------------------------------------------------------------------
+
+# ANSWER
+verticalLine = function(theChar, length){
+  while(length>0) {  
+    cat(theChar, "\n")
+    length = length - 1
+  }
+}
+
+verticalLine( 3 , "*" )
+
+verticalLine( 4 , "x" )
+
+#-----------------------------------------------------------------------------
+# TOPICS: loops
+# 
+# QUESTION:
+#
+# Write the function
+#    countdown = function( from )
+#
+# that uses a loop and the cat function to display the messages as shown 
+# below in the example.
+# The output should pause for 1 second between each line being displayed.
+#
+# Use the cat function to display the info.
+#
+# EXAMPLE 1
+#    > countdown(5)
+#    T minus 5 seconds
+#    T minus 4 seconds
+#    T minus 3 seconds
+#    T minus 2 seconds
+#    T minus 1 seconds
+#    BLASTOFF!!!!
+#
+# EXAMPLE 2
+#    > countdown(3)
+#    T minus 3 seconds
+#    T minus 2 seconds
+#    T minus 1 seconds
+#    BLASTOFF!!!!
+#-----------------------------------------------------------------------------
+
+
+countdown = function ( from ){
+  
+  while( from > 0){ 
+    cat("T minus", from, "seconds\n")
+    Sys.sleep(1)     # Sleep for 1 second
+    from = from - 1
+  }
+  
+  cat("BLASTOFF!!!\n")
+}
+
+countdown(5) 
+countdown(3) 
+
+
+#-----------------------------------------------------------------------------
+# Write the funciton 
+#    mysum = function( nums )
+#
+# Where nums is expected to be a numeric vector. The function should
+# return the sum of the numbers in nums (do NOT use the cat function).
+# YOU MAY NOT USE THE SUM FUNCTION.
+# Use a loop.
+#
+# EXAMPLE 1
+#   > mysum( c(10,20,5) )
+#   [1] 35
+#
+# EXAMPLE 2
+#   > mysum( c(-3,100,200,-150,0,10) )
+#   [1] 157
+#-----------------------------------------------------------------------------
+
+# ANSWER
+mysum = function( nums ){
+  
+  theSum = 0
+  position = 1
+  while( position <= length(nums) ){
+    theSum = theSum + nums[position]
+    position = position + 1
+  }
+  
+  return( theSum )
+}
+
+mysum( c(10,20,5) )
+
+
+#-----------------------------------------------------------------------------
+# QUESTION
+# TOPICS: lopos
+#
+# A palindrome is a word or message that is spelled the same both forwards and
+# backwards. For example "civic", "kayak" and "racecar" are all palindromes.
+#
+# Write a function
+#    isPalindrome = function( word )
+#
+# That returns TRUE if the word is a palindrome and FALSE otherwise.
+# Use the following code to split up the word into individual "characters"
+# (i.e. individual letters, digits or symbols).
+#
+#   theLetters = strsplit(word,"")[[1]]
+#
+# The rev function returns the values in a vector in reverse order.
+#
+# (a) do this using the rev function and the all function
+#
+# (b) do this using the rev function and the paste function
+#
+# (c) do this using a loop WITHOUT using any of the functions: rev, paste, all
+#     HINT: compare the 1st letter with the last letter
+#           compare the 2nd letter with the 2nd to last letter 
+#           compare the 3rd letter with the 3rd to last letter 
+#           etc
+#           until you get to the middle of the word
+#           DO THIS USING A LOOP
+#     
+#-----------------------------------------------------------------------------
+
+# (a) do this using the rev function and the all function
+isPalindrome = function( word ){
+  theLetters = strsplit(word,"")[[1]]
+  
+  all(  theLetters==rev(theLetters)  )
+}
+
+isPalindrome("racecar")  # TRUE
+isPalindrome("abca")     # FALSE
+
+
+# (b) do this using the rev function and the paste function
+isPalindrome = function( word ){
+  theLetters = strsplit(word,"")[[1]]
+  word == paste(rev(theLetters), collapse="")
+}
+
+isPalindrome("racecar")  # TRUE
+isPalindrome("abca")     # FALSE
+
+# (c) do this using a loop WITHOUT using any of the functions: rev, paste, all
+isPalindrome = function( word ){
+  theLetters = strsplit(word,"")[[1]]
+ 
+  position1 = 1 
+  position2 = length(theLetters)
+  
+  while (position1 <= length(theLetters)/2){
+    if(theLetters[position1] != theLetters[position2])
+      return(FALSE)
+    
+    position1 = position1 + 1
+    position2 = position2 - 1
+  }
+
+  TRUE  
+}
+
+isPalindrome("racecar")  # TRUE
+isPalindrome("abca")     # FALSE
+
+
+#-----------------------------------------------------------------------------
+# QUESTION
+# TOPICS: lopos
+#
+# Write a function,
+#     increasingDigits = function()
+# backwards. For example "civic", "kayak" and "racecar" are all palindromes.
+#-----------------------------------------------------------------------------
+
+increasingDigits = function(num){
+  digits = strsplit(as.character(num), "" )[[1]]
+  justDigits = digits [ digits %in% as.character(0:9) ]
+  
+  if (paste0(justDigits, collapse="") == paste0(sort(justDigits), collapse="")){
+    return (TRUE)
+  }else{
+    return(FALSE)
+  }
+}
+#debugonce(increasingDigits)
+increasingDigits(1.2345)
+increasingDigits(1.3245)
+
+
+fractionsInOrder = function( howMany ){
+  num=1
+  denom=2
+  nums = numeric(0)
+  denoms=numeric(0)
+  quotients = numeric(0)
+  while(length(nums) < howMany){
+    nums = c(nums, num)
+    denoms = c(denoms, denom)
+    quotients = round(c(quotients,num/denom),4)
+    num=num+1
+    if(num==denom){
+      denom=denom+1
+      num=1
+    }
+  }
+  
+  m = matrix(c(nums, denoms, quotients), nrow = 3, ncol=length(nums), byrow=TRUE)
+  rownames(m) = c("numerator", "denominator", "quotients")
+  m
+}
+
+fractionsInOrder(300)
+
+
+increasingDigits = function( howMany ){
+  num=1
+  denom=2
+  nums = numeric(0)
+  denoms=numeric(0)
+  quotients = numeric(0)
+  while(length(nums) < howMany){
+    
+    quotient = num/denom
+    digits = strsplit(as.character(quotient), "")[[1]]
+    digits = digits[ digits %in% as.character(0:9) ]
+    
+    if(paste0(digits, collapse="") == paste0(sort(digits),collapse="")){
+      nums = c(nums, num)
+      denoms = c(denoms, denom)
+      quotients=c(quotients, quotient)
+    }
+
+    num=num+1
+    if(num==denom){
+      denom=denom+1
+      num=1
+    }
+  }
+  
+  m = matrix(c(nums, denoms, quotients), nrow = 3, ncol=length(nums), byrow=TRUE)
+  rownames(m) = c("numerator", "denominator", "quotients")
+  m
+}
+
+increasingDigits(300)
+
+
+
+#-----------------------------------------------------------------------------
+# QUESTION
+#
+# TOPICS: apply functions, while loop, for loop
+#
+# Create the function described below. 
+#
+#   (a)Create the function by using one of the apply functions(lapply,sapply,etc). 
+#
+#   (b)Create the function by using a while loop. 
+#
+#   (c)Create the function by using a for loop.
+#
+# NAME:          justTheGrids
+#
+# ARGUMENTS:     x - expected to be a list.
+#
+# RETURN VALUE:  The function should return a list that contains just the
+#                matrices and dataframes that are in the list, x.
+#
+# EXAMPLE:
+#    > lst = list(someLogicals = c(TRUE, FALSE),
+#                 m1 = matrix(c(10,20,30,40), nrow=2, ncol=2),
+#                 nums = c(100,200,300),
+#                 df = data.frame(fruit=c("apple","orange"),calories=c(100,200)),
+#                 tools = c("hammer", "wrench"),
+#                 m2 = matrix(c(TRUE, FALSE), nrow=2, ncol=3))
+#
+#    > justTheGrids(lst)
+#    $m1
+#         [,1] [,2]
+#    [1,]   10   30
+#    [2,]   20   40
+#    
+#    $df
+#       fruit calories
+#    1  apple      100
+#    2 orange      200
+#    
+#    $m2
+#          [,1]  [,2]  [,3]
+#    [1,]  TRUE  TRUE  TRUE
+#    [2,] FALSE FALSE FALSE
+#-----------------------------------------------------------------------------
+
+#........
+# ANSWERS
+#........
+
+# Some data to test the answers:
+
+lst = list( someLogicals = c(TRUE, FALSE),
+            m1 = matrix(c(10,20,30,40), nrow=2, ncol=2),
+            nums = c(100,200,300),
+            df1 = data.frame(fruit = c("apple", "orange"), 
+                             calories=c(100,200),
+                             stringsAsFactors = FALSE),
+            tools = c("hammer", "wrench"),
+            m2 = matrix(c(TRUE, FALSE, FALSE, TRUE, FALSE, FALSE), nrow=2, ncol=3)
+)
+
+# (a)Create the function by using one of the apply functions(lapply,sapply,etc). 
+
+justTheGrids = function(x){
+  isMatrixOrDataframe = function(y) is.matrix(y) | is.data.frame(y)
+  tf = sapply(x, isMatrixOrDataframe )
+  x[tf]
+}
+
+justTheGrids(lst)
+
+# (b)Create the function by using a while loop. 
+
+# one way
+justTheGrids = function(x){
+  answer = list()   # start with an empty list
+  
+  position = 1      # start looking at the first value in x
+  
+  while (position <= length(x)){
+
+    if( is.matrix(x[[position]]) | is.data.frame(x[[position]])){
+      answer = c(answer, list(x[[position]]) ) # add matrix/dataframe to answer
+      names(answer)[length(answer)] = names(x)[position] # keep the same name
+    }
+    position = position + 1   # don't forget this! 
+  }    
+  
+  answer   # return the answer - don't forget this!
+}
+
+debugonce(justTheGrids)
+justTheGrids(lst)
+
+# another way - work backwards through x and remove the values
+# that are not dataframes/matrices. Then return x. 
+#
+# Why do you think we are working backwards???
+# We are working backwards through the list so that when we 
+# remove an item, we will not affect the values that have 
+# not been processed yet. If we had been working forwards, 
+# if we remove an item from the list the later values in the list 
+# would "move up" and it would complicate the code a lot.
+
+justTheGrids = function(x){
+  position = length(x)    # start with the last position
+  
+  while (position >= 1) { # keep going until we get to the 1st position
+    
+    if( !is.matrix(x[[position]]) & !is.data.frame(x[[position]])){
+      x[[position]] = NULL
+    }
+    position = position - 1   # don't forget this! 
+  }    
+  
+  x   # return the answer - don't forget this!
+}
+
+justTheGrids(lst)
+
+# (c)Create the function by using a for loop.
+
+# This answer "almost" works but it doesn't preserve the names of the entries
+
+justTheGrids = function(x){
+  answer = list()   # start with an empty list
+  
+  for ( specificValue in x ){
+    
+    if( is.matrix(specificValue) | is.data.frame(specificValue)){
+      answer = c(answer, list(specificValue) ) # add matrix/dataframe to answer
+      
+      # This doesn't work since we don't know the position - see next answer
+      #names(answer)[length(answer)] = names(lst)[position] # keep the same name
+    }
+  }    
+  
+  answer   # return the answer - don't forget this!
+}
+
+justTheGrids(lst)
+
+# This version uses a for loop to loop through the index numbers of x.
+# This is similar to the answer with a while loop. The difference is that
+# the for loop automatically puts the correct values in the position variable.
+# 
+
+justTheGrids = function(x){
+  answer = list()   # start with an empty list
+  
+  for ( position in 1:length(x) ){
+    
+    if( is.matrix(x[[position]]) | is.data.frame(x[[position]])){
+      answer = c(answer, list(x[[position]]) ) # add matrix/dataframe to answer
+      names(answer)[length(answer)] = names(lst)[position] # keep the same name
+    }
+    
+  }    
+  
+  answer   # return the answer - don't forget this!
+}
+
+justTheGrids(lst)
+
+

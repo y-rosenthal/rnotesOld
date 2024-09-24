@@ -1,0 +1,110 @@
+## Using cat to help debug your code.
+
+```{r}
+# Sometimes if you write a function and it doesn't work as expected it is
+# helpful to use cat to help figure out what the problem is. This is an
+# alternative to using the debugger. (The "debugger" is covered in another
+# section of these notes).
+
+# For example, someone wrote the following function whose intention was
+# to swap the first and last values of a vector. However, it doesn't
+# seem to work correctly. 
+
+swapFirstAndLast = function(vec) {
+
+  vec[1] = vec[length(vec)]
+
+  vec[length(vec)] = vec[1]
+  
+  return(vec)
+}
+
+# This doesn't return the correct value. 
+# The intention was to return 50 20 30 40 10
+# but instead it returns 50 20 30 40 50
+# It may not be immediately obvious what the problem is.
+swapFirstAndLast(c(10,20,30,40,50)) 
+
+#--------------------------------------------------------------------.
+# You cannot display information from inside a function without cat.
+#--------------------------------------------------------------------.
+
+# To try to figure out what is going on, it might be tempting to display
+# the value of the variables as the function is being processed. 
+# However, this does not work.
+
+swapFirstAndLast = function(vec) {
+  
+  vec    # You will NOT see this on the screen (we're in a function)
+  
+  vec[1] = vec[length(vec)]
+  
+  vec    # You will NOT see this on the screen (we're in a function)
+  
+  vec[length(vec)] = vec[1]
+
+  vec    # You will NOT see this on the screen (we're in a function)
+  
+  return(vec)
+}
+
+swapFirstAndLast(c(10,20,30,40,50)) 
+
+
+#--------------------------------------------------------------------.
+# You CAN display information from inside a function WITH cat
+# to help figure out the problem.
+#--------------------------------------------------------------------.
+
+# To help figure out what's going on, we can use cat to display the 
+# values of our variables as the function is being executed.
+#
+# If we run the following function, we will see that the 
+# at first vec contains exactly what we passed to it, i.e.
+#
+#     Before 1st assignment: 10 20 30 40 50 
+# 
+# After the 1st assignment, the first position contains the last number, i.e.
+#
+#     After 1st assignment: 50 10 20 30 40 50 
+#
+# By just seeing this output we should realize our mistake. By the time
+# the 2nd assignment happens, the value that was in the first position
+# of vec is gone. It was overwritten by the value from the last position.
+# Therefore when the 2nd assignment finally runs the first value is the
+# same as the last value.
+
+swapFirstAndLast = function(vec) {
+  
+  cat("Before 1st assignment: " , vec, "\n")    # display the value of vec
+  
+  vec[1] = vec[length(vec)]
+  
+  cat("After 1st assignment: " , vec, "\n")    # display the value of vec
+  
+  vec[length(vec)] = vec[1]
+  
+  cat("After 2nd assignment: " , vec, "\n")    # display the value of vec
+  
+  return(vec)
+}
+
+swapFirstAndLast(c(10,20,30,40,50)) 
+
+#--------------------------------------------------------------------.
+# Once we found the problem, we can fix it.
+# We can then remove the calls to the cat function.
+# In this case, one way to fix this specific problem is to 
+# copy both values in the same command.
+#--------------------------------------------------------------------.
+
+swapFirstAndLast = function(vec) {
+  
+  vec[c(1, length(vec))] = vec[c(length(vec),1)]
+  
+  return(vec)
+}
+
+swapFirstAndLast(c(10,20,30,40,50)) 
+
+```

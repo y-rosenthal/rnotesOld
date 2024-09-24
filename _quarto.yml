@@ -1,0 +1,100 @@
+project:
+  type: book
+
+book:
+  title: "r notes"
+  author: "Y. Rosenthal"
+  date: "10/31/2023"
+  chapters:
+    - index.qmd
+    - part: 000065-quartoBook_part1_midterm2023-v001.qmd
+      chapters:
+      - 000100-a-installingAndUsingR-v011-afterClass.qmd
+      - 000100-b-variables_intDivision_remainder_ls_rm-v011-afterClass.qmd
+      - 000150-orderOfOperationsInR-v002.qmd
+      - 000300-usingSomeBuiltinFunctions-v028.qmd
+      - 000350-b_b-userDefinedFunctions-v060.qmd
+      - 000350-c_h-introToTheDebugger-v060.qmd
+      - 000350-d_d-modesOfData_numeric_logical_character-v060.qmd
+      - 000350-e_e-NA_is.na_na.rm-v060.qmd
+      - 000350-f_f-indexingWithPositiveNumbers-v060.qmd
+      - 000350-g_g-indexingWithNegativeNumbers-v060.qmd
+      - 000350-h_c-IntroToLogicalVectorsAndOperators_ifelseFunction-v060.qmd
+      - 000350-j_j-indexingWithLogicalValues_notOperator-v060.qmd
+      - 000350-k_k-characterValues_cat_nchar_paste_paste0-v060.qmd
+      - 000350-l_i-usingCatToDebugYourCode-v060.qmd
+      - 000350-m_l-parallelVectors-v060.qmd
+    - part: 000376-quartoBook_part2_afterMidterm2023-v001.qmd
+      chapters:
+        - 000350-o-in_intersect_setdiff_usingNotIn-v060.qmd
+        - 000350-p-localVariables_globalVariables-v060.qmd
+        - 000380-logicalOperators_and_or_not-v013-withAnswers-afterBerenClass.qmd
+        - 000390-sciNotation_roundoffError_v005.qmd
+        - 000400-sciNotation_roundoffError_accessingVectorPositions-v000.qmd
+        - 000410-implicitAndExplicitConversions-v025.qmd
+        - 000415-a-lists-v035.qmd
+        - 000415-c2-lists-v035.qmd
+        - 000415-d-lists-v036.qmd
+        - 000415-e-lists-v035.qmd
+        - 000430-lapply-v031-afterWilf.qmd
+        - 000495-attributres_attr_names_matrix_factor_dataframe-v010.qmd
+        - 000700-matrices-v015.qmd
+        - 000800-factors-v010.qmd
+        - 000850-introToDataframes-v0019-afterBeren.qmd
+        - 000875-cbind_rbind-v002.qmd
+        - 000900-if_ifElse_if_elseif_else_nestedStatements-v019.qmd
+        - 001000-whileLoops-v027-afterWilfClass25.qmd
+        - 001020-forLoops_sleep_strsplit-v017-maybeChanged.qmd
+    - part: 000354-quartoBook_part_morePracticeQuestions.qmd
+      chapters: 
+      - 000555-midtermQuestionsToStudy.qmd
+      - 000600-HW-vectorsFunctionsRecyclingrule-v004.qmd
+      - 99900-qstns-10-vectors-v035-ANSWERS.qmd
+      - 99900-qstns-40-assortedTopics-v035-ANSWERS.qmd
+      - 99900-qstns-20-dataframes-v035-ANSWERS.qmd
+      - 99900-qstns-30-userDefinedFunctions-v035-ANSWERS.qmd
+      - 000450-additionalPracticeProblems-WITH_ANSWERS-v005.qmd
+      - 000460-listQuestions-WITH_ANSWERS-v004.qmd  
+      - 001100-assignment-loops-v001-SOLUTIONS-v002-ONLY_QUESTIONS_4-9.qmd
+    - part: 99975-quartoBook_part_questionsAddedRecently-v001.qmd
+      chapters:
+      - 99950-qstns-moreQuestions-v001.qmd
+      - 001035-qstns-loopsReadcode-v001.qmd
+# TODO: fix these files
+#     - 000750-matrixQuestions-v002.qmd
+#     - 008888-additionalQuestions-v003.qmd
+  appendices: 
+    - 000110-RStudioHotkeys-v001.qmd
+    - 000350-n-doNotUseParenthesesWhenTheyAreClearlyNotNecessary-v060.qmd
+    - 000365-matchingBraces_indentation-v001.qmd
+    - 0200200-rstudioFolding-v033.qmd
+execute: 
+  error: true
+  warning: true
+format:
+  html:
+    theme: cosmo
+    toc-expand: true
+    fontsize: 80%
+    number-depth: 2
+    include-in-header: yrNocacheHeaders-v001.html
+#  pdf:
+#    documentclass: scrreprt
+#    fontsize: 9px
+  docx: default
+editor: source
+
+#000430-lapply-v031-afterWilf.qmd
+#000450-additionalPracticeProblems-WITH_ANSWERS-v005.qmd
+#000460-listQuestions-v002-addedANonListQuestion-move it to the appropriate file.qmd
+#000460-listQuestions-WITH_ANSWERS-v001.qmd
+#000495-attributres_attr_names_matrix_factor_dataframe-v010.qmd
+#000555-midtermQuestionsToStudy.qmd
+#000600-HW-vectorsFunctionsRecyclingrule-v003.qmd
+#000600-HW-vectorsFunctionsRecyclingrule-v004.qmd
+#000700-matrices-v015.qmd
+#000750-matrixQuestions-v002.qmd
+#000800-factors-v009.qmd
+#000850-introToDataframes-v0019-afterBeren.qmd
+#000875-SKIPPED2022-cbind_rbind-v002.qmd
+#000900-if_ifElse_if_elseif_else_nestedStatements-v019.qmd

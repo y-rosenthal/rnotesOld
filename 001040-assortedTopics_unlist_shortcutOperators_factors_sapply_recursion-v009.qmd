@@ -1,0 +1,848 @@
+rm(list=ls())
+
+###############################
+# TOPICS:
+# - unlist
+# - && vs &   || vs |
+# - factors
+###############################
+
+
+# Questions about homework???
+
+#   
+?rep
+
+#  rep(x, times = 1, length.out = NA, each = 1)
+
+rep(c("apple","orange"), times=3)
+
+rep(c("apple","orange"), each=3)
+
+rep(c("apple","orange"), times=3, each=2)
+
+###################################
+###################################
+##
+## unlist    - this is review - we covered this earlier
+##
+###################################
+###################################
+
+# For complete information see the documentation
+?unlist
+
+#--------------------------------------------------------
+# The unlist function will remove all values from a list
+# and put them into a single vector. The following info
+# is from the documentation (i.e. ?unlist)
+#
+#   unlist(x, recursive=TRUE, use.names=TRUE)
+#
+#   ARGUMENTS: 
+#     x is a list 
+#     recursive will be described below
+#     use.names will be described below
+# 
+#--------------------------------------------------------
+
+# EXAMPLES ...
+
+#.......................................
+# unlist a simple list
+#.......................................
+
+stuff <- list( 1:10 , matrix(letters[1:16], nrow=4, ncol=4))
+stuff
+unlist(stuff)
+stuff    # remember, stuff didn't change
+
+#......................................................
+# unlist a dataframe (remember, a dataframe is a list)
+#......................................................
+df <- data.frame ( student = c("joe", "sam", "sue"),
+             test1 = c(100,90,80),
+             final = c(95,92,88),
+             stringsAsFactors=FALSE)
+df
+unlisted <- unlist(df)
+unlisted                                 # The values are returned in a NAMED vector
+unlisted[c("final1","final2","final3")]  # You can use this as a named vector
+unlist(df, use.names = FALSE)            # This will get the info as an un-named vector
+df     # the original df didn't change since we didn't assign anything to it
+
+
+
+#......................................................
+# unlist a list that contains other lists (i.e. a "nested" list)
+#......................................................
+
+# NESTED LISTS
+#
+# The following is a 3-level-list, i.e. a list that contains a list that contains a list
+threeLevelList <- list ( 
+               year = 2020,
+               semester = "fall",
+               sections=
+                 list(
+                    beren = data.frame ( student = c("sue", "anne", "fran"),
+                                 test1 = c(100,90,80),
+                                 final = c(95,92,88),
+                                 stringsAsFactors=FALSE)
+                    ,
+                    wilf = data.frame ( student = c("mike", "sam"),
+                                 test1 = c(85,80),
+                                 final = c(98,87),
+                                 stringsAsFactors=FALSE)
+                 )
+              )
+
+threeLevelList
+
+# the names in the named vector are automatically taken from the names
+# in the values in the list. Primarily $'s are converted to periods.
+vec <- unlist(threeLevelList)   # one large named vector
+vec
+
+# retrieve info from the named list
+vec[ c("sections.beren.final1", "sections.beren.final2", "sections.beren.final3")]
+str(vec)   # a named vector
+
+# we can get an unnamed vector too
+unlist(threeLevelList, use.names=FALSE)
+
+#------------------------------------------------------------------------------
+# If the recursive argument is set to FALSE, then unlist will only unlist
+# the outermost list
+#-----------------------------------------------------------------------------
+
+# Above, we defined the variable threeLevelList
+threeLevelList
+
+# unlist just the first level ...
+# notice that $sections$beren   changed to   $sectionns.beren
+# and         $sections$wilf    changed to   $sectionns.wilf
+twoLevelList <- unlist(threeLevelList, recursive=FALSE)
+twoLevelList
+
+# Get the beren dataframe from twolevelList
+twoLevelList$sections.beren
+
+# Get the beren dataframe from original threeLevelList
+threeLevelList$sections$beren
+
+# doing this again puts all columns from the dataframes directly into
+# the top level list
+oneLevelList <- unlist(twoLevelList, recursive=FALSE)
+oneLevelList
+
+# doing this again, unlists the only remaining list to arrive at a vector
+vec <- unlist(oneLevelList, recursive=FALSE)   # same as unlist( ... )
+vec
+
+# same as ...
+unlist(threeLevelList)
+
+
+
+
+
+############################################################
+############################################################
+##
+## && and || are known as "shortcut operators"
+##
+## They are similar to but not exactly the same as & and |  
+##
+############################################################
+############################################################
+
+#--------------------
+# The theory ...
+#--------------------
+
+# FALSE & anything ... should be FALSE
+# TRUE | anything  ... should be TRUE
+
+# However, the & and | don't work that way
+#
+# && and || DO work that way.
+# Therefore && and || are known as "shortcut" operators
+
+# Example:
+
+
+
+#-----------------
+# The problem ...
+#-----------------
+
+# Function to return a vector a specified length.
+# First 1/2 of the items will contain item1
+# Second 1/2 of items will contain item2
+# The length must be an even number
+f <- function(length, item1, item2){
+  if (!is.numeric(length) | length %% 2 != 0){
+    stop("num must be an even number")
+  }
+  
+  return ( c(rep(item1, length/2) , rep(item2, length/2)) )
+    
+}
+
+f(4, 10, 20)
+f(6, "apple" ,"orange")
+f(7, "apple" ,"orange")   # error message since 7 is odd
+
+f("apple")  # error message from R, not our "better" error message
+
+
+#-----------------------------------
+# The solution ... && instead of &
+#                  || instead of |
+#-----------------------------------
+
+# && and || will only "evaluate" i.e. "look at" the 
+# right hand value if it is needs to ...
+
+# First of all ...
+
+# Some things about print
+# 
+# 1. print displays a value to the screen
+# 2. print "returns" the value that is displayed
+# 3. The return value from print is "invisible",
+#    ie. it is not printed. What you see on the screen
+#    in general is from the side-effect of print 
+#    forcing the value to be displayed to the screen.
+# 4. To explicitly display an invisible value, you can 
+#    use that value in an expression or simply
+#    put that value in (parentheses)
+
+print(100)   # just displays 100 (the "value" isn't displayed)
+
+print(100) * 2  # 100 (printed to screen)   200 (result of the expression)
+
+(print(100)) # displays 100 twice ... first is printed to screen, 2nd is result of expression
+
+
+#................................................................
+# Differences between shortcut operators (&& and ||)
+# and the non-shortcut operators (& and |)
+#................................................................
+
+
+# The following evaluates print(FALSE) since it needs to in
+# order to determine if the condition is TRUE or FALSE
+
+if ( TRUE && print(FALSE)){  # displays FALSE      (uses &&)
+  cat("yes")
+} else {
+  cat("no")                  # dispalys "no"
+}
+
+# The following does NOT print FALSE
+# R knows that the condition is FALSE just by looking at the first value
+
+if ( FALSE && print(FALSE)){  # DOES NOT DISPLAY FALSE      (uses &&)
+  cat("yes")
+} else {
+  cat("no")                   # displays "no"
+}
+
+
+#.......................................
+# same example with & 
+#.......................................
+
+# The following using & instead of &&
+# FALSE is displayed in BOTH CASES since & is NOT a shortcut operator
+
+if ( TRUE & print(FALSE)){  # displays FALSE      (uses &)
+  cat("yes")
+} else {
+  cat("no")                  
+}
+
+# The following does NOT print FALSE
+# R knows that the condition is FALSE just by looking at the first value
+
+if ( FALSE & print(FALSE)){  # displays FALSE      (uses &)
+  cat("yes")
+} else {
+  cat("no")                  
+}
+
+
+
+
+
+
+
+
+
+#-------------------------------------------
+#  &&  only evaluates as much as necessary
+#-------------------------------------------
+
+# The following prints TRUE FALSE no
+# order to determine if the condition is TRUE or FALSE
+
+if ( print(TRUE) && print(FALSE)){  # prints:  TRUE FALSE
+  cat("yes")
+} else {
+  cat("no")                  # dispalys "no"
+}
+
+# The following prints FALSE no
+# It does NOT print TRUE
+# R knows that the condition is FALSE just by looking at the first value
+
+if ( print(FALSE) && print(TRUE)){  # prints: FALSE 
+  cat("yes")
+} else {
+  cat("no")                   # displays "no"
+}
+
+
+
+#-------------------------------------------------------------
+# Showing the difference between && vs & and between || vs |
+#-------------------------------------------------------------
+myTrue = function (){
+  cat("myTrue was called\n")
+  TRUE
+}
+
+myFalse = function (){
+  cat("myFalse was called\n")
+  FALSE
+}
+
+myTrue()   # this is the SAME as TRUE. However, it will display a message saying the function was called.
+myFalse()   # this is the SAME as FALSE. However, it will display a message saying the function was called.
+
+# The following displays the following results:
+#
+#    > nums = c(10,20,30,40,50)
+#    > nums[c(myTrue(), myFalse(), myTrue(), myFalse(), myFalse())]
+#    myTrue was called
+#    myFalse was called
+#    myTrue was called
+#    myFalse was called
+#    myFalse was called
+#    [1] 10 30
+
+nums = c(10,20,30,40,50)
+nums[c(myTrue(), myFalse(), myTrue(), myFalse(), myFalse())]
+
+myTrue() && myFalse() # No shortcut - both functions are called
+myFalse() && myTrue() # SHORTCUT && - result is FALSE even though myTrue is never called
+myFalse() & myTrue()  # No shortcut - both functions are called
+myFalse() & myTrue()  # No shortcut - both functions are called
+
+myTrue() || myFalse()
+myFalse() || myTrue()
+myTrue() | myFalse()
+
+
+
+#-----------------------------------------------------------------
+# SOLUTION TO THE ORIGINAL PROBLEM:
+#
+# use the || "or-shortcut" operator instead of the | "or" operator
+#-----------------------------------------------------------------
+
+f <- function(length, item1, item2){
+  if (!is.numeric(length) || length %% 2 != 0){    # we changed | to ||
+    stop("num must be an even number")
+  }
+  
+  return ( c(rep(item1, times=length/2) , rep(item2, times=length/2)) )
+  
+}
+
+f(4, 10, 20)
+f(6, "apple" ,"orange")
+f(7, "apple" ,"orange")   # ERROR - num must be an even number
+
+f("apple")  # ERROR - num must be an even number
+
+
+#################################################################
+#
+# SECOND DIFFERENCE between && and &   and between   || and |
+#
+#################################################################
+
+
+
+# The condition in an if and the condition in a while only
+# expect a SINGLE TRUE or FALSE. 
+# Therefore programmers usually use && and || instead of & and |
+
+f ( 6, "apple", "orange" )
+f ( c(6,7), "apple", "orange" )
+
+
+nums <- c(50, 150)
+
+nums < 100
+
+if(nums < 100){
+  cat("small number\n")
+} else {
+  cat("large number\n")
+}
+
+# now switch the nums
+
+nums <- c(150, 50)
+
+nums < 100
+
+if(nums < 100){
+  cat("small number\n")
+} else {
+  cat("large number\n")
+}
+
+# The && and || operators only return a single value.
+# They are NOT vectorized operators
+c(10, 20, 30) > c(5,25,28)
+
+c(TRUE, TRUE, FALSE, FALSE) & c(TRUE, FALSE, TRUE, FALSE)
+
+# with a && you only get the FIRST result
+c(TRUE, TRUE, FALSE, FALSE) && c(TRUE, FALSE, TRUE, FALSE)
+
+#--------------------------------------------------------------
+# SUMMARY
+#
+# && is different from & in the following TWO ways:
+# 
+# 1. & will cause both sides to be calculated before it figures out the answer
+#    && will only calculate the 2nd side if necessary.
+#       If the left side is FALSE, then the answer is automatically FALSE
+#       This is known as a "shortcut" operator.
+#
+# 2. & is "vectorized"; it will potentiall return many TRUE/FALSE values
+#    && is NOT "vectorized"; i.e. it will only return the first logical value, 
+#
+#
+#
+# || is different from | in the following TWO ways:
+#
+# 1. | will cause both sides to be calculated before it figures out the answer
+#    || will only calculate the 2nd side if necessary.
+#       If the left side is TRUE, then the answer is automatically TRUE
+#       This is known as a "shortcut" operator.
+# 
+# 2. | is "vectorized"; it will potentiall return many TRUE/FALSE values
+#    || is NOT "vectorized"; i.e. it will only return the first logical value, 
+#--------------------------------------------------------------
+
+
+
+
+
+
+##############################################
+##############################################
+##
+## factors
+##
+##############################################
+##############################################
+
+# Different types of data in statistics
+# https://stats.idre.ucla.edu/other/mult-pkg/whatstat/what-is-the-difference-between-categorical-ordinal-and-numerical-variables/#:~:text=A%20categorical%20variable%20(sometimes%20called,intrinsic%20ordering%20to%20the%20categories.
+#
+#   - nominal/categorical data   (ratios are OK,    > and < are not OK,    means are not OK)
+#   - ordinal data               (ratios are OK,    > and < are OK,        means are not OK)   
+#   - numeric data               (ratios are OK,    > and < are OK,        means are OK)  
+
+
+# What is a factor? 
+#
+# A factor is R's way of working with nominal/categorical data
+#
+# A factor is a vector that has the following attributes:
+# - class is set to "factor"
+# - "levels" is a vector of level names
+
+person   <- c("joe", "sue", "bob", "alan", "anne", "pearl")    # character data
+
+favcolor <- factor(c("red", "blue", "red", "red", "blue", "yellow"))   # nominal data  (use a factor in R)
+
+year <-     factor(c("fr", "so", "fr", "so", "fr", "se"))              # ordinal data (use a factor in R)
+
+test1 <-    c(70,80,90,100,95,85)                              # numeric data
+
+# 1=some high school, 2=hs graduate, 3=some college, 4=college grad ,5=advanced degree
+education <- factor(c( 2, 4, 4, 1, 5, 4))         # ordinal data (use a factor in R)
+
+
+# A "GENERIC FUNCTION" will run differently for different "classes" of data
+
+summary(person)
+summary(favcolor)
+summary(year)     # notice "ju" doesn't appear
+summary(test1)
+summary(education)
+
+
+plot(person)   # doesn't make sense to plot character data
+plot(favcolor) # bar chart for factors   
+plot(year)     # bar chart for factors   (ju is missing and values not in order)
+plot(test1)    # dot plot for numbers
+plot(education) # bar chart for factors  (3 is missing)
+
+# Recreate the year variable to ensure that ALL "levels" are
+# included. Also make sure that order of levels is as desired.
+year <-     factor(c("fr", "so", "fr", "so", "fr", "se"),
+                   levels=c("fr","so","ju","se"))              # ordinal data (use a factor in R)
+
+plot(year)   # now data is in order and ju shows a zero total
+summary(year)   # now data is in order and ju shows a zero total
+
+education <- factor(c( 2, 4, 4, 1, 5, 4), 
+                    levels=c(1,2,3,4,5))         # nominal data (use a factor in R)
+
+# similar approach for education
+plot(education)
+summary(education)
+
+
+# A factor is a vector that has the following attributes
+#  1. the "class" attribute has a value of "factor"
+#  2. the "levels" attribute is a character vector with the names of the levels
+year
+attributes(year)
+class(year)
+
+education
+attributes(education)
+class(year)
+
+# Turn year into a character vector
+charYear <- as.character(year)
+charYear
+year
+is.factor(charYear)
+is.factor(year)
+
+# Turn a character vector into a factor with the factor function
+charYear
+facYear <- factor(charYear, levels=c("fr","so","ju","se"))
+facYear
+
+# If you do not specify stringsAsFactors=FALSE
+# (or if you specify stringsAsFactors=TRUE, which is the default - ?data.frame)
+# then any character column (i.e. "string column")
+# WILL be turned into a factor column - which is often NOT what you want.
+
+?data.frame
+
+grades <- data.frame( student = c("joe", "sam", "sue"), 
+                      year = c("fr", "ju", "fr"),
+                      test1 = c(70,80,90)
+                      )
+grades
+grades$student
+grades$year
+grades$test1
+
+# grades$student is a factor... but it shouldn't be.
+# Convert grades$student into a character vector
+
+grades$student <- as.character(grades$student)
+grades$student
+
+# fix up the year factor to make sure that includes
+# all year levels, i.e. "fr", "so", "ju", "se"
+grades$year
+plot(grades$year)
+grades$year = factor(grades$year, levels=c("fr","so","ju","se"))
+plot(grades$year)
+
+
+# Using factors and other types of data in a dataframe
+voters <- data.frame ( voter = c("joe", "sue", "anne", "mike", "bob", "alice"),
+                       party = factor(c("rep", "dem", "ind", "rep", "rep", "dem"),
+                                      levels=c("rep","dem","ind","rtl","com","grn")),
+                       lastYearVoted = c(2010, 2016,2020, 2020, 2012, 2016),
+                       salary = c(80, 120, 140, 20, 30, 90),
+                       stringsAsFactors=FALSE)
+voters
+
+voters[[1]]   # character columns show just data
+voters$voter
+
+voters[[2]]   # factor columns show levels too
+voters$party
+
+str(voters)
+
+
+voters
+
+# convert a factor to a character column
+voters$party
+voters$party <- as.character(voters$party)
+voters$party
+str(voters)
+
+# convert a character column to a factor
+voters$party <- factor(voters$party, levels=c("rep","dem","ind","rtl","com","grn"))
+voters$party
+str(voters)
+
+######################
+# 
+# WARNING: as.numeric will convert a factor into the underlying numeric
+#          values of the levels
+
+colors <- factor(c("violet", "red", "green", "red", "green", "violet", "red", "red"))
+colors
+attributes(colors)
+
+# REMOVE THE class attribute - the data will no longer be a factor
+
+attr(colors, "class") <- NULL   # remove the class attribute
+
+attributes(colors)
+
+colors # display the underlying data without the special treatment of being a factor
+
+
+# when R creates a factor it does the following:
+#  It uses the numbers 1,2,3, etc.
+#  to represent the first,second,third, etc levels
+#
+#  R stores this data in a numeric vector and stores the names
+#  of the levels in the levels attributes
+colors <- factor(c("violet", "red", "green", "red", "green", "violet", "red", "red"))
+colors
+is.factor(colors)  # TRUE
+is.character(colors) # FALSE
+is.numeric(colors)   # FALSE
+
+as.numeric(colors) # 3 2 1 2 1 3 2 2
+
+
+
+
+education <- factor(c( 2, 4, 4, 1, 5, 4), 
+                    levels=c(1,2,3,4,5))         # nominal data (use a factor in R)
+
+education
+as.numeric(education)
+
+
+# What happens if you remove the class attribute from a dataframe
+voters
+attributes(voters)
+class(voters) <- NULL   # same as attr(voters, "class") <- NULL
+attributes(voters)
+voters
+
+
+
+###############################################
+###############################################
+##
+## lapply vs sapply
+##
+###############################################
+###############################################
+
+#-------------------------
+# Review of lapply
+#-------------------------
+
+# As we've learned earlier, lapply is used to "apply" a 
+# single function to the entries in either a 
+# vector or a list.
+#
+# lapply returns a list that contains the return
+# values from each of the function calls.
+
+#............
+# EXAMPLE 1
+#............
+double <- function(num){
+  return(num*2)
+}
+
+# example of using double on variable numbers
+double(10)   # 20
+double(7)    # 14
+
+# example of using double on every value in a vector
+lapply(c(10,7,100), double)  # a list of 20, 14, 200
+
+#.............................................
+# EXAMPLE 2 - using lapply to call a function 
+#             on every value in a list
+#.............................................
+
+minPlusMax <- function(nums){
+  return (min(nums) + max(nums))
+}
+
+minPlusMax(c(100,300,500))          # 600
+minPlusMax(c(1,2,3))                # 4
+minPlusMax(c(100,70,95,83,22,83))   # 122
+
+numVectors <- list ( c(100,300,500), c(1,2,3), c(100,70,95,83,22,83))
+
+lapply(numVectors, minPlusMax)  # a list of 600, 4, 122
+
+
+
+# lapply will 
+f1 <- function(num) {
+  return ( num * 2 + 3)
+}
+
+f1( 10 )   # 10*2+3 = 23
+f1(15)     # 15*2+3 = 33
+
+f2 <- function(num) {
+  return ( rep(num, num))
+}
+
+f2(3)
+f2(9)
+
+lapply(c(1,2,3,4), f1)
+lapply(c(1,2,3,4), f2)
+
+sapply(c(1,2,3,4), f1)
+sapply(c(1,2,3,4), f2)
+
+f3 <- function(num){
+  return ( sample(1:6, num, replace=TRUE) )
+}
+
+lapply(c(2,4,3), f3)
+sapply(c(2,4,3), f3)
+
+f4 <- function(num ){
+  return ( sample(1:num, 2) )
+}
+f4(6)
+f4(100)
+
+lapply(c(2,3,4,5,6,7,8), f4)
+sapply(c(2,3,4,5,6,7,8), f4)
+
+
+range( c(100,37, 90, 22, 150, 10))   # 10 150
+
+
+##############################################
+##############################################
+##
+## the call stack and recursive functions
+##
+##############################################
+##############################################
+
+
+
+# Recursive functions - isPalindrome
+
+
+
+####################################################
+####################################################
+## 
+## Other topics for discussion
+##
+####################################################
+####################################################
+
+#------------------------------------------------------
+# Loops that use the value of the loop variable
+# to index into a vector, dataframe, matrix or list
+#-----------------------------------------------
+
+#..............................................................
+# For loops that use the values in the vector to index into a
+# vector, dataframe, etc
+#..............................................................
+
+
+#..............................................................
+# While loops that use the 
+#..............................................................
+
+
+
+# For loops that use the value from the vector itself
+
+
+
+# For loops that don't use the value from the vector at all
+
+
+
+
+# Any for loop can be converted to a while loop.
+
+
+
+# Four ways to "loop" in R
+#
+# 1. vector operations - this is the fastest to run
+#    Example:
+
+x <- c(1,2,3)
+x + 10
+
+# 2. loops - this is SLOW in R
+
+x <- c(1,2,3)
+add10 <- function( nums ){
+  answer <- numeric(0)
+  for (i in nums){
+    answer <- c(answer, nums[i] + 10)
+  }
+  return(answer)
+}
+x <- add10(x)
+x
+
+# 3. lapply or sapply - this is also slow in R
+
+x <- c(1,2,3)
+x <- sapply(x, function(num) num+10)
+x
+
+
+
+
+
+# Write a function named flip_dataframe_matrix(x)
+#
+# ARGUMENTS:
+#   x is expected to be either:
+#     - a dataframe for which all columns are the same mode (e.g. numeric, character, logical)
+#     - or a matrix
+#
+# If x is a matrix then flip_dataframe_matrix should return
+# a dataframe with the same data in same rows and columns.
+# The row names and column names should be the same too.
+#
+# If x is a dataframe, then the function should return
+# a matrix with the same data in the same rows and columns.
+# The row names and column names should be the same too.
+#
+# If x is neither a dataframe nor a matrix, the function should
+# stop with an error and an appropriate error message.
+#
+# If x is a dataframe whose columns are of different types
+# the function should stop with an error an an appropriate error message.
+

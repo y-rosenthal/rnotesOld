@@ -1,0 +1,762 @@
+# "character" values (also known as "strings"), cat(), nchar(), paste(), paste0()
+
+```{r}
+#########################################################################.
+#########################################################################.
+## 
+## character values (also known as "strings")
+##
+## character values must be surrounded by
+## "quotes"      (also known as "double quotes")   or 
+## 'apostrophes'  (also known as 'single quotes')
+##
+#########################################################################.
+#########################################################################.
+
+# R has different types (or "modes") of data.
+# We've already seen numeric data and logical (TRUE/FALSE) data.
+# The other type (or "mode") of data we will learn about now
+# is "character" data.
+#
+# Character data can contain ANY "characters" but the characters must
+# be surrounded by "double quotes" (i.e. quotes) or 'single quotes'
+# (i.e. apostrophes).
+
+# Character data can be used to store words 
+greeting <- "hello"
+mode(greeting)          # "character"
+greeting                # "hello"
+rep(greeting, times=5)  # "hello" "hello" "hello" "hello" "hello"
+```
+
+## "double-quotes" vs 'single-quotes'
+
+```{r}
+# character data MUST be surrounded by "quotes" or 'apostrophes' 
+# (they basically do the exact same thing in R)
+#
+# "quotes" are often called "double quotes"  (i.e. there are 2 lines for each quote)
+# 'apostrophes' are often called 'single quotes' (i.e. there is 1 line for each apostrophe)
+
+rep("hello", 5)   # "hello" is a character value, 5 is a numeric value
+
+rep('hello', 5)   # 'hello' is a character value, 5 is a numeric value
+
+# If you leave off the quotes, R will assume hello is a variable name
+rep(hello, 5)   # ERROR - variable hello doesn't exist.
+```
+
+## R always displays character data surrounded with "double-quotes"
+
+```{r}
+#------------------------------------------------------------------------------.
+# Even if you use 'single quotes' to create a character vector, R will display
+# the information with "double quotes". That is fine. Remember, 'single quotes'
+# and "double quotes" are basically the same to R.
+#------------------------------------------------------------------------------.
+fruit = c("apple", "banana", "pear") # "double-quotes"
+
+fruit      # no surprises:    "apple" "banana" "pear"
+
+
+
+vegetables = c('potato', 'carrot')   # assigned with 'single-quotes'
+
+vegetables # but displays with "double-quotes", i.e. "potato" "carrot"
+```
+
+## Many functions (e.g. length, rep, etc) work with all types of vectors
+
+```{r}
+#-------------------------------------------------------------------.
+# Many functions that you already know (e.g. length, rep)
+# work with any type of vector (numeric, logical, character).
+#-------------------------------------------------------------------.
+
+people <- c("joe", "sue", "sam", "alice")   # "double quotes"
+people
+
+length(people)  # 4
+rep(people, 2)  # "joe" "sue" "sam" "alice" "joe" "sue" "sam" "alice" 
+people          # people didn't change
+
+# As with numeric values, you don't need an actual variable.
+# You can type the character values directly in wherever you want 
+# to use it. You can use the c() function to create a vector with 
+# more than one value.
+
+rep(c("bob", "anne"), 2) # "bob" "anne" "bob" "anne"
+```
+
+## Surround data containing quotes with apostrophes (and vice versa)
+
+```{r}
+#-----------------------------------------------------------------------.
+# Mixing "double quotes" and 'single quotes'
+#
+# Don't place 'apostrophes' inside of 'apostrophes' and
+# don't place "quotes" inside of "quotes"
+# unless ... (keep reading)
+#
+#-----------------------------------------------------------------------.
+
+# You may type apostrophes inside of quotes (e.g. "How's it going?")
+# and quotes inside of apostrophes (e.g. 'He said "Hello" to Sue').
+
+saying <- c("What's up?")              # apostrophe inside quotes - that's fine
+saying
+
+
+sentence <- 'He said "Hello" to Sue.'  # "quotes" inside apostrophes is fine too
+
+# When you display information that has a "quote" inside of a character value
+# R will display the quotes that are inside of the value with a
+# backslash before the quote, i.e. \"
+
+sentence   # "He said \"Hello\" to Sue."
+
+# BACKSLASH      \   (used to "escape" quotes or apostrophes)
+# FORWARD SLASH  /   (used for division, e.g. 3/4)
+```
+
+## Quoting text that contains the same type of quote leads to errors.
+
+```{r}
+#----------------------------------------------------------------------.
+# You will get ERRORS if you you type a quote inside of quotes
+# or an apostrophe inside of apostrophes. R will get confused.
+#
+# You can use \" or \' to place a quote inside of quotes 
+# or an apostrophe inside of apostrophes
+#----------------------------------------------------------------------.
+
+# The next line would cause an error since the entire value
+# is surrounded by apostrophes and it also contains an apostrophe
+# in the actual text (i.e. in the word How's).
+# (See below for an explanation of why this causes an error.)
+
+question <- c('How's it going?')  # ERROR 
+```
+
+```{r}
+# How does R interpret this line of code?
+# 
+#   Step 1: R correctly interprets the 1st apostrophe (i.e. 'How ...)
+#           as the start of the quoted text.
+#
+#   Step 2: R interprets the 2nd apostrophe (ie. the apostrophe that
+#           appears after 'How') as the end of the quoted text.
+#
+#   Step 3: When R sees the 2nd apostrophe it assumes that the quotation
+#           is over and expects to see a closing parentheses. However, instead
+#           of a closing parentheses, the next symbol after the apostrophe
+#           is the letter s. Therefore R gets confused and reports and error.
+```
+
+## Use " inside double-quotes. Use ' inside single-quotes.
+
+```{r}
+# FIX 1 - surround with "double quotes"
+question <- c("How's it going?")  # this is fine
+question
+
+# FIX 2 - use \' inside the character value
+question <- c('How\'s it going?')  # backslash-apostrophe also works
+question                           # "How's it going?"  (this is how it is displayed)
+```
+
+## Backslash (\\) vs Forward Slash (/)
+
+```{r}
+# NOTE:
+#   There are two different slashes on most keyboards. 
+#
+#   BACKSLASH, "\", IS THE CORRECT SLASH:
+#     The "backslash" i.e. "\" slants from the top left and towards the lower right.
+#     This is the slash to use in this situation.
+#
+#   FORWARD SLASH, "/", IS THE WRONG SLASH:
+#     The "forward slash" i.e. "/" slants from the lower left towards the top right.
+#     This is NOT the slash to use in this case. This slash is used for division.
+#
+#   MNEMONIC TO REMEMBER \BACKSLASH vs /FORWARD SLASH
+#     Imagine that someone is walking along next to the text from left to right.
+#     Think of the slash as that person.
+#     The backslash, i.e. \ , can be viewed as the person falling backwards.
+#     The forward slash, i.e. / , can be viewed as the person falling forwards.
+#  
+```
+
+## Similarly, don't type a double-quote inside of double-quotes.
+
+```{r}
+# Don't place quotes inside of quotes.
+#
+# ERROR: (uncomment the next line to see that it is an error)
+
+sentence <- c("Joe said "Hello" to Sue.")  # ERROR - "quote" inside "quotes"
+```
+
+```{r}
+# FIX 1 - surround the entire value with apostrophes (AKA 'single quotes')
+sentence <- c('Joe said "Hello" to Sue.')     # this works
+
+# NOTE: When you display a character value that contains quotation marks, R
+# puts a backslash (\) in front of the quotation mark that is inside the quote.
+# We'll explain more about this below.
+sentence   # "Joe said \"Hello\" to Sue."     (this is how it is displayed)
+
+# FIX 2 - use \" inside the character value
+sentence <- c("Joe said \"Hello\" to Sue.")
+sentence
+
+# The backslashes demonstrate that the quotes with the backslashes are
+# inside of the character value and do not surround (i.e. delimit) the
+# character value.
+sentence   # "Joe said \"Hello\" to Sue."
+
+# You can use the cat function to display the sentence in a more readable
+# way. The output of cat doesn't display any quotes 
+# around the sentence. cat also doesn't display the backslashes (\) that
+# precede the quotes inside the sentence. In short, cat is used to 
+# display the information in a "human friendly" way.
+# We will discuss the cat function in more depth below. However, for now
+# you can use cat to display the text in a more readable manner. 
+
+cat(sentence)    # Joe said "Hello" to Sue
+```
+
+## MIXING 'single quotes' and "double quotes" in the same text.
+
+```{r}
+#-----------------------------------------------------------------.
+# MIXING 'single quotes' and "double quotes" in the same text.
+#-----------------------------------------------------------------.
+
+# If your data contains both quotation marks and apostrophes, you 
+# should surround your data with either type of quote and then 
+# use backslashes in front of that type of quote in your data.
+# 
+# The following are all valid and all result in the same thing.
+
+
+# . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+# One way - surround with "double quotes" (i.e. quotation marks), use \" in the data
+# . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+saying = "He's going to ask Sue \"Will you marry me\". He hopes she says yes."
+saying        # this is what is stored
+cat(saying)   # this is a "human friendly" view of your data
+
+# . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+# Another way - surround with 'single quotes' (i.e. apostrophes), use \' in the data
+# . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+saying = 'He\'s going to ask Sue "Will you marry me". He hopes she says yes.'
+saying        # this is what is stored
+cat(saying)   # this is a "human friendly" view of your data
+
+# . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+# Yet another way - the backslashes are ok, even if they aren't necessary
+# . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+# The following uses \' and \" in the data. 
+# You don't need \" since the data is surrounded with 'single quotes'.
+# The \" is unnecessary in this case but it doesn't hurt.
+
+saying = 'He\'s going to ask Sue \"Will you marry me\". He hopes she says yes.'
+saying        # this is what is stored
+cat(saying)   # this is a "human friendly" view of your data
+```
+
+## cat(value1, value2, etc.)
+
+```{r}
+###########################################################################.
+# cat( value1, value2, etc. )
+#
+# WHAT DOES IT DO
+#
+# The cat function is used to display information to the screen in a 
+# user friendly way. The output of cat will NOT include extra backslash characters.
+# The output of cat will also not be surrounded with quotes.
+#
+#
+# YOU CANNOT "USE" THE OUTPUT OF CAT (other than to display information)
+#
+# The output of cat iS ONLY used to display information to the screen.
+# You cannot capture the output of cat to a variable or use cat in a
+# larger expression. It is simply used to display information to the screen.
+# See below for an example of what happens if you try to use the output 
+# from cat in a larger context (hint ... it doesn't work).
+#
+#
+# SOME TRIVIA - WHY IS IT CALLED CAT? 
+#
+# If you're wondering why it's called "cat", it is because "cat" is short for
+# the English word "concatenate". "concatenate" means to "link things together"
+# - https://www.dictionary.com/browse/concatenate . The cat function can take
+# multiple pieces of info and display them all together to the screen (see 
+# the example code below). Incidentally, the "c()" function is also short 
+# for "concatenate" since it "concatenates" (or combines) multiple different
+# vectors into a single combined vector.
+#
+# The command "cat" predated the creation of R. It originated with the
+# Unix operating system in the 1970's and was carried over to the Linux
+# operating system which is very popular today. As often happens with
+# programming languages and technology, newer languages and technology (e.g. R)
+# inherit many of the features (i.e. cat) that were present in older
+# languages and technology (e.g. Unix). 
+###########################################################################.
+
+#----------------------------------------------------------------.
+# cat displays values to the screen in a "human friendly" way.
+#----------------------------------------------------------------.
+
+# Set a character value ...
+sentence <- "Joe said \"Hello\" to Sue."
+
+# Display the results ...
+#
+# To see the actual character value without the backslashes, you can use the cat function.
+# Compare the difference in output of the following two lines.
+# Notice that for cat there are no quotes around the text and no backslashes within the text.
+
+sentence       # "Joe said \"Hello\" to Sue."
+
+cat(sentence)  # Joe said "Hello" to Sue.  (no backslashes, no "quotes" surrounding the data)
+
+
+# You can use cat to output multiple pieces of information to the screen.
+# This includes multiple values within a single vector as well as 
+# multiple different vectors.
+# By default all items are separated with spaces.
+
+people = c("joe", "sue", "bill")
+food = c("apple", "orange", "pear")
+cat(people, food)   # just outputs all values
+
+# You can change the separator to anything you like by using the sep argument
+cat (people, food, sep="-")      
+cat (people, food, sep=":---:")  # the separator can be anything, even multiple characters
+cat (people, food, sep="")       # use the "" empty string to remove the separator
+
+# another example
+tf = TRUE
+grade = 100
+person = "Bill"
+cat ( "It is", tf, "that", person, "got", grade, "on the test!")
+```
+
+## WILF - UP TO HERE - AFTER CLASS 9
+
+## \\n &nbsp;&nbsp; \\t &nbsp;&nbsp; \\\\
+
+```{r}
+#########################################################.
+# The backslash \ 
+#########################################################.
+
+# The backslash character ( \ ) is used to change the meaning from 
+# the character that follows it. When used before a "double quote" (i.e. \" ) or
+# a 'single quote' (i.e. \' ) it takes the special meaning of the quote away.
+# The quote is no longer used to indicate the end of a quotation but becomes intead
+# simply part of the text.
+# 
+# In a similar way, the backslash changes the meaning of some other characters.
+# For example
+#    \n is used for an ENTER (i.e. a "newline").
+#    \t is used for a "tab" character
+#    \\ is used for an actual backslash character.
+#
+# EXAMPLE
+
+cat("This is line 1.\nThis is line 2.")   # displayed on two different lines
+
+cat("This is line 1.\n\nWe just skipped a line.")  # use double \n\n to skip a line
+
+cat("Hi.\tI really like pizza.\n\tI don't like broccoli.")  # two lines, notice the tabs
+
+cat("This ... \\ ... is a backslash.")
+```
+
+## --- Practice ---
+
+```{r}
+#...........................................................................
+# QUESTION   TOPICS: cat, backslash
+#
+# (a) Write a single R command that assigns the following message
+#     to the variable named message.
+#  
+#      The '\' is known as a "backslash". 
+#      It's used to escape the meaning of
+#      the character that follows it.
+#
+# (b) display the message variable to the screen by just typing the word, message.
+# (c) Use the cat command to display the message to the screen.
+#...........................................................................
+```
+
+::: {.callout-note icon="false" collapse="true"}
+#### click here for answer {.unnumbered}
+
+```{r}
+message = "\tThe '\\' is known as a \"backslash\".\n\tIt's used to escape the meaning of\n\tthe character that follows it."
+
+message       # this shows the backslashes, ie. \n   \t   \"   \'  
+
+cat(message)  # this changes \n into ENTER, \t into tab, \" into " and \' into '
+```
+:::
+
+## DON'T use cat inside a larger expression.
+
+```{r}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Do NOT use the output of cat inside a larger expression.  ####
+# (you CAN use the output of most other functions in a larger expression)
+# 
+# See examples below
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#-----------------------------------------------.
+# SETUP SOME DATA TO USE IN THE EXAMPLES BELOW
+#-----------------------------------------------.
+
+# people and food are parallel vectors 
+# - i.e. joe's favorite food is apple, sue's favorite food is orange, etc.
+
+people       = c("joe", "sue", "bill")    
+favoriteFood = c("apple", "orange", "pear")
+
+people[2] # use the number 2 to get the 2nd person
+
+cat(2)    # this just uses cat to display the number 2 on the screen
+
+# . . . .. . . . . . . . . . . . . . . . . . . . . .. . . 
+# ONLY USE cat TO DISPLAY INFO TO THE SCREEN.
+# DON'T USE CAT FOR ANYTHING ELSE!
+# . . . .. . . . . . . . . . . . . . . . . . . . . .. . . 
+
+#...........
+# EXAMPLE 1
+#...........
+
+# ONLY USE cat TO DISPLAY INFO TO THE SCREEN.
+# DON'T USE CAT FOR ANYTHING ELSE - THIS DOESN'T WORK
+people[cat(2)]   # error
+
+# HOWEVER, THIS WORKS - use an expression to display the 2nd person
+people[ 1 + 1 ]  # sue
+
+
+#...........
+# EXAMPLE 2
+#...........
+
+# ONLY USE cat TO DISPLAY INFO TO THE SCREEN.
+# DON'T USE CAT FOR ANYTHING ELSE - THIS DOESN'T WORK
+
+y = cat(people[3])   # "bill"
+y                    # NULL
+
+# Set the variable x to the name of the 2nd person
+x = people[2]   # this works
+x
+```
+
+## nchar returns the number of symbols (letters, digits, spaces, etc) in a value.
+
+```{r}
+########################################################.
+# a few character functions :    nchar, paste0, paste   
+# (there are many more): 
+########################################################.
+
+#---------------------------------------------------------.
+# nchar returns the number of characters in a value.
+# All characters, including spaces and punctuation count as part of the value.
+#---------------------------------------------------------.
+
+nchar(c("O.K.", "hello", "there", "hello there"))    
+wierdGreeting = "hello\n\tthere"
+cat(wierdGreeting)
+nchar(wierdGreeting)
+```
+
+## paste and paste0 combine character values from different vectors
+
+```{r}
+#-------------------------------------------------------------------.
+# paste and paste0 functions are used to combine character values
+#-------------------------------------------------------------------.
+paste0 ( "hi", "there")   # paste0 does not leave any space between values
+
+# You can capture the output of these functions in a variable
+
+greeting = paste0("hi",  "there", "joe")
+greeting
+nchar(greeting)
+
+# paste (as opposed to paste0)
+paste("hi", "there")
+
+
+paste("hi", "there", "joe")  # paste by default leaves a space
+
+
+# you can change the separator with a sep argument 
+paste("hi", "there", "joe", sep = "-")
+
+
+message = paste("hi", "there", "joe", sep = "-")
+message
+
+message2 = cat("hi", "there", "joe", sep = "-")
+message2
+
+length(message)
+length(message2)
+
+
+
+# the empty string is "" or ''
+paste("hi", "there", "joe", sep = "")   # exact same thing as paste0
+
+
+# Like most functions, paste0 and paste work with the recycling rule
+
+firstNames = c("joe","chaim","juan")
+firstNames
+
+paste ("hello", firstNames)
+paste0 ("hello", firstNames)
+# becomes             paste0(  c("hello","hello","hello"), c("joe","chaim","juan"))
+# vector operations   "hellojoe"  "hellochaim"  "hellojuan"
+
+#...........................................................
+# Using paste with vectors that have more than one value
+#...........................................................
+firstNames = c("joe","chaim","juan")
+firstNames
+
+lastNames = c("smith", "schwartz", "rodriguez")
+lastNames
+
+fullNames = paste (firstNames, lastNames)
+fullNames
+
+length(firstNames)
+length(lastNames)
+length(fullNames)
+
+# sep argument is used to separate the values being pasted together
+paste(firstNames, lastNames, sep="-")
+
+paste(firstNames, lastNames, sep=" ...---... ")
+
+paste(firstNames, lastNames, sep="'s last name is ")
+
+paste(firstNames, lastNames, sep="")   # same as paste0(firstNames, lastNames)
+
+
+
+
+# Three (or more) vectors also works
+paste(c("abc","def"), c("UVW","XYZ"), c("012","345"))
+paste(c("abc","def"), c("UVW","XYZ"), c("012","345"), sep = "")  # no more spaces
+paste0(c("abc","def"), c("UVW","XYZ"), c("012","345"))  # same thing
+
+?paste
+
+
+# Recycling rule 
+paste(c("abc","def"), c("RST", "UVW","XYZ"), sep="")  # "abcRST" "defUVW" "abcXYZ"
+
+
+paste(c("a","b"), c("x","y","z"), "somethingElse", sep=" ")
+
+
+#.....................................................................
+# collapse argument is used to collapse entire output into a 
+# vector that contains a single item
+#
+# The value of the collapse argument is used to separate between the different
+# values that are being collapsed.
+#.....................................................................
+
+# example of using collapse
+paste(c("abc","def"), c("RST", "UVW","XYZ"), sep="") # without collapse
+paste(c("abc","def"), c("RST", "UVW","XYZ"), sep="", collapse="-") # with collapse
+
+
+# another example
+answer = paste(firstNames, lastNames, sep="---") # without collapse 
+answer
+length(answer)
+answer = paste(firstNames, lastNames, sep="---", collapse="@@@") # with collapse
+answer
+length(answer)
+
+# One or both of sep and collapse arguments can be the "empty string" (i.e. "")
+paste(firstNames, lastNames, sep="-", collapse="")
+
+paste(firstNames, lastNames, sep="", collapse="-")
+
+paste(firstNames, lastNames, sep="", collapse="")
+
+
+# student's question
+paste(firstNames, lastNames, sep=" ", collapse="") # sep is space
+
+paste(firstNames, lastNames, collapse="")  # same thing (default for sep is a space)
+```
+
+## Can't do math with "character" values: "1" + "1" = ERROR
+
+```{r}
+#---------------------------------------------------------------------------.
+# You cannot do math with character data - even if it looks like a number
+#---------------------------------------------------------------------------.
+
+"5" * "3"   # ERROR
+
+5 * 3       # that's better
+
+# Another example
+
+charNums = c("85", "19" ,"103",  "100", "22", "099" , "9" , "1000000", "2000")
+charNums
+
+sum(charNums)  # ERROR - no math with character values
+```
+
+## review - sort function with numeric vectors
+
+```{r}
+
+###########################################################.
+#
+# sort function - how it works with character values
+#
+###########################################################.
+
+#------------------------------------.
+# numeric - numbers sort as you'd expect
+#------------------------------------.
+
+nums = c(85, 19 ,103,  100, 22, 099 , 9 , 1000000, 2000)
+
+sort (nums) # 9  19  22  85  99  100  103  2000  1000000
+
+# you can sort in decreasing order too
+sort (nums, decreasing=TRUE) # 9  19  22  85  99  100  103  2000  1000000
+
+?sort  # see the help for more info.
+```
+
+## sort function with logical (i.e. TRUE/FALSE) vectors
+
+```{r}
+#------------------------------------.
+# logical - FALSE is less than TRUE
+#------------------------------------.
+tf = c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE)
+sort (tf)   # FALSE FALSE FALSE TRUE TRUE TRUE
+sort (tf, decreasing = TRUE)   # TRUE TRUE TRUE FALSE FALSE FALSE
+```
+
+## sort function with "character" vectors
+
+```{r}
+#----------------------------------------------------------------------------.
+# sorting character data
+#
+# In general, sort will arrange character data in alphabetical order.
+#
+# The sort order of "special characters" (@%#$ etc) spaces, numbers,
+# CAPITALS vs lowercase depends on the "locale" of your computer,
+# e.g. USA, Europe, Israel, etc.
+# Discussion of "locale" is beyond the scope of this document. 
+#----------------------------------------------------------------------------.
+
+stuff = c("table", "@table", "  table", "book case", "101 dalmations", "apple", "ape", "apex")
+stuff
+sort (stuff)  # "  table"        "@table"         "101 dalmations" "ape"            "apex"           "apple"          "book case"      "table"  
+```
+
+## sorting "character" numbers, eg. sort("2", "100", "30") \# "100" "2" "30"
+
+```{r}
+#.................................................................................
+# If numbers are stored as characters then they will sort as characters do.
+#
+# The first character is the most important character for the sorting order. 
+# Only when two of the first characters are the same will the 2nd character be important, etc.
+#.................................................................................
+sort(charNums) # "099"  "100"  "1000000"  "103"  "19"  "2000"  "22"  "85"  "9" 
+
+# EXPLANATION OF THE SORT ORDER
+#
+# "099" sorts first because 0 is the "earliest" character in the 
+# sequence 0,1,2,3,4,5,6,7,8,9
+#
+# 100 is next because "1" is after "0" in the sequence 01,2,3,4,5,6,7,8,9
+#
+# 1000000 is next because the first 3 characters, i.e. "100" is the same
+# as the previous value, i.e."100" but "1000000" is longer than "100" in characters
+# so it sorts after "100". This is similar to why "be" is followed by "bed" in the dictionary
+# "bed" contains "be" but is longer than "be".
+#
+# "103" is next because the "10" is the same as the first two characters of the 
+# previous value but the third character, i.e. "3" is "later" in the list 0,1,2,3,4,5,6,7,8,9
+# than is "0", the third character of "1000000".
+#
+# "19" is next because "9" is later than the "0" from "103"
+#
+# "2000" is next because the "2" is later than the "1" from "19"
+#
+# "22" is next because the 2nd "2" is later then the first "0" from "2000"
+#
+# "85" is next because the "8" is later than the first "2" from "22"
+#
+# "9" is last because it has the latest first character from the list 01,2,3,4,5,6,7,8,9 from
+# all of the values being sorted.
+```
+
+## Some functions automatically convert "1" to 1
+
+```{r}
+##############################################################.
+# Sometimes, R implicitly (i.e. automatically) converts
+# character values into numeric values. See one example
+# shown below with the rep function.
+##############################################################.
+
+# The rep function expects a numeric value as its second argument.
+
+rep("hello", 5)  # "hello" is character, 5 is numeric
+
+# If instead you specify a character value that contains a 
+# number, the rep function will convert the character into a 
+# number.
+
+rep("hello", "5")  #  "5" is converted to 5
+
+
+# However such conversions are NOT guaranteed to happen for all functions.
+# For example, the 2nd argument to the round function is used to specify 
+# to what position to round the number. For example the following line
+# rounds 3.579 to the 1st decimal place
+
+round(3.579, 1)   # 3.6
+
+# If you specify the character value "1" for the 2nd argument 
+# instead of the number 1 you will get an ERROR since the 2nd argument
+# is supposed to be numeric.
+
+round(3.579, "1")  # ERROR - "1" is a character value, should be a number
+
+# Bottom line - the functions that are built into R are not consistent
+# in how they handle this issue. 
+```

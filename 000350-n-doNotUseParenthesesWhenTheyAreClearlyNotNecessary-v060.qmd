@@ -1,0 +1,97 @@
+# DO NOT use parentheses when they are clearly not necessary.
+
+```{r}
+#####################################################################.
+# In general, DO NOT use parentheses when they are clearly not necessary. ####
+# It shows poor knowledge of the R language. 
+#####################################################################.
+
+# Don't do this! - you never need parentheses around a single value
+seq((1), (3))  
+
+# Don't do this! - unnecessary parentheses
+(seq(1,3))   
+
+# Don't do this! - you never need parentheses around a single argument
+x=2
+seq(1,(3+x))  # do not put parentheses around a single argument
+
+# This is the way to do it.
+seq(1 , 3+x)  # better!
+
+
+#####################################################################.
+# It is acceptable to use extra parentheses when they are used to 
+# clarify the order of operations. Not everyone knows the order of 
+# operations by heart and this can make your code more readable.
+#####################################################################.
+
+# For example:
+
+10-(2:10)
+
+# is very different from 
+
+(10-2):10
+
+# The following (without the parentheses)
+10-2:10
+
+# is the same as 10-(2:10) as the order of operations lists the
+# colon operator (:) before the subtraction operator (-)
+# ( see ?Syntax )
+#
+# Therefore, I'd accept 10-(2:10) even thought strictly speaking the 
+# parentheses are not necessary as the parentheses help to clarify the
+# order of operations.
+
+
+############################################################################.
+# QUESTION: The vector, x, contains at lest 3 values.
+#           Write a command to show the last 3 values in the vector.
+#           Your code must work no matter how many values are in the vector.
+#
+# Example 1: 
+#   > x = c("anne","bob","carla","dave","ed","fran","george","hugh","ike","jill")
+#   YOUR CODE GOES HERE
+#   [1] "hugh" "ike" "jill"
+#
+# Example 2: 
+#   > x = seq(10,50,by=10)
+#   YOUR CODE GOES HERE
+#   [1] 30 40 50
+############################################################################.
+
+
+#------------.
+# Answer: 
+#------------.
+
+# Example 1:
+x = c("anne","bob","carla","dave","ed","fran","george","hugh","ike","jill")
+x[ (length(x)-2):length(x) ]    # ANSWER
+
+# Example 2: 
+x = seq(10,50,by=10)
+x[ (length(x)-2):length(x) ]    # ANSWER
+
+
+
+
+#####################################################################.
+# Don't use c(...) when it is not necessary  ####
+#####################################################################.
+
+# c() is only required to combine multiple vectors into a single vector.
+# Do not use c for a single vector.
+
+students = c("joe", "sue")   # c is required
+c(students)     # c is not required - since there is only one vector - dont use c here
+students
+
+
+c(seq(1,10,by=2))  # c is not required because seq is already a vector! - don't use c here
+seq(1,10,by=2)
+
+c ( rep(10,3), rep(20, 2))  # c IS required because you're combining two different vectors
+```

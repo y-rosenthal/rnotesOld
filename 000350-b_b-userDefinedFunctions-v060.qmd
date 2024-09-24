@@ -1,0 +1,773 @@
+# User defined functions
+
+```{r}
+# Remove all variables. 
+# It's a good idea to start with a "clean slate".
+
+rm(list=ls())   # remove all variables
+
+
+####################################################################.
+####################################################################.
+#
+# INTRO TO USER DEFINED FUNCTIONS ####
+#
+####################################################################.
+####################################################################.
+
+
+#----------------------------------------------------------------------------.
+# R has many, many built-in functions. However, if you don't find what you 
+# are looking for with R's built-in functions, you can also define
+# your own functions!
+#
+# The following simple examples demonstrate the concepts.
+#
+# EXAMPLE:
+#
+# The following is called a FUNCTION DEFINITION. ####
+# It defines a brand new function called "doubleIt".
+# The doubleIt function is defined to take a single argument named nums.
+# The doubleIt function returns two times whatever value is passed to nums.
+# (see examples below)
+#
+#          doubleIt <- function(nums) {    
+#             return(2 * nums)
+#          }
+#
+#----------------------------------------------------------------------------.
+```
+
+## Type function definitions in the SCRIPT window
+
+```{r}
+# YOU SHOULD TYPE FUNCTION DEFINITIONS IN THE SCRIPT WINDOW ####
+# (NOT IN THE CONSOLE WINDOW)
+#----------------------------------------------------------------------------.
+# Since function definitions tend to be rather long and span multiple lines,
+# it's not very convenient to type them in the Console window.
+# Rather type them in RStudio's script window and then run the code
+# To run the code, put your cursor on the first 
+# line of the function definition in RStudio's "script window"
+# (or highlight the complete function definition) and then
+# press ctrl-ENTER (windows) or cmd-ENTER (Mac). After you run the 
+# code, you will see the name of the function
+# appear in RStudios "Environment" window. You can also see the name of the 
+# function in the output of the ls() command.
+#
+# To get R to recognize that this new function exists, 
+# you MUST run the function definition - i.e. put your cursor on the first 
+# line of the function definition (or highlight the complete function definition)
+# in the script window and then press ctrl-ENTER (windows) or cmd-ENTER (Mac).
+#
+# It's very important to realize that it's not enough to just type the code
+# in the script window. Don't forget to run the code for the function definition 
+# (many newbies forget this part).
+#
+# When you run the code for the function definition, all that appears to happen is 
+# that you will see the code displayed in the console window. Nothing else
+# appears to have happened. For example:
+#
+#        > doubleIt <- function(nums) {    
+#        +   return(2 * nums)
+#        + }
+#
+# The "+" signs at the beginning of the line are NOT part of the code. 
+# They simply mean that your function definition spans multiple lines of code. 
+#---------------------------------------------------------------------------
+```
+
+## Run the definition before using the function
+
+```{r}
+#----------------------------------------------------------------------------.
+# USING YOUR NEW FUNCTION
+#----------------------------------------------------------------------------.
+# Once you've run the code for the function definition (see above)
+# you can then use the new function with any values that you wish. For example:
+#
+#         > doubleIt(7)
+#         [1] 14
+#
+#         > doubleIt( c(10,20,30) )
+#         [1] 20 40 60
+#
+#         > doubleIt( c( 1:3 , rep(5,6) ) )
+#         [1]  2  4  6 10 10 10 10 10 10
+#----------------------------------------------------------------------------.
+
+# define a new function  
+#
+# DON'T FORGET TO RUN THE CODE FOR THE FUNCTION DEFINITION  ####
+# i.e. put your cursor on the first line and 
+#      press ctrl-ENTER (win) or cmd-ENTER (mac)
+
+doubleIt <- function(nums) {    
+  return(2 * nums)
+}
+
+# We can now use the doubleIt function with many different values similar
+# to the way you can use R's built-in functions.
+#
+# Before running the following lines of code you must make sure that you've
+# run the function definition above.
+
+doubleIt(3)             # 6
+
+doubleIt(c(10,20,30))   # 20 40 60
+
+doubleIt( nums = c(100,500))  # you can specify the name of the argument in the function call
+
+doubleIt(c(100,500)) # same thing
+
+# In general you can now work with the user-defined-functions
+# the same way you would work with built in functions.
+
+aBigNumber = doubleIt(1000) + 210
+aBigNumber
+
+# As with all functions, you must figure out the value of the arguments
+# before the function is actually called.
+
+doubleIt( seq(1,3) )
+
+# original:        doubleIt( seq(1,3) )
+# seq:             doubleIt( c(1,2,3) )
+# doubleIt:        2 4 6
+
+
+doubleIt( 1 + seq(1,3) )
+
+# original:        doubleIt( 1 + seq(1,3) )
+# seq:             doubleIt( 1 + c(1,2,3) )
+# addition:        doubleIt( c(2,3,4) )
+# doubleIt:        4 6 8
+
+
+doubleIt( c( 1:3 , rep(5,6) ) )
+
+# original:              doubleIt( c(    1:3    ,    rep(5,6)    ) )
+# expand 1:3:            doubleIt( c( c(1,2,3) , rep(5,6) )
+# rep function:          doubleIt( c( c(1,2,3) , c(5,5,5,5,5,5) ) )
+# outermost c function:  doubleIt( c(1,2,3,5,5,5,5,5,5) ) 
+# doubleIt:              2  4  6 10 10 10 10 10 10
+```
+
+## "Local" variables
+
+```{r}
+##################################################################.
+#
+# The code inside a function definition may consist of several lines 
+#
+# You may use "local variables" in a function definition.
+#
+##################################################################.
+
+# Below we defined the function, trippleIt, that tripples the values
+# in the argument, nums.
+#
+# We wrote trippleIt using a slightly different approach than we used
+# for doubleIt. Instead of simply multiplying by 3, we 
+# used a variable named total to store the 
+# value that will be returned. Every line of the function
+# adds another multiple of the values in nums to the total.
+# The last line of the function returns the total.
+#
+# This seems unnecessarily complex. It is. We could have very easily written
+# trippleIt the same way that we wrote doubleIt, i.e. by simply 
+# multiplying by 3. That would work just fine.
+# We used this alternative approach simply to demonstrate some concepts:
+# 
+# (a) a function definition can contain multiple lines of code
+#
+# (b) You may define "local variables" inside a function definition.
+#     A "local variable" is a variable that is created inside a 
+#     function definition to help perform the calculations for 
+#     the function. We'll discuss more about local variables later below.
+#
+
+# Define the function
+trippleIt <- function(nums) {    
+  return(3 * nums)
+}
+
+# call the function
+trippleIt(c(5,6,7))
+
+# A differnt version of trippleIt that returns the same values as the
+# original version above. The purpose of writing the following version of 
+# trippleIt is simply to demonstrate that a function can have multiple lines
+# of code.
+# 
+# This will also be helpful to demonstrate R's "debugger" (which we will
+# see soon)
+
+
+trippleIt = function( nums ){
+  total = nums
+  total = total + nums
+  total = total + nums
+  return (total)
+}
+
+trippleIt(3)            # 9
+trippleIt(c(10,20,30))  # 30  60  90
+
+# to use the debugger for a function, you need to call the debugonce function
+# to tell the debugger to debug the specified function the next time it is called.
+
+trippleIt(c(10,20,30))
+
+# You can use the trippleIt and doubleIt functions together. 
+
+trippleIt(doubleIt(3))
+
+2 ^ doubleIt(c(1, 1.5, 2))
+
+trippleIt( 2 ^ doubleIt(c(1, 1.5, 2)) )
+
+
+#----------------------------------------------------------------.
+# "LOCAL VARIABLES" AND "SCOPE OF VARIABLES"   ####
+#----------------------------------------------------------------.
+# Note that variables that are created inside the definition of 
+# a user-defined-function are only "known" inside of that function
+# definition. When the trippleIt function above finishes executing, the variable 
+# total does NOT appear in the variables in the environment.
+# For example ls() will not show the total variable.
+#
+# A variable that can only be used inside of a particular function definition ====
+# is known as a "local variable" for that function. We say that the           ====
+# variable has "local scope".                                                 ====
+#
+# We will discuss much more about local variables and 
+# the "scope" of a variable a little later (below).
+#----------------------------------------------------------------.
+
+ls()   # show all variables - note that total isn't in the list.
+
+# We will return to discuss these issues more in depth a little later.
+```
+
+## Last value of the function is returned
+
+```{r}
+#######################################################################.
+# If you don't write the word "return" then
+# the final value of the function is returned as the value of the function. ####
+#######################################################################.
+
+# We could have written the definition of trippleIt without the return.
+# By default, if there is no return statement then
+# the last value of the function is what is returned.
+# The following is an equivalent definition of the trippleIt function.
+# Even though we left out the "return" the last value is still returned
+# as the value of the function.
+
+trippleIt = function( nums ){
+  total = nums
+  total = total + nums
+  total = total + nums
+  total                    # we took out the word return, it still works
+}
+
+# This still works
+
+trippleIt(3)            # 9
+trippleIt(c(10,20,30))  # 20  40  60
+```
+
+## Don't return an assignment statement
+
+```{r}
+# BE CAREFUL - don't return the value of an assignment statement ####
+#
+# If we take out the last line of the trippleIt function entirely
+# (e.g. by commenting it out) then the last command of the function
+# becomes an assignment statement. 
+#
+# However, remember that when you run an assignment statement no value 
+# is actually displayed to the screen. For example, if you run 
+#
+#     > x = 5
+#     > 
+#
+# Nothing is displayed as the result of the command. In a similar way, if you
+# final command of the function is an assignment statement, nothing
+# will be displayed when you run the function.
+
+
+trippleIt_returningAnAssignment = function( nums ){
+  total = nums
+  total = total + nums
+  total = total + nums
+  # total     # if we remove this entire line, the function does not work the same way
+}
+
+# Now since the last command to be executed in trippleIt is an assignment 
+# statement, the following lines do NOT display any values.
+
+trippleIt_returningAnAssignment (3)            # nothing is displayed
+trippleIt_returningAnAssignment (c(10,20,30))  # nothing is displayed
+
+# As a general rule, you should return the value of an assignment statement
+# or have an assignment statement as the last value of a function
+# whose job it is to return a value.
+
+###########################################################################.
+# 2023 - WILF - UP TO HERE - AFTER CLASS 5 ####
+###########################################################################.
+
+###########################################################################.
+# 2023 - BEREN - UP TO HERE - AFTER CLASS 6 ####
+###########################################################################.
+```
+
+## "invisible" return values
+
+```{r}
+#--------------------------------------------------------------------------.
+# Note about "invisible" return values ####
+#--------------------------------------------------------------------------.
+
+# What is very strange is that even though in it's current form, the 
+# trippleIt function does NOT display anything when you call it, if you 
+# assign the result of the function to a variable, the variable WILL 
+# contain the value!!! This may be very surprising.
+
+trippleIt_returningAnAssignment (3)      # nothing is displayed
+
+x = trippleIt_returningAnAssignment (3)
+x   # 9
+
+# The "value" of an assignment statement is an "invisible" value. ####
+# ("invisible" is an little known R concept that many people don't understand).
+# Invisible values can be captured to a variable, but by default they are not displayed. ####
+#
+# This is a somewhat advanced topic so we will not discuss it more now.
+# However, you should avoid ending a function with an assignment
+# statement if the purpose of the function is to return a value 
+# that needs to be displayed.
+```
+
+## don't pass too many arguments
+
+```{r}
+#------------------------------------------------------------------.
+# Be careful - don't pass too many arguments  ####
+#
+# The following will generate an error since you are trying to pass
+# three different  values to trippleIt but trippleIt is only
+# defined to take a single argument, nums.
+#------------------------------------------------------------------.
+
+trippleIt( 100, 200, 300 )  # ERROR - trippleIt only allows for one argument, nums
+
+
+# This fixes the problem since c(100,200,300) is a single vector.
+# The vector c(100,200,300) is passed to nums.
+
+trippleIt( c( 100, 200, 300) )  # 200 400 600
+```
+
+## Function name without parentheses() shows definition code
+
+```{r}
+##############################################################################.
+# A function's name without any parentheses, shows the definition of the function. ####
+##############################################################################.
+
+doubleIt   # show the definition of doubleIt
+```
+
+## --- Practice ---
+
+```{r}
+##################################################.
+# QUESTION - part (a)   ####
+#
+# A professor gives 3 tests.
+# The first test is worth 25% of the grade,
+# the 2nd test is worth 30% of the grade and the third test is worth 45% of the grade.
+# A student in the class got the following test grades are 80, 90 and 100.
+# Use the variables, weights and grades, shown below to calculate the student's 
+# overall "weighted average".
+##################################################.
+
+weights = c(0.25, 0.3, 0.45)
+tests = c(80,90,100)
+
+# ANSWER
+
+sum(weights * tests)   # ANSWER
+
+
+##################################################.
+# QUESTION - part (b)   ####
+#
+# Write a function named, weightedAvg, that takes
+# two arguments, weights and tests. The function
+# should work as shown below.
+#
+#     > WRITE THE FUNCTION DEFINITION HERE
+#
+#     # Now you can use the function
+#     > weightedAvg( c(0.25, 0.3, 0.45) , c(80,90,100) )   # result should be 92
+#     [1] 92
+#
+#     > weightedAvg( c(0.25, 0.3, 0.45) , c(70,85,50) )   # result should be 65.5
+#     [1] 65.5
+#
+# i. Write the function with the return statement
+#
+# ii. Write the function without the return statement
+#     (should produce the same results)
+##################################################.
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+# step 1 - define the function
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+
+weightedAvg = function (grades, weights){          # ANSWER
+  return( sum(grades * weights) )     # ANSWER
+}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+# step 2 - you must RUN the function definition.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+
+# As with all code that you write in the script window, to run it
+# simply, put your cursor on the first line of the function definition and
+# press ctrl-ENTER (win) or cmd-ENTER (mac).
+#
+# After you run the function definition you should see the 
+# name of the function appear in the Environment tab (by default
+# it's found in the upper right hand corner of the RStudio window)
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+# step 3 - use the new function to perform some calculations
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+
+# Call the function by just supplying the values for 
+# the tests and the weights. You do not have to type the argument names
+# as long as you supply the values in the proper order.
+weightedAvg( c(80,90,100), c(0.25, 0.3, 0.45))     # ANSWER
+
+# Just as with the built in functions you may also supply the 
+# argument names when you call the function. This makes the code
+# more clear but it is NOT necessary as long as you supply
+# the values in the correct order. 
+weightedAvg( grades=c(80,90,100), weights=c(0.25, 0.3, 0.45))     # ANSWER
+
+# You can also pass the values of the arguments as variables.
+# Note that the variable names do NOT have to be the same as the
+# argument names. The variable names simply represent the values that 
+# were assigned to them. For example:
+t = c(80,90,100)         # these are the test grades      
+w = c(0.25, 0.3, 0.45)   # these are the weights
+
+weightedAvg(t, w)                    # this works
+
+weightedAvg(grades=t, weights=w)     # this also works
+
+# Just as with built-in functions, if you type the names of the arguments, 
+# you can write the arguments in a different order.
+
+weightedAvg(weights=w, grades=t)     # this also works
+
+
+#--------------------------------------------------------------.
+# ANSWER - Another way - without the return function     
+#---------------------------------------------------------------.
+
+# The answer above used the return() function to "return" the final value
+# from the function. We'll see later that sometimes it is necessary to 
+# use the return() function. However, with simple functions (as these are)
+# by default the R function will return whatever value is the last value
+# to be executed inside of the function.
+
+weightedAvg = function (grades, weights){     # ANSWER
+  
+  # In this version there is no "return" function call
+  # Since the following is the last line this is automatically returned.
+  
+  sum(grades * weights)      # same as      return(sum(grades * weights))
+}   
+
+
+# This still works
+weightedAvg( c(80,90,100), c(0.25, 0.3, 0.45))
+```
+
+## Default argument values
+
+
+```{r}
+###########################################################################.
+#
+# Default argument values.    ####
+#
+###########################################################################.
+
+# If the function definition specifies a value for an argument then that
+# value will be used as the default argument if the call to the function
+# doesn't specify that argument. 
+
+# For example, the following function returns the volume of a cylinder
+# (e.g. a soda can) that has a specific height and a specific radius.
+# 
+# The "defualt value" for the height is 1 and the default value of the
+# radius is specified as 0.5 (i.e. a diameter of 1).
+
+
+volumeOfCylinder = function( radius=0.5, height=1){
+  return( pi * radius^2 * height )
+}
+
+volume2(1,5)      # volume of a cylinder with radius = 1 and height = 5
+
+volumeOfCylinder(1,5)      # volume of a cylinder with radius = 1 and height = 5
+
+volumeOfCylinder(2)        # volume of a cylinder with radius = 2 and height = 1
+
+volumeOfCylinder()         # volume of a cylinder with radius = 0.5 and height = 1
+
+volumeOfCylinder(0.5, 1)   # same thing
+
+volumeOfCylinder(radius=0.5, height=1)   # same thing
+
+volumeOfCylinder( height = 6)   # radius is 0.5  height is 6
+
+# Note that you can refer to the other arguemnts when defining the 
+# default values. This is shown in the following QUESTION/ANSWER.
+```
+
+## --- Practice ---
+
+```{r}
+##################################################.
+# QUESTION - part (c)   ####
+#
+# Create the weightedAvg function described in the previous question
+# so that if a value for weights is not supplied in the function call
+# then equal weight should be given to each grade.
+#
+# Call the function weightedAvg_newVersion so that it doesn't 
+# replace the original weightedAvg function
+##################################################.
+
+# ANSWER 
+#
+# Notice the default value of weights argument that appears on the first line.
+# It is set so that the weight is evenly distributed among the grades.
+
+weightedAvg_newVersion = function (grades, weights=1/length(grades)){     # ANSWER
+  return( sum(grades * weights) )     # ANSWER
+}     # ANSWER
+
+
+# Using the new function - with the default weights
+weightedAvg_newVersion(c(80,90,100))     # ANSWER
+
+# Using the new function by specifying our own weights
+weightedAvg_newVersion(c(80,90,100), c(0.25, 0.25, 0.5))     # ANSWER
+
+weightedAvg_newVersion(c(80,90,100), 1/3)     # ANSWER
+
+# The original function required that you specify all the arguments
+# The following call to the original function will generate the following errror:
+#
+#      Error in weightedAvg(c(80, 90, 100)) : 
+#        argument "weights" is missing, with no default
+
+weightedAvg(c(80,90,100))   # ERROR - missing argument
+```
+
+## 2023 - WILF - UP TO HERE - AFTER CLASS 6 (also covered debugger)
+
+## 2023 - BEREN - UP TO HERE - AFTER CLASS 7 (also covered debugger)
+
+## Calculations in middle of function definition are NOT displayed
+
+```{r}
+##########################################################################.
+# Code in a function definition is DIFFERENT than code that is run 
+# directly in the console window:
+#
+# If you type a simple calculation IN THE CONSOLE the result is DISPLAYED.
+# For example: 
+#      > 10 + rep(1,3)
+#      [1] 11 11 11
+#
+# If you type a simple calculation IN A FUNCTION DEFINITION the result is IGNORED. ####
+# See the examples below.
+##########################################################################.
+
+# A calculation typed in the console that would display a value has 
+# absolutely no effect on the code of a function.
+
+f = function( stuff ){
+  3*10        # this line is ignored (it is not displayed)
+  5+7         # this line is ignored (it is not displayed)
+  stuff + 5   # this line is ignored (it is not displayed)
+  2           # the function always returns 2
+}
+
+f(10)               # 2
+
+f(c(100,200,300))   # 2
+
+f(6547654.4356543)  # 2
+
+# You can save the value of the calculation in a variable and then
+# continue to use the value by referring to the variable.
+# e.g. see the following code (including the comments).
+
+calculateBill = function( charge, tip ){
+  tax = 0.0875 * charge        # you can save this calculation in a variable
+  return (charge + tax + tip)  # now you can use the tax variable in this line
+}
+
+calculateBill(100, 10)
+```
+
+## --- Practice ---
+
+```{r}
+##################################################.
+# QUESTION
+#
+# Write a function named, gpa, to calculate a GPA.
+# Feel free to use "local" variables to make your function
+# easier to read.
+# 
+# ARGUMENTS:
+#   credits - a vector that contains the number of credits for each course
+#   grades - a vector that contains the grades for each course (0 for F, 1 for D, 2 for C, 3 for B, 4 for A)
+#
+# e.g.  
+# > getGpa (credits = c(4,3,3),  grades=c(2, 3, 4))    # i.e. (4*2 + 3*3 + 3*4) / (4+3+3)
+# [1] 2.9       
+#
+#
+# *****************************************************************
+# ** READ THE FOLLOWING IF YOU DON'T KNOW HOW TO CALCULATE A GPA **
+# *****************************************************************
+#
+# A GPA is a weighted average.
+#
+# Letter grades are treated as numbers, i.e. A is 4, B is 3, C is 2, D is 1, F is 0
+#
+# To calculate a GPA you determine what percent of your overall 
+# college average is attributed to a specific class, then you multiply
+# the grade for that class by that number, i.e. 
+#     (credits_for_a_class / total_credits_taken) * grade_for_the_class
+# Finally, you add up the results for all of the classes.
+#
+# EXAMPLE: physics 4 credits, grade is B
+#          data analytics 3 credits, grade is A
+#          gym 0.5 credits, grade is B
+#
+# total creidts is  4 + 3 + 0.5
+# percent of total that is attributed to physics is 4 / 7.5
+# Portion of GPA attributed to physics is (4/7.5) * 3   # remember B is 3
+#
+# Do this for all classes to get that the GPA is 3.4 calculated as follows
+#
+#    (4/7.5)*3 + (3/7.5)*4 + (0.5/7.5)*3   which is   3.4
+#
+##################################################.
+
+# ANSWER 
+
+# (You need to do this)
+
+
+
+# AFTER YOU RUN YOUR CODE, CHECK YOUR ANSWER:
+gpa( credits=c(4,3,0.5)   ,   grades=c(3,4,3))    # 3.4 (if you wrote the code correctly)
+gpa( c(4,3,0.5)   ,   c(3,4,3))    # 3.4 (if you wrote the code correctly)
+
+
+
+
+
+#######################################################################.
+# QUESTION - use the gpa function that you defined above to 
+# calculate Joe's GPA. Joe took 4 classes. The credits and grades were as follows
+#   4 credit class - got a C
+#   3 credit class - got an A
+#   3 credit class - got a B
+#   2 credit Class - got a A
+#######################################################################.
+
+# ANSWER
+gpa( credits = c(4,3,3,2), grades = c(2, 4, 3, 4))
+
+
+
+
+##################################################.
+# QUESTION
+#
+# Rewrite the definition of the gpa function, call it gpa2.
+# This time, use the weightedAvg function inside
+# your definition of the gpa function.
+###################################################.
+
+# ANSWER
+
+gpa2 <- function (credits, grades) {                               # **ANSWER**
+  # **ANSWER**
+  totalCredits = sum(credits)                                      # **ANSWER**
+  weights = credits / totalCredits                                 # **ANSWER**
+  # **ANSWER**
+  # Instead of writing                                             # **ANSWER**
+  #                                                                # **ANSWER**
+  #   sum(weights * grades)                                        # **ANSWER**
+  #                                                                # **ANSWER**
+  # as we did in the gpa function above, we can make use of the    # **ANSWER**
+  # weightedAvg function that we defined earlier.                  # **ANSWER**
+  #                                                                # **ANSWER**
+  # Remember that we defined the weightedAvg function above as:    # **ANSWER**
+  #                                                                # **ANSWER**
+  #   weightedAvg = function(weights, tests) {                     # **ANSWER**
+  #      sum ( weights * tests )                                   # **ANSWER**
+  #   }                                                            # **ANSWER**
+  #                                                                # **ANSWER**
+  # NOTE that the weightedAvg function definition uses the         # **ANSWER**
+  # argument names weights and tests                               # **ANSWER**
+  # In this function we want the weightedAvg of weights and grades. # **ANSWER**
+  # The following function call uses the weightedAvg function.     # **ANSWER**
+  # The function all passes the weights variable that is local     # **ANSWER**
+  # to the gpa2 function to the weights variable that              # **ANSWER**
+  # is local to the weightedAvg function. However, the grades      # **ANSWER**
+  #  variable in this function is being passed to the              # **ANSWER**
+  # "tests" variable in the weightedAvg function.                  # **ANSWER**
+  # **ANSWER**
+  weightedAvg( weights , grades )                                  # **ANSWER**
+}                                                                  # **ANSWER**
+
+
+# calculate Joe's GPA. Joe took 4 classes. The credits and grades were as follows
+#   4 credit class - got a C
+#   3 credit class - got an A
+#   3 credit class - got a B
+#   2 credit Class - got a A
+gpa2( credits = c(4,3,3,2), grades = c(2, 4, 3, 4))
+
+
+# CHECK YOUR ANSWER
+# If you wrote the code correctly you should get the following results.
+
+# Show that the gpa and the gpa2 functions both return the same results
+gpa( credits=c(4,3,0.5)   ,   grades=c(3,4,3))    # 3.4
+gpa2( credits=c(4,3,0.5)   ,   grades=c(3,4,3))   # 3.4
+
+
+# Show that the gpa and the gpa2 functions both return the same results
+gpa ( c(4,3,3,2) ,  c(2,4,3,4) )     # 3.08333
+gpa2 ( c(4,3,3,2) ,  c(2,4,3,4) )    # 3.08333
+```

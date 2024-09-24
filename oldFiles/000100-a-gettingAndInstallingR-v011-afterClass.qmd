@@ -1,0 +1,2 @@
+# NOTE - this material was moved to the index.qmd file
+# to be in compliance with the Quarto-book format.

@@ -1,0 +1,71 @@
+# modes of data: "numeric","logical","character",etc.
+
+## mode ( SOME_VECTOR )
+
+```{r}
+############################################################################.
+# mode ( SOME_VECTOR )
+#
+# NOTE: 
+# typeof ( SOME_VECTOR )  is very similar to mode( SOME_VECTOR ) ####
+# In our class, we will tend to use the mode function instead of typeof.
+# See this for more info : https://stackoverflow.com/questions/35445112/what-is-the-difference-between-mode-and-class-in-r#:~:text=mode%20are%20basically%20the%20same,(mode%20%22function%22).
+#
+############################################################################.
+
+#---------------------------------------------------------------------------.
+# The "mode" function returns the type of data in a vector (e.g. "numeric", "logical", etc)
+#---------------------------------------------------------------------------.
+
+mode( c(100,200,300) )   # "numeric"
+
+mode ( c(TRUE, FALSE, TRUE, TRUE) ) # "logical"
+
+mode ( c("apple","orange","pear") ) # "character"
+```
+
+## The modes: numeric, logical, character, list, complex, raw 
+
+```{r}
+#--------------------------------------------------------------------------.
+# R HAS SIX MODES OF DATA : numeric, logical, character, list, complex, raw ####
+#
+# So far we learned about two modes of data, i.e. "numeric" and "logical".
+# R also has several other "modes". The ones that we will cover
+# in this course are:
+# 
+#    "numeric"     (for numbers)
+#    "logical"     (for TRUE/FALSE values)
+#    "character"   (we will cover this soon)
+#    "list"        (we will cover this soon)
+#
+# R also has the following modes of data that we will not cover this semester:
+#
+#    "complex"     (for "complex" numbers - we will not cover this)
+#    "raw"         (for "binary" data - we will not cover this)
+#--------------------------------------------------------------------------.
+
+#--------------------------------------------------------------------------.
+# ONE MODE PER VECTOR
+#
+# A single vector can only contain one "mode" of data.
+# If you attempt to put data of different modes in the same vector, 
+# R automatically converts all of the data in a vector to the same mode. ####
+#
+# For example, if you mix logical and numeric data in a single vector,
+# R converts all of the data into numeric data.
+# The TRUE's are converted to 1's and the FALSE's are converted to 0's.
+#--------------------------------------------------------------------------.
+
+# You CANNOT mix logical values and numbers in a single vector. 
+# If you try to mix numbers with TRUE/FALSE's the TRUEs become 1's and the FALSEs become 0's. ####
+
+mixedVector = c(100, TRUE, FALSE, -20)
+
+mixedVector   # 100 1 0 -20        TRUE changes to 1 and FALSE to 0
+```
+
+
+## 2023 - WILF - UP TO HERE - AFTER CLASS 7 ####
+
+

@@ -1,0 +1,146 @@
+# Practice Questions <span style="font-size: .75em">*(also see "More Practice Questions" below)*</span>
+
+This section includes practice questions for the ***entire course***.
+
+## Final exam
+
+* All of these question are applicable. 
+
+* For additional questions, also see the 
+next section entitled "More Practice Questions (added recently)". I may continue
+to add additional practice questions to the end of that section.
+
+* Note that in addition to the questions in this section, [**there are also 
+many practice questions that are included in the actual text of the chapters**]{.underline}.
+
+## Midterm exam
+
+* Below is a list of practice questions that were relevant to study for the 
+***midterm exam***.
+
+* Note that in addition to the questions in this section, [**there are also 
+many practice questions that are included in the actual text of the chapters**]{.underline}.
+
+The following questions are related to the material for the midterm.
+
+* Practice Questions - TOPIC Vectors1
+
+  1-17 (all questions)
+
+* Practice Questions - TOPIC Vectors2
+
+  1,2,3,4,5,6,\
+  8,9,10,11,\
+  14,15,16,17,18,19,20,21,22,23,\
+  25,26,27,28,29,30,31,\
+  33,34,35,36,37,38,39,40,41,42
+
+* Practice Questions - TOPIC: User Defined Functions
+
+  67, 68,\
+  71a, 71b
+
+* Practice Questions - TOPIC: Assorted Topics
+
+  73,\
+  75, 76, 77, 78, 79,\
+  81
+
+* Practice Questions - TOPIC: Parallel Vectors, other assorted questions
+
+  1,2,\
+  4,5,6,\
+  19,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38
+
+::: content-hidden
+## About these questions/answers
+
+The answers to each question were written to explain how to think about arriving at the answer.
+
+The actual answer is on the line containing the comment #ANSWER. All other lines are there to demonstrate the answer working on actual data or to demonstrate portions of the whole answer so that the whole answer is more easily understood. If the actual required code for an answer takes up several lines then the comment will say #ANSWER (MULTIPLE LINES).
+
+If different possible answers are shown, then the different answers will be displayed with the comment #ALTERNATE ANSWER or #ANOTHER ANSWER.\
+Note that it is very possible that there are valid answers other than the ones shown below.
+:::
+
+
+
+::: content-hidden
+# NOTE:
+
+# 
+
+# \[The following notes are for Prof. Rosenthal (and anyone else who will be
+
+# editing this file) to aid him in modifying this file.\]
+
+# 
+
+# The original versions of this file were created in MS Word. Word files are
+
+# able to be printed much more concisely than this format of the file (in R) since
+
+# an entire question is in one paragraph that automatically wraps to the correct
+
+# width. By contrast, in this R code version of the file I have to break up a
+
+# single question into multiple lines so that the #commentCharacter comes out at
+
+# the beginning of the line. This can make the file much longer and more difficult
+
+# to print. Also in Word, it's very easy to use a tiny font to print. In an
+
+# R file - it seems to be less easy to do so.
+
+# 
+
+# Nevertheless, I converted the MSWord files to .R files. This makes it much easier
+
+# to maintain this file (with solutions) and convert it to an equivalent file
+
+# with just the questions by simply taking out the answers/solutions.
+
+# 
+
+# The following information can be used to automatically generate the
+
+# question file (that does not contain the answers.)
+
+# - All questions start with a number and a period.
+
+# - The entire question in is a single comment
+
+# - The answers start below that and continue to the next question.
+:::
+
+::: content-hidden
+# TOPICS
+
+==*!= %/%*%% &*\| &&*\|\| vectors recycling vectorArithmetic vectorAssignment indexingVectors indexingWithLogicalValues indexingWithNumbers indexingWithLogicalValues c sum_mean min_max round_trunc_ceiling_floor rep_seq_colonOperator sqrt length runif namedVectors orderOfOperations parallelVectors userDefinedFunctions
+
+dataframes loops lists sciNotation Inf
+
+## indexing with positive numbers
+
+## indexing with negative numbers
+
+## indexing with logical values
+
+## length
+
+## round
+
+## R help pages
+
+## seq
+
+## rep
+
+## :
+
+## c
+
+## named vectors
+
+## vector assignment
+:::
