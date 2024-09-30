@@ -21,6 +21,8 @@ book:
       - 000350-g_g-indexingWithNegativeNumbers-v060.qmd
       - 000350-h_c-IntroToLogicalVectorsAndOperators_ifelseFunction-v060.qmd
       - 000350-j_j-indexingWithLogicalValues_notOperator-v060.qmd
+      - 000350-j_j_b-indexingWithLogicalValues_notOperator-v060.qmd
+      - 000350-j_j_c-indexingWithLogicalValues_notOperator-v060.qmd
       - 000350-k_k-characterValues_cat_nchar_paste_paste0-v060.qmd
       - 000350-l_i-usingCatToDebugYourCode-v060.qmd
       - 000350-m_l-parallelVectors-v060.qmd

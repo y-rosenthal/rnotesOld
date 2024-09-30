@@ -1,0 +1,325 @@
+# Automatic (or "implicit") conversions - numeric to logical - logical to numeric
+
+## Automatic (or "implicit") conversions from numeric to logical
+
+If R sees a logical value where it *expects* a numeric value
+then R will automatically interpret the logical value as a numeric value
+in the following way 
+
+- TRUE is interpreted as a 1 and
+- FALSE is interpreted as a 0 (zero)
+
+In the following example, the arithmetic operators (e.g. +,-,*,/,%%,%/%,^) 
+expect that both of their "operands" will be numbers. 
+However, in the following examples one or both of the operands are TRUE 
+or FALSE. Therefore, R interprets TRUE as a 1 and FALSE as a 0 (zero).
+See the examples:
+
+```{r}
+TRUE + 100    # interprets as 1 + 100
+
+FALSE * 100    # interprets as 0 * 100
+
+30 + FALSE    # interprets as 30 + 0
+
+FALSE + TRUE + TRUE + FALSE + TRUE # interprets as 0+1+1+0+1
+```
+
+```{r}
+x=10
+y=15
+(x>y) * 100 # result is 0 * 100, or just 0
+
+# EXPLANATION: 
+#
+# step 1: x>y is 10>15. This produces FALSE
+# step 2: the * requires numbers so the FALSE is
+#         converted to a number. R converts FALSE to 0.
+```
+
+```{r}
+x = 200
+y = 0.3
+(x>y) * 100   # result is 1 * 100, or just 100
+
+# EXPLANATION: 
+#
+# step 1: x>y is 200>0.3. This produces TRUE
+# step 2: the * requires numbers so the TRUE must be
+#         converted to a number. R converts TRUE to 1.
+```
+
+## sum( LOGICAL_VECTOR )
+
+The sum function expects numbers. 
+If you provide sum
+with logicals they get converted to numbers.
+
+```{r}
+sum ( c( FALSE, TRUE, TRUE, FALSE) )   # same as sum(0,1,1,0)
+```
+
+Think about it ...
+
+- sum( LOGICAL_VECTOR ) results in *the ***number*** of values* that are TRUE
+
+## mean( LOGICAL VECTOR )
+
+The mean function expects numbers. 
+If you provide mean
+with logicals they get converted to numbers.
+
+```{r}
+mean ( c( TRUE, FALSE, TRUE, TRUE) )  # same as mean(1,0,1,1)
+
+```
+
+Think about it ...
+
+- mean( LOGICAL_VECTOR ) results in *the ***percent*** of values* that are TRUE
+
+
+
+<!---
+  #### WILF - UP TO HERE - AFTER CLASS 8  ####
+--->
+  
+## --- Practice ---
+
+### QUESTION
+  
+```{r}
+##########################################################################.
+# QUESTION: grades is a vector that contains grades of students on a test.
+#
+#           (a) write a command to show the number of students who got an 80 or above.
+#
+#           (b) write a command to show the percent of the class who got an 80 or above
+# 
+#           (c) show the grades that were 80 or above
+##########################################################################.
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### ANSWER (a) - Click here for answer
+```{r}
+#-----------------------------------------------------------------------------------.
+# ANSWER: (a) write a command to show the number of students who got an 80 or above.
+#-----------------------------------------------------------------------------------.
+
+# EXAMPLE 1
+grades = c(85, 80, 79, 65, 55, 72, 90, 95)
+sum ( grades >= 80 )
+# Original:  sum ( grades >= 80 )
+#         :  sum ( c(85, 80, 79, 65, 55, 72, 90, 95) >= 80 )
+#         :  sum ( c(85>=80, 80>=80, 79>=80, 65>=80, 55>=80, 72>=80, 90>=80, 95>=80))
+#         :  sum ( c(TRUE, TRUE, FALSE,  FALSE,  FALSE,  FALSE, TRUE, TRUE))
+#         :  sum ( c(1,1,0,0,0,0,1,1))
+#            4
+
+
+# EXAMPLE 2
+grades = c(45, 78, 78, 85, 88)   
+sum ( grades >= 80 )
+```
+:::
+  
+::: {.callout-note icon=false collapse="true"}
+#### ANSWER (b) - Click here for answer
+```{r}
+#-------------------------------------------------------------------------------------.
+# ANSWER: (b) write a command to show the percent of the class who got an 80 or above
+#-------------------------------------------------------------------------------------.
+
+# EXAMPLE 1
+grades = c(85, 80, 79, 65, 55, 72, 90, 95)
+# YOUR CODE GOES HERE       # 0.5
+
+# ONE WAY
+mean( grades >= 80 )
+# Original:  mean ( grades >= 80 )
+#         :  mean ( c(85, 80, 79, 65, 55, 72, 90, 95) >= 80 )
+#         :  mean ( c(85>=80, 80>=80, 79>=80, 65>=80, 55>=80, 72>=80, 90>=80, 95>=80))
+#         :  mean ( c(TRUE, TRUE, FALSE,  FALSE,  FALSE,  FALSE, TRUE, TRUE))
+#         :  mean ( c(1,1,0,0,0,0,1,1))
+#            0.5
+
+# ANOTHER WAY
+
+sum( grades>= 80) / length(grades)
+
+
+# EXAMPLE 2
+grades = c(45, 78, 78, 85, 88)   
+# YOUR CODE GOES HERE       # 0.4
+```
+:::
+  
+  
+::: {.callout-note icon=false collapse="true"}
+#### ANSWER (c) - Click here for answer
+```{r}
+#-------------------------------------------------------------------------------------.
+# ANSWER: (c) show the grades that were 80 or above
+#-------------------------------------------------------------------------------------.
+
+# EXAMPLE 1
+grades = c(85, 80, 79, 65, 55, 72, 90, 95)
+
+# ANSWER       
+grades[grades>=80]    # 85 80 90 95
+# Original:   grades[grades>=80]
+#             grades[c(85, 80, 79, 65, 55, 72, 90, 95)>=80]
+#             grades[c(85>=80, 80>=80, 79>=80, 65>=80, 55>=80, 72>=80, 90>=80, 95>=80)]
+#             grades[c(85>=80, 80>=80, 79>=80, 65>=80, 55>=80, 72>=80, 90>=80, 95>=80)]
+#         :   grades[c(TRUE, TRUE, FALSE,  FALSE,  FALSE,  FALSE, TRUE, TRUE)]
+#             85 80 90 95
+
+# EXAMPLE 2
+grades = c(45, 78, 78, 85, 88)   
+# ANSWER       
+grades[grades>=80]    # 85 88
+```
+:::
+  
+  
+### QUESTION
+  
+```{r}
+##########################################################################.
+# QUESTION: Add up the grades that are above 80
+##########################################################################.
+```
+
+::: {.callout-note icon=false collapse="true"}
+#### Click here for answer
+```{r}
+grades = c(45, 78, 78, 85, 88)   
+
+# ANSWER
+sum ( grades[grades>=80] )
+```
+:::
+  
+
+## Automatic (or "implicit") conversions from logical to numeric
+
+
+To convert numeric values to logical values, R uses slightly different rules.
+
+If R sees a **numeric** value where it *expects* a **logical** value  (i.e. TRUE or FALSE)
+then R will automatically interpret the numeric value as a 
+logical (i.e. TRUE or FALSE) value
+in the following way 
+
+- 0 (zero) is interpreted as FALSE
+- any nonzero number (e.g. 92, -0.243, etc) is interpreted as a TRUE
+
+<blockquote>
+
+### Quick review of ifelse(LOGICAL_VALUE, SOME_VALUE, ANOTHER_VALUE)
+
+Recall that the ifelse function expects a logical value (i.e. TRUE or FALSE) 
+as the first argument. The following are some simple examples:
+
+```{r}
+x = 10
+y = 3
+ifelse(x>y, 100, 200)   # 100
+
+x = 10 
+y = 15
+ifelse(x>y, 100, 200)    # 200
+
+ifelse(c(x>y, x>100), "apple", "pear")  # 1st argument has 2 logical values
+
+```
+
+</blockquote>
+
+When the ifelse function contains numbers in the first argument, then the 
+numbers are converted into logicals using the rules stated above
+(0 becomes FALSE; non-zero becomes TRUE). See the following 
+examples:
+
+```{r}
+ifelse(97, 100, 200)  # 97 is converted to TRUE, result is 100
+
+ifelse(-3.2, 100, 200)  # -97 is also converted to TRUE, result is 100
+
+ifelse(0, 100, 200)    # 0 is converted to FALSE, result is 200
+
+x=0
+y=100
+
+ifelse(x, 100, 200)    # ifelse(0,100,200)     same as ifelse(FALSE, 100, 200)
+ifelse(x*y, 100, 200)  # ifelse(100*0,100,200) same as ifelse(FALSE, 100, 200)
+ifelse(y+x, 100, 200)  # ifelse(100+0,100,200) same as ifelse(TRUE, 100, 200)
+
+# This one is tricky.
+ifelse(TRUE+FALSE*FALSE, 100, 200)  
+
+# EXPLANATION:
+# original:      ifelse(TRUE+FALSE*FALSE, 100, 200)  
+# becomes:       ifelse(1+0*0, 100, 200)  
+# order of ops:  ifelse(1+0, 100, 200)
+#                ifelse(1, 100, 200)
+# final result:  100
+```
+
+## Review - numeric vs logical indexing - no conversions happen
+
+Remember that an index can be a numeric vector or a logical vector.
+Therefore, TRUE / FALSE vectors will NOT be converted to 1's and 0's in an index.
+
+```{r}
+# Start with some data
+grades = c(60,70,80,90,100)
+
+# The following uses a logical index to extract those values
+# that correspond to the TRUE values in the index.
+grades[c(FALSE, TRUE, FALSE, TRUE, TRUE)]  # 70 90 100
+
+# The following uses a numeric index. Here the first value
+# is extracted a few times. An index of 0 is ignored.
+grades[c(0,1,0,1,1)]  # 60 60 60
+```
+
+## Question
+
+What's going to be displayed by the following? Why?
+
+> grades = c(60,70,80,90,100)
+> grades[c(1, 0, 0, 1)]   
+> grades[c(1, FALSE, FALSE, TRUE)]  
+> c( TRUE, 999, FALSE )
+> sum(c(TRUE, FALSE, TRUE, TRUE))
+> mean(c(TRUE, FALSE, TRUE, TRUE))
+
+::: {.callout-note icon=false collapse="true"}
+### Click here for answer
+```{r}
+# setup some data
+grades = c(60,70,80,90,100)
+
+# A 0 index is ignored.
+grades[c(1, 0, 0, 1)]   
+
+# You cannot mix logical values and numbers in a vector.
+# If you try to then TRUE becomes 1 and FALSE becomes 0
+# A 0 index is ignored.
+grades[c(1, FALSE, FALSE, TRUE)] 
+
+# You cannot mix logical values and numbers in a vector, TRUE becomes 1 and FALSE becomes 0
+c( TRUE, 999, FALSE )
+
+# you cannot sum logicals so they become numbers
+sum(c(TRUE, FALSE, TRUE, TRUE))  
+
+# same as mean(c(1,0,1,1))
+mean(c(TRUE, FALSE, TRUE, TRUE))
+```
+:::
+
+
+
